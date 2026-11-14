@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="الفصل الثاني: الأمن السيبراني - منصة Adam Mohamed Platform" />
+  <title>الفصل الثاني: الأمن السيبراني | Adam Mohamed Platform</title>
+
+  <!-- Login Protection Guard -->
+  <script>
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+      window.location.replace('login.html');
+    }
+  </script>
+
+  <!-- Google Fonts: Cairo & Tajawal -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            cairo: ['Cairo', 'sans-serif'],
+            tajawal: ['Tajawal', 'sans-serif'],
+            mono: ['Fira Code', 'monospace']
+          },
+          colors: {
+            cyber: '#00D4FF',
+            neon: {
+              blue: '#00D4FF',
+              purple: '#7C3AED',
+              green: '#10B981',
+              pink: '#EC4899',
+              yellow: '#F59E0B',
+              red: '#EF4444'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      font-family: 'Cairo', 'Tajawal', sans-serif;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+    body {
+      background: #050814;
+      color: #f1f5f9;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    /* Light Theme */
+    body.light-theme {
+      background: #f8fafc !important;
+      color: #0f172a !important;
+    }
+    body.light-theme nav {
+      background: rgba(255, 255, 255, 0.95) !important;
+      border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+    }
+    body.light-theme .card-neon {
+      background: #ffffff !important;
+      border-color: rgba(0, 0, 0, 0.12) !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+    }
+    body.light-theme .text-white {
+      color: #0f172a !important;
+    }
+    body.light-theme .text-gray-300, body.light-theme .text-gray-400 {
+      color: #334155 !important;
+    }
+    body.light-theme .bg-slate-900, body.light-theme .bg-slate-950 {
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+    }
+
+    .card-neon {
+      background: rgba(12, 18, 34, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      border-radius: 1rem;
+      transition: all 0.3s ease;
+    }
+    .card-neon:hover {
+      border-color: rgba(239, 68, 68, 0.5);
+      box-shadow: 0 8px 30px rgba(239, 68, 68, 0.15);
+    }
+
+    .btn-action-red {
+      background: linear-gradient(135deg, #EF4444, #7C3AED);
+      color: white;
+      font-weight: 800;
+      border-radius: 0.75rem;
+      padding: 0.65rem 1.25rem;
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+      cursor: pointer;
+    }
+    .btn-action-red:hover {
+      box-shadow: 0 6px 25px rgba(239, 68, 68, 0.6);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary-action {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #EF4444;
+      font-weight: 700;
+      border-radius: 0.75rem;
+      padding: 0.65rem 1.25rem;
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+    .btn-secondary-action:hover {
+      background: rgba(239, 68, 68, 0.25);
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+    }
+
+    .demo-area {
+      background: #020617;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      min-height: 80px;
+    }
+
+    .quiz-opt {
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 0.75rem;
+      padding: 0.85rem 1.25rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .quiz-opt:hover {
+      border-color: #EF4444;
+      background: rgba(239, 68, 68, 0.07);
+    }
+    .quiz-opt.correct {
+      border-color: #10B981 !important;
+      background: rgba(16, 185, 129, 0.2) !important;
+      color: #10B981 !important;
+    }
+    .quiz-opt.wrong {
+      border-color: #EF4444 !important;
+      background: rgba(239, 68, 68, 0.2) !important;
+      color: #EF4444 !important;
+    }
+
+    /* Reset XP & Quiz Interactive Controls */
+    .btn-reset-xp {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: #fbbf24;
+      transition: all 0.25s ease;
+    }
+    .btn-reset-xp:hover {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fde68a;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+    }
+    body.light-theme .btn-reset-xp {
+      background: #fef3c7 !important;
+      border-color: #f59e0b !important;
+      color: #b45309 !important;
+    }
+    body.light-theme .btn-reset-xp:hover {
+      background: #fde68a !important;
+      color: #92400e !important;
+    }
+
+    .btn-reset-ans {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: #fbbf24;
+      transition: all 0.25s ease;
+    }
+    .btn-reset-ans:hover {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fde68a;
+    }
+    body.light-theme .btn-reset-ans {
+      background: #fef3c7 !important;
+      border-color: #f59e0b !important;
+      color: #b45309 !important;
+    }
+    body.light-theme .btn-reset-ans:hover {
+      background: #fde68a !important;
+    }
+
+    body.light-theme .btn-next-q {
+      background: linear-gradient(135deg, #ef4444, #7c3aed) !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25) !important;
+    }
+    body.light-theme .btn-prev-q {
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      color: #334155 !important;
+    }
+  </style>
+</head>
+<body class="selection:bg-red-500 selection:text-white">
+
+  <!-- Header / Navigation Bar -->
+  <nav class="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-md border-b border-red-500/20 py-3 px-4 sm:px-8">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo -->
+      <a href="index.html" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-red-500 to-purple-600 flex items-center justify-center text-xl shadow-lg shadow-red-500/20 group-hover:scale-105 transition-transform">
+          🛡️
+        </div>
+        <div>
+          <span class="text-base sm:text-lg font-black tracking-tight text-white flex items-center gap-1.5">
+            Adam Mohamed <span class="text-red-400">Platform</span>
+          </span>
+          <span class="text-xs text-red-300 block font-bold">الفصل الثاني: الأمن السيبراني</span>
+        </div>
+      </a>
+
+      <!-- Quick Navigation Buttons -->
+      <div class="hidden lg:flex items-center gap-1.5 font-semibold text-xs xl:text-sm">
+        <a href="index.html" class="px-2.5 py-1.5 rounded-lg text-gray-300 hover:text-white hover:bg-slate-800 transition-colors flex items-center gap-1">
+          <span>🏠</span> الرئيسية
+        </a>
+        <a href="chapter1.html" class="px-2.5 py-1.5 rounded-lg text-gray-300 hover:text-cyan-400 hover:bg-cyan-500/10 transition-colors flex items-center gap-1">
+          <span>🧠</span> ف1: الذكاء الاصطناعي
+        </a>
+        <a href="chapter2.html" class="px-2.5 py-1.5 rounded-lg text-red-400 bg-red-500/10 border border-red-500/30 flex items-center gap-1 font-bold">
+          <span>🛡️</span> ف2: الأمن السيبراني
+        </a>
+        <a href="chapter3.html" class="px-2.5 py-1.5 rounded-lg text-gray-300 hover:text-green-400 hover:bg-green-500/10 transition-colors flex items-center gap-1">
+          <span>💻</span> ف3: تطبيقات الويب
+        </a>
+        <a href="chapter4.html" class="px-2.5 py-1.5 rounded-lg text-gray-300 hover:text-pink-400 hover:bg-pink-500/10 transition-colors flex items-center gap-1">
+          <span>🎨</span> ف4: تصميم الوسائط
+        </a>
+      </div>
+
+      <!-- Controls -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- XP Counter (User-Specific) -->
+        <div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-950/60 border border-red-500/30 text-xs font-bold text-red-400">
+          <i data-lucide="shield" class="w-3.5 h-3.5 text-yellow-400"></i>
+          <span>النقاط: <span id="userXpDisplay">0</span> XP</span>
+        </div>
+
+        <!-- Reset XP Button -->
+        <button onclick="resetUserXp()" class="btn-reset-xp text-xs px-2.5 py-1 rounded-lg flex items-center gap-1 font-bold cursor-pointer" title="تصفير نقاط الـ XP لحسابك الحالي إلى 0">
+          <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+          <span class="hidden sm:inline">تصفير XP</span>
+          <span class="sm:hidden">0 XP</span>
+        </button>
+
+        <button onclick="toggleTheme()" class="p-2 rounded-xl bg-slate-900 border border-slate-700 text-gray-300 hover:text-yellow-400 transition-colors" title="تبديل الوضع">
+          <span id="themeIcon">🌙</span>
+        </button>
+        <button onclick="logoutUser()" class="text-xs text-red-400 hover:text-red-300 px-2.5 py-1.5 rounded-lg bg-red-950/50 border border-red-500/30 font-bold flex items-center gap-1">
+          <span>خروج</span>
+          <span>🚪</span>
+        </button>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- CHAPTER 2 MAIN CONTENT -->
+  <main class="max-w-7xl mx-auto px-4 py-10">
+
+    <!-- Hero Header -->
+    <div class="p-8 rounded-3xl bg-gradient-to-r from-red-950/40 via-purple-950/40 to-slate-900 border border-red-500/30 mb-10 text-center relative overflow-hidden">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-500/10 border border-red-500/30 text-red-300 text-xs font-bold mb-4">
+        <span>🛡️</span> الفصل الثاني — معامل أمن المعلومات والمحاكاة الحية
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-black text-white mb-4">
+        الأمن السيبراني وتقنيات حماية الأنظمة
+      </h1>
+      <p class="text-gray-300 text-sm sm:text-base max-w-3xl mx-auto leading-relaxed">
+        تعلم كيف تحمي الأنظمة الرقمية من خلال محاكاة حية لمصافحة TLS، ولعبة المصادقة الثنائية، ومخطط صد الهجمات، وغرفة طوارئ برمجية الفدية!
+      </p>
+    </div>
+
+    <!-- Dynamic Lesson Selector & Showcase Area Bar (منطقة العرض الديناميكية التفاعلية) -->
+    <div class="card-neon p-4 sm:p-5 mb-8 flex flex-col md:flex-row items-center justify-between gap-4 border-red-500/40 bg-slate-900/90 shadow-xl shadow-red-500/10">
+      <div class="flex items-center gap-2">
+        <div class="w-9 h-9 rounded-xl bg-red-500/20 border border-red-500/40 flex items-center justify-center text-red-400">
+          <i data-lucide="shield-alert" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <div class="text-xs font-black text-white">منطقة العرض التفاعلية وأزرار الأكشن:</div>
+          <div class="text-[11px] text-red-300">اختر الدرس لعرض الشرح والأمثلة والمحاكاة الحية فوراً</div>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-2 w-full md:w-auto justify-center" id="lessonTabsBar">
+        <button onclick="switchActiveLesson('lesson2-1')" id="tab_lesson2-1" class="btn-action-red text-xs flex items-center gap-1.5 py-2 px-3.5">
+          <i data-lucide="key" class="w-3.5 h-3.5 text-yellow-300"></i>
+          <span>2-1: التشفير والمصادقة</span>
+        </button>
+        <button onclick="switchActiveLesson('lesson2-2')" id="tab_lesson2-2" class="btn-secondary text-xs flex items-center gap-1.5 py-2 px-3.5">
+          <i data-lucide="shield" class="w-3.5 h-3.5"></i>
+          <span>2-2: أمان الشبكات والدفاع</span>
+        </button>
+        <button onclick="switchActiveLesson('lesson2-3')" id="tab_lesson2-3" class="btn-secondary text-xs flex items-center gap-1.5 py-2 px-3.5">
+          <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i>
+          <span>2-3: الاستجابة للحوادث والمخاطر</span>
+        </button>
+        <button onclick="switchActiveLesson('all')" id="tab_all" class="btn-secondary text-xs flex items-center gap-1.5 py-2 px-3">
+          <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+          <span>عرض الكل</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- LESSON 2-1: تقنيات التشفير والمصادقة -->
+    <!-- ========================================================================= -->
+    <section class="card-neon p-6 sm:p-8 mb-10" id="lesson2-1">
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <div>
+          <span class="text-xs font-bold text-red-400 uppercase tracking-wider">الدرس 2-1</span>
+          <h2 class="text-xl sm:text-2xl font-black text-white">تقنيات التشفير والمصادقة الرقمية</h2>
+        </div>
+        <span class="text-xs px-3 py-1 rounded-full bg-red-950 text-red-300 border border-red-500/30 font-bold">
+          TLS Handshake • 2FA • الشهادات الرقمية
+        </span>
+      </div>
+
+      <p class="text-xs sm:text-sm text-gray-300 mb-6 leading-relaxed">
+        التشفير غير المتماثل (المفتاح العام والخاص) يُستخدم للمصادقة وتأكيد هوية الخادم عبر الشهادة الرقمية الموقعة من CA، بينما التشفير المتماثل (مثل AES) يُستخدم لنقل البيانات بسرعة هائلة.
+      </p>
+
+      <!-- DEMO 1: TLS Handshake Step-by-Step Simulator -->
+      <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 mb-8">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-bold text-sm text-white flex items-center gap-2">
+            <span>🔐</span> محاكي خطوات مصافحة TLS (HTTPS Handshake)
+          </h3>
+          <span class="text-xs text-cyan-400 font-mono" id="tlsStepIndicator">الخطوة 1 من 6</span>
+        </div>
+        <p class="text-xs text-gray-400 mb-4">
+          اضغط زر الأكشن للمرور عبر خطوات المصافحة الست ومشاهدة تبادل الشهادات ومفتاح الجلسة:
+        </p>
+
+        <!-- Visual Flow Box -->
+        <div class="flex items-center justify-between p-4 bg-slate-900 rounded-xl border border-slate-800 mb-4">
+          <div class="text-center">
+            <div class="text-3xl mb-1">💻</div>
+            <span class="text-xs font-bold text-cyan-400">متصفح العميل (Client)</span>
+          </div>
+          <div id="tlsPacketAnimation" class="text-2xl font-mono text-purple-400 transition-all">
+            ⟵ Client Hello ⟶
+          </div>
+          <div class="text-center">
+            <div class="text-3xl mb-1">🌐</div>
+            <span class="text-xs font-bold text-emerald-400">الخادم الآمن (Server)</span>
+          </div>
+        </div>
+
+        <div class="flex gap-3 mb-4">
+          <button onclick="actionNextTlsStep()" class="btn-action-red text-xs flex-1">
+            ⚡ زر أكشن: تنفيذ الخطوة التالية في المصافحة
+          </button>
+          <button onclick="actionResetTls()" class="btn-secondary-action text-xs">
+            🔄 إعادة تعيين
+          </button>
+        </div>
+
+        <div id="tlsStepLogBox" class="demo-area text-xs text-cyan-300 leading-relaxed">
+          الخطوة 1: Client Hello — يرسل المتصفح قائمة خوارزميات التشفير المدعومة ورقم عشوائي لبدء الاتصال.
+        </div>
+      </div>
+
+      <!-- DEMO 2: 2FA Bank Challenge -->
+      <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-bold text-sm text-white flex items-center gap-2">
+            <span>🔑</span> تحدي تأمين الحساب البنكي بالمصادقة الثنائية (2FA)
+          </h3>
+          <span class="text-xs text-yellow-400 font-bold">تطبيق عملي</span>
+        </div>
+        <p class="text-xs text-gray-400 mb-4">
+          اختر وسيلتين من الفئات الثلاث (معرفة، حيازة، سمات)، ثم اضغط زر الأكشن لفحص مستوى الأمان وتأكيد هل هي 2FA حقيقية أم لا:
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+          <!-- Knowledge -->
+          <div class="p-3 rounded-xl bg-slate-900 border border-cyan-500/30 text-center">
+            <span class="text-xs font-bold text-cyan-300 block mb-2">1. ما تعرفه (المعرفة)</span>
+            <div class="space-y-1.5">
+              <button onclick="actionToggleMfaItem('pass')" id="mfa_pass_btn" class="w-full py-1.5 px-2 rounded-lg bg-slate-800 text-[11px] text-gray-300 border border-transparent">🔑 كلمة مرور</button>
+              <button onclick="actionToggleMfaItem('pin')" id="mfa_pin_btn" class="w-full py-1.5 px-2 rounded-lg bg-slate-800 text-[11px] text-gray-300 border border-transparent">🔢 رمز PIN</button>
+            </div>
+          </div>
+          <!-- Possession -->
+          <div class="p-3 rounded-xl bg-slate-900 border border-purple-500/30 text-center">
+            <span class="text-xs font-bold text-purple-300 block mb-2">2. ما تملكه (الحيازة)</span>
+            <div class="space-y-1.5">
+              <button onclick="actionToggleMfaItem('otp')" id="mfa_otp_btn" class="w-full py-1.5 px-2 rounded-lg bg-slate-800 text-[11px] text-gray-300 border border-transparent">📲 رسالة OTP بالهاتف</button>
+              <button onclick="actionToggleMfaItem('token')" id="mfa_token_btn" class="w-full py-1.5 px-2 rounded-lg bg-slate-800 text-[11px] text-gray-300 border border-transparent">📟 مفتاح USB فيزيائي</button>
+            </div>
+          </div>
+          <!-- Biometric -->
+          <div class="p-3 rounded-xl bg-slate-900 border border-emerald-500/30 text-center">
+            <span class="text-xs font-bold text-emerald-300 block mb-2">3. ما أنت عليه (السمات)</span>
+            <div class="space-y-1.5">
+              <button onclick="actionToggleMfaItem('finger')" id="mfa_finger_btn" class="w-full py-1.5 px-2 rounded-lg bg-slate-800 text-[11px] text-gray-300 border border-transparent">👆 بصمة الإصبع</button>
+              <button onclick="actionToggleMfaItem('face')" id="mfa_face_btn" class="w-full py-1.5 px-2 rounded-lg bg-slate-800 text-[11px] text-gray-300 border border-transparent">😊 التعرف على الوجه</button>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="actionValidateMfa()" class="btn-action-red w-full justify-center text-xs mb-3">
+          ⚡ زر أكشن: فحص أمان المصادقة الثنائية
+        </button>
+
+        <div id="mfaFeedbackDisplay" class="demo-area text-xs text-gray-400 flex items-center">
+          حدد وسيلتين من القوائم أعلاه واضغط زر الأكشن للفحص.
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- LESSON 2-2: تصميم أمان الشبكات -->
+    <!-- ========================================================================= -->
+    <section class="card-neon p-6 sm:p-8 mb-10" id="lesson2-2">
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <div>
+          <span class="text-xs font-bold text-yellow-400 uppercase tracking-wider">الدرس 2-2</span>
+          <h2 class="text-xl sm:text-2xl font-black text-white">تصميم أمان الشبكات: الدفاع في العمق وانعدام الثقة</h2>
+        </div>
+        <span class="text-xs px-3 py-1 rounded-full bg-yellow-950 text-yellow-300 border border-yellow-500/30 font-bold">
+          Defense in Depth • Zero Trust
+        </span>
+      </div>
+
+      <!-- DEMO 3: Defense in Depth Live Attack Simulation -->
+      <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 mb-8">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-bold text-sm text-white flex items-center gap-2">
+            <span>🏰</span> محاكاة الدفاع في العمق (Defense in Depth Live Test)
+          </h3>
+          <button onclick="actionSimulateDdosAttack()" class="btn-action-red text-xs">
+            ⚔️ زر أكشن: شن هجوم سيبراني تجريبي
+          </button>
+        </div>
+        <p class="text-xs text-gray-400 mb-4">
+          اختبر متانة الشبكة متعددة الطبقات (جدار الحماية ⟵ DMZ ⟵ VPN ⟵ تشفير قاعدة البيانات الداخلية):
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-4 text-center">
+          <div id="layerNode1" class="p-3 rounded-xl bg-slate-900 border border-red-500/40">
+            <span class="text-xl block mb-1">🔥</span>
+            <span class="text-xs font-bold text-red-400 block">Firewall</span>
+            <span class="text-[10px] text-gray-400">حظر المنافذ المشبوهة</span>
+          </div>
+          <div id="layerNode2" class="p-3 rounded-xl bg-slate-900 border border-yellow-500/40">
+            <span class="text-xl block mb-1">🏢</span>
+            <span class="text-xs font-bold text-yellow-400 block">DMZ</span>
+            <span class="text-[10px] text-gray-400">عزل الخوادم العامة</span>
+          </div>
+          <div id="layerNode3" class="p-3 rounded-xl bg-slate-900 border border-purple-500/40">
+            <span class="text-xl block mb-1">🔒</span>
+            <span class="text-xs font-bold text-purple-400 block">VPN Gateway</span>
+            <span class="text-[10px] text-gray-400">تشفير وصول الموظفين</span>
+          </div>
+          <div id="layerNode4" class="p-3 rounded-xl bg-slate-900 border border-emerald-500/40">
+            <span class="text-xl block mb-1">🗄️</span>
+            <span class="text-xs font-bold text-emerald-400 block">Internal Database</span>
+            <span class="text-[10px] text-gray-400">تشفير البيانات والنسخ</span>
+          </div>
+        </div>
+
+        <div id="attackResultDisplay" class="demo-area text-xs font-mono text-gray-400 leading-relaxed">
+          الشبكة في حالة استقرار تام. اضغط زر الأكشن لمحاكاة صد هجوم متزامن على طبقات الدفاع.
+        </div>
+      </div>
+
+      <!-- DEMO 4: Zero Trust Access Evaluator -->
+      <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800">
+        <h3 class="font-bold text-sm text-white mb-2 flex items-center gap-2">
+          <span>🛡️</span> محاكي فحص الأذونات وفق مبدأ انعدام الثقة (Zero Trust Audit)
+        </h3>
+        <p class="text-xs text-gray-400 mb-4">
+          في نهج Zero Trust، لا نثق بأي شخص تلقائياً حتى لو كان مديراً داخل مقر الشركة. اختبر سيناريوهات محاولة الدخول:
+        </p>
+
+        <div class="flex gap-2 flex-wrap mb-4">
+          <button onclick="actionAuditZeroTrust('trusted')" class="btn-secondary-action text-xs">
+            ⚡ أكشن: فحص جهاز موثوق ومحدث من داخل المقر
+          </button>
+          <button onclick="actionAuditZeroTrust('foreign')" class="btn-secondary-action text-xs border-yellow-500/40 text-yellow-300">
+            ⚡ أكشن: فحص محاولة دخول من دولة أجنبية بـ VPN مجاني
+          </button>
+          <button onclick="actionAuditZeroTrust('outdated')" class="btn-secondary-action text-xs border-red-500/40 text-red-300">
+            ⚡ أكشن: جهاز مصاب بنظام تشغيل قديم غير مرقع
+          </button>
+        </div>
+
+        <div id="zeroTrustDisplay" class="demo-area text-xs text-gray-300 leading-relaxed">
+          اختر أي سيناريو أعلاه لتشغيل محرك تدقيق Zero Trust ومشاهدة النتيجة.
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- LESSON 2-3: الاستجابة للحوادث وإدارة المخاطر -->
+    <!-- ========================================================================= -->
+    <section class="card-neon p-6 sm:p-8 mb-10" id="lesson2-3">
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <div>
+          <span class="text-xs font-bold text-red-400 uppercase tracking-wider">الدرس 2-3</span>
+          <h2 class="text-xl sm:text-2xl font-black text-white">الاستجابة للحوادث السيبرانية وحاسبة المخاطر</h2>
+        </div>
+        <span class="text-xs px-3 py-1 rounded-full bg-red-950 text-red-300 border border-red-500/30 font-bold">
+          Ransomware IR • Risk Formula
+        </span>
+      </div>
+
+      <!-- DEMO 5: Ransomware Emergency Room -->
+      <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 mb-8">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-bold text-sm text-white flex items-center gap-2">
+            <span>🚨</span> غرفة عمليات الطوارئ: هجوم برمجية الفدية (Ransomware Response)
+          </h3>
+          <span class="text-xs text-red-400 font-bold">تحذير أمني</span>
+        </div>
+        <p class="text-xs text-gray-400 mb-4">
+          تعرضت خوادم شركة مصرية لهجوم فدية شفر الملفات! اضغط بالترتيب الهندسي لاختيار المراحل ثم اضغط زر الأكشن للاعتماد:
+        </p>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4" id="rPhaseButtonsContainer">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 mb-4">
+          <span class="text-[11px] text-gray-400 block mb-1">الترتيب الهندسي المختار حالياً:</span>
+          <div id="rChosenOrderDisplay" class="text-xs text-cyan-300 font-mono">
+            — اختر المراحل بالترتيب السليم أولاً —
+          </div>
+        </div>
+
+        <div class="flex gap-3 mb-4">
+          <button onclick="actionValidateRansomwarePlan()" class="btn-action-red text-xs flex-1">
+            ⚡ زر أكشن: اعتماد خطة الاستجابة للحادث
+          </button>
+          <button onclick="actionResetRansomwarePlan()" class="btn-secondary-action text-xs">
+            🔄 إعادة الترتيب
+          </button>
+        </div>
+
+        <div id="ransomwarePlanFeedback" class="demo-area text-xs text-gray-400 flex items-center">
+          تنبيه: ترتيب المراحل خاطئ إذا قمت بالاستعادة قبل الاستئصال الكامل للبرمجية الخبيثة!
+        </div>
+      </div>
+
+      <!-- DEMO 6: Interactive Risk Calculator -->
+      <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800">
+        <h3 class="font-bold text-sm text-white mb-2 flex items-center gap-2">
+          <span>📊</span> حاسبة المخاطر السيبرانية التفاعلية: (درجة الخطر = التأثير × الاحتمالية)
+        </h3>
+        <p class="text-xs text-gray-400 mb-4">
+          حرك المؤشرات لتعديل درجة التأثير واحتمالية حدوث الهجوم، ثم اضغط زر الأكشن لتقييم المخاطرة:
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div>
+            <div class="flex justify-between text-xs mb-1">
+              <span class="text-gray-300">حجم الضرر والتأثير (Impact):</span>
+              <span id="ch2ImpactNum" class="text-red-400 font-bold font-mono">3 / 5</span>
+            </div>
+            <input type="range" min="1" max="5" value="3" id="ch2ImpactSlider" oninput="document.getElementById('ch2ImpactNum').textContent=this.value+' / 5'" class="w-full accent-red-500" />
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1">
+              <span class="text-gray-300">احتمالية الحدوث (Probability):</span>
+              <span id="ch2ProbNum" class="text-purple-400 font-bold font-mono">3 / 5</span>
+            </div>
+            <input type="range" min="1" max="5" value="3" id="ch2ProbSlider" oninput="document.getElementById('ch2ProbNum').textContent=this.value+' / 5'" class="w-full accent-purple-500" />
+          </div>
+        </div>
+
+        <button onclick="actionCalculateCyberRisk()" class="btn-action-red w-full justify-center text-xs mb-3">
+          ⚡ زر أكشن: حساب درجة الخطر والتوصية الهندسية
+        </button>
+
+        <div id="riskCalculationDisplay" class="demo-area text-xs text-cyan-300 flex items-center">
+          اضغط زر الأكشن لتطبيق معادلة تقييم الخطر وعرض التقرير الفوري.
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- CHAPTER 2 QUIZ & THINK LIKE AN ENGINEER -->
+    <!-- ========================================================================= -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- Quiz (2 cols) -->
+      <div class="lg:col-span-2 card-neon p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+            <span>📝</span> بنك أسئلة الفصل الثاني (اختبار تقييمي فوري)
+          </h3>
+          <span id="ch2QuizProg" class="text-xs text-red-400 font-mono">السؤال 1 من 3</span>
+        </div>
+        <div id="ch2QuizBox"></div>
+      </div>
+
+      <!-- Think Like an Engineer (1 col) -->
+      <div class="card-neon p-6 bg-gradient-to-b from-slate-900 to-red-950/40 border-red-500/30">
+        <div class="flex items-center gap-2 text-yellow-400 font-black text-sm mb-3">
+          <span>💡</span> فكّر كمهندس (Think Like an Engineer)
+        </div>
+        <h4 class="text-xs font-bold text-white mb-2">أزمة اختراق بيانات بمستشفى مصري:</h4>
+        <p class="text-xs text-gray-300 mb-4 leading-relaxed">
+          اكتشف فريقك تسريب بيانات مرضى عبر حساب موظف مسروق. ما الإجراء الفوري الأول؟
+        </p>
+        <div class="space-y-2">
+          <button onclick="actionAnswerCh2Engineer('isolate')" class="w-full text-right p-2.5 rounded-xl bg-slate-950 border border-slate-700 hover:border-red-400 text-xs text-gray-300">
+            🔘 الخيار أ: عزل الحساب فوراً وإلغاء صلاحياته
+          </button>
+          <button onclick="actionAnswerCh2Engineer('backup')" class="w-full text-right p-2.5 rounded-xl bg-slate-950 border border-slate-700 hover:border-red-400 text-xs text-gray-300">
+            🔘 الخيار ب: استعادة نسخة احتياطية قديمة
+          </button>
+        </div>
+        <div id="ch2EngineerFeedback" class="hidden mt-3 p-3 rounded-xl bg-red-950/60 border border-red-500/40 text-xs text-red-200"></div>
+      </div>
+
+    </div>
+
+    <!-- Navigation buttons -->
+    <div class="mt-12 text-center flex items-center justify-center gap-4 flex-wrap">
+      <a href="chapter1.html" class="btn-secondary-action text-xs">
+        <span>→</span>
+        <span>العودة للفصل الأول</span>
+      </a>
+      <a href="chapter3.html" class="btn-action-red text-xs">
+        <span>الانتقال للفصل الثالث: تطبيقات الويب</span>
+        <span>←</span>
+      </a>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-20 border-t border-slate-800 bg-slate-950/90 py-10 px-4 text-center text-xs text-gray-400">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <strong class="text-white">Adam Mohamed Platform</strong> | تِكأكاديمي
+      </div>
+      <div>
+        إعداد وتطوير: <strong class="text-cyan-400 font-bold">Adam Mohamed</strong> | منهج البرمجة والذكاء الاصطناعي 2024 / 2025
+      </div>
+      <div>
+        <a href="index.html" class="text-cyan-400 hover:underline">الرئيسية</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT LOGIC -->
+  <script>
+    function toggleTheme() {
+      const cur = localStorage.getItem('theme') || 'dark';
+      const next = cur === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+    }
+    function applyTheme(theme) {
+      localStorage.setItem('theme', theme);
+      const icon = document.getElementById('themeIcon');
+      if (theme === 'light') {
+        document.body.classList.add('light-theme');
+        if (icon) icon.textContent = '☀️';
+      } else {
+        document.body.classList.remove('light-theme');
+        if (icon) icon.textContent = '🌙';
+      }
+    }
+    applyTheme(localStorage.getItem('theme') || 'dark');
+
+    // User-Specific XP Management Functions
+    function getCurrentUserEmail() {
+      return (localStorage.getItem('userEmail') || 'adam@gmail.com').trim().toLowerCase();
+    }
+
+    function getUserXp() {
+      const email = getCurrentUserEmail();
+      const xpKey = 'xp_' + email;
+      const stored = localStorage.getItem(xpKey);
+      if (stored !== null) return parseInt(stored, 10) || 0;
+      if (email === 'adam@gmail.com' || email === 'adam.mohamed@gmail.com') {
+        localStorage.setItem(xpKey, '710');
+        return 710;
+      }
+      localStorage.setItem(xpKey, '0');
+      return 0;
+    }
+
+    function saveUserXp(xp) {
+      const email = getCurrentUserEmail();
+      localStorage.setItem('xp_' + email, xp.toString());
+    }
+
+    function resetUserXp() {
+      const email = getCurrentUserEmail();
+      if (confirm(`هل أنت متأكد من رغبتك في إعادة ضبط الحساب (${email}) وتصفير نقاط الـ XP إلى 0 وإقفال كافة الأوسمة والإنجازات؟`)) {
+        // 1. تصفير الـ XP
+        saveUserXp(0);
+        
+        // 2. إقفال وحذف الأوسمة وإعادة التقدم لحالته الابتدائية
+        const resetState = {
+          xp: 0,
+          completedChapters: { 1: false, 2: false, 3: false, 4: false },
+          badgesUnlocked: { 1: false, 2: false, 3: false, 4: false },
+          quizProgress: { 1: 0, 2: 0, 3: 0, 4: 0 }
+        };
+        localStorage.setItem('state_' + email, JSON.stringify(resetState));
+        localStorage.setItem('ai_edu_grade11_state', JSON.stringify(resetState));
+
+        // 3. تحديث واجهة المستخدم فوراً
+        const disp = document.getElementById('userXpDisplay');
+        if (disp) disp.textContent = '0';
+
+        if (typeof ch2QuizIdx !== 'undefined') {
+          ch2QuizIdx = 0;
+          if (typeof renderCh2Quiz === 'function') renderCh2Quiz();
+        }
+
+        playBeep(330, 'triangle', 0.2);
+        alert('تمت إعادة ضبط الحساب بنجاح: تم تصفير نقاط الـ XP إلى 0 وقفل كافة الأوسمة والإنجازات!');
+      }
+    }
+
+    function addXp(amount) {
+      let current = getUserXp() + amount;
+      saveUserXp(current);
+      const disp = document.getElementById('userXpDisplay');
+      if (disp) disp.textContent = current;
+      playBeep(880, 'sine', 0.2);
+      return current;
+    }
+
+    function logoutUser() {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userName');
+      localStorage.removeItem('authVerifiedAt');
+      window.location.replace('login.html');
+    }
+
+    // DEMO ACTIONS:
+
+    // 1. TLS Step-by-Step
+    const tlsSteps = [
+      { name: "1. Client Hello", text: "المتصفح يرسل: مرحباً بالخادم! أنا أدعم تشفير TLS 1.3 ولدي خوارزميات AES-256 و RSA. إليك أيضاً رقماً عشوائياً.", packet: "Client Hello ⟶" },
+      { name: "2. Server Hello + الشهادة الرقمية", text: "الخادم يرد: اخترنا خوارزمية TLS_AES_256_GCM_SHA384، وهذه شهادتي الرقمية الموقعة رسمياً من جهة CA موثوقة مع مفتاحي العام.", packet: "⟵ Server Hello + Certificate" },
+      { name: "3. التحقق من الشهادة (Validation)", text: "المتصفح يفحص توقيع CA الرقمي، وتاريخ الصلاحية، واسم الدومين؛ ليتأكد بنسبة 100% أنه يتصل بالبنك الحقيقي وليس موقعاً مزيفاً.", packet: "Checking Certificate... ✅" },
+      { name: "4. تبادل مفتاح الجلسة (Session Key)", text: "يتم استخدام التشفير غير المتماثل (المفتاح العام للخادم) لتبادل مفتاح جلسة سري متماثل بسرعة وأمان مطلق.", packet: "Key Exchange ⟶" },
+      { name: "5. رسائل التأكيد (Finished)", text: "يرسل الطرفان رسائل جاهزية مشفرة بمفتاح الجلسة الجديد لاختبار سلامة الاتصال ومنع التلاعب.", packet: "Finished 🤝" },
+      { name: "6. التحول للتشفير المتماثل الفائق بـ AES", text: "الآن تم تأمين القناة بالكامل! كل طلبات صفحات الويب والصور وكلمات المرور تُنقل مشفرة بسرعة البرق بـ AES.", packet: "🔒 Secure AES-256 Tunnel Active" }
+    ];
+    let tlsIdx = 0;
+    function actionNextTlsStep() {
+      tlsIdx = (tlsIdx + 1) % tlsSteps.length;
+      const s = tlsSteps[tlsIdx];
+      document.getElementById('tlsStepIndicator').textContent = `الخطوة ${tlsIdx + 1} من 6`;
+      document.getElementById('tlsPacketAnimation').textContent = s.packet;
+      document.getElementById('tlsStepLogBox').innerHTML = `<strong>${s.name}:</strong><br/>${s.text}`;
+    }
+    function actionResetTls() {
+      tlsIdx = 0;
+      const s = tlsSteps[0];
+      document.getElementById('tlsStepIndicator').textContent = 'الخطوة 1 من 6';
+      document.getElementById('tlsPacketAnimation').textContent = s.packet;
+      document.getElementById('tlsStepLogBox').innerHTML = `<strong>${s.name}:</strong><br/>${s.text}`;
+    }
+
+    // 2. 2FA Challenge
+    let selectedMfaKeys = new Set();
+    function actionToggleMfaItem(key) {
+      const btn = document.getElementById(`mfa_${key}_btn`);
+      if (selectedMfaKeys.has(key)) {
+        selectedMfaKeys.delete(key);
+        btn.classList.remove('border-red-400', 'bg-red-950/60');
+      } else {
+        if (selectedMfaKeys.size >= 2) return;
+        selectedMfaKeys.add(key);
+        btn.classList.add('border-red-400', 'bg-red-950/60');
+      }
+    }
+
+    function actionValidateMfa() {
+      const box = document.getElementById('mfaFeedbackDisplay');
+      if (selectedMfaKeys.size < 2) {
+        box.innerHTML = `<span class="text-yellow-400">⚠️ يرجى اختيار وسيلتين أولاً.</span>`;
+        return;
+      }
+      const arr = Array.from(selectedMfaKeys);
+      const isKnowledge = k => ['pass', 'pin'].includes(k);
+      if (isKnowledge(arr[0]) && isKnowledge(arr[1])) {
+        box.innerHTML = `
+          <div class="text-red-400">
+            ❌ <strong>فشل المصادقة الثنائية (2FA)!</strong><br/>
+            اخترت وسيلتين من نفس الفئة (ما تعرفه: كلمة مرور + PIN). هذا لا يضيف حماية كافية؛ فإذا اخترق المخترق جهازك سيسرق كلاهما! 2FA الحقيقية تتطلب فئتين مختلفتين (مثال: كلمة مرور + رسالة OTP على هاتفك).
+          </div>
+        `;
+      } else {
+        box.innerHTML = `
+          <div class="text-emerald-400">
+            ✅ <strong>مصادقة ثنائية ناجحة وقوية 100%!</strong><br/>
+            جمعت بين فئتين مستقلتين (مثلاً: ما تعرفه + ما تملكه أو سماتك الحيوية). هذا يضمن حماية حسابك البنكي حتى لو تسربت كلمة مرورك عبر بريد تصيد احتيالي!
+          </div>
+        `;
+      }
+    }
+
+    // 3. Defense in Depth
+    function actionSimulateDdosAttack() {
+      const box = document.getElementById('attackResultDisplay');
+      box.innerHTML = `⚡ بدء إطلاق 50,000 حزمة هجومية في الثانية...`;
+      setTimeout(() => {
+        box.innerHTML = `
+          <div class="text-yellow-400">1. Firewall: تم حظر 47,500 حزمة Syn-Flood غير مصرح بها.</div>
+        `;
+        setTimeout(() => {
+          box.innerHTML += `
+            <div class="text-purple-400">2. DMZ: الخادم العام امتص الحزم الباقية دون أن يسمح لها بالعبور للشبكة الداخلية.</div>
+          `;
+          setTimeout(() => {
+            box.innerHTML += `
+              <div class="text-emerald-400 font-bold">3. نجاح الدفاع في العمق! قاعدة البيانات الحساسة محمية ومشفرة 100%! 🛡️</div>
+            `;
+          }, 400);
+        }, 400);
+      }, 400);
+    }
+
+    // 4. Zero Trust Audit
+    const ztAudits = {
+      trusted: "✅ <strong>نتيجة التدقيق:</strong> تم التحقق من هوية الموظف عبر 2FA، والجهاز مزود بأحدث باتشات الأمان وموجود داخل المقر. منح صلاحية مؤقتة ومحدودة فقط للملف المطلوب.",
+      foreign: "🚨 <strong>تنبيه أمني شديد:</strong> تم رصد محاولة دخول بحساب موظف من دولة أجنبية في غير أوقات العمل! خوارزمية Zero Trust جمدت الحساب فوراً وطلبت تأكيد الهوية ببصمة الوجه.",
+      outdated: "⚠️ <strong>رفض الوصول:</strong> جهاز الموظف يحتوي على ثغرة أمنية غير مرقعة بنظام التشغيل. نهج Zero Trust عزل الجهاز عن شبكة الشركة حتى اكتمال التحديث."
+    };
+    function actionAuditZeroTrust(type) {
+      document.getElementById('zeroTrustDisplay').innerHTML = ztAudits[type];
+    }
+
+    // 5. Ransomware 6 Phases
+    const rPhases = [
+      { id: "p1", name: "1. التحضير والوقاية" },
+      { id: "p2", name: "2. الاكتشاف والتحليل" },
+      { id: "p3", name: "3. الاحتواء (عزل الأجهزة)" },
+      { id: "p4", name: "4. الاستئصال ومسح الفدية" },
+      { id: "p5", name: "5. الاستعادة من النسخ الاحتياطية" },
+      { id: "p6", name: "6. الدروس المستفادة والتوثيق" }
+    ];
+    let chosenRansomwareOrder = [];
+    function initRansomwareButtons() {
+      const c = document.getElementById('rPhaseButtonsContainer');
+      const shuffled = [...rPhases].sort(() => Math.random() - 0.5);
+      c.innerHTML = shuffled.map(p => `
+        <button onclick="actionPickRPhase('${p.id}', '${p.name}')" id="rbtn_${p.id}" class="p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-gray-300 hover:border-red-400">
+          ${p.name}
+        </button>
+      `).join('');
+    }
+    function actionPickRPhase(id, name) {
+      if (chosenRansomwareOrder.find(item => item.id === id)) return;
+      chosenRansomwareOrder.push({ id, name });
+      document.getElementById(`rbtn_${id}`).classList.add('opacity-40', 'border-red-500');
+      document.getElementById('rChosenOrderDisplay').textContent = chosenRansomwareOrder.map(i => i.name).join(' ⟶ ');
+    }
+    function actionResetRansomwarePlan() {
+      chosenRansomwareOrder = [];
+      document.getElementById('rChosenOrderDisplay').textContent = '— اختر المراحل بالترتيب السليم أولاً —';
+      document.getElementById('ransomwarePlanFeedback').textContent = 'تنبيه: ترتيب المراحل خاطئ إذا قمت بالاستعادة قبل الاستئصال الكامل للبرمجية الخبيثة!';
+      initRansomwareButtons();
+    }
+    function actionValidateRansomwarePlan() {
+      const box = document.getElementById('ransomwarePlanFeedback');
+      if (chosenRansomwareOrder.length < 6) {
+        box.innerHTML = `<span class="text-yellow-400">⚠️ يرجى اختيار جميع المراحل الست بالترتيب أولاً.</span>`;
+        return;
+      }
+      const eIdx = chosenRansomwareOrder.findIndex(i => i.id === 'p4');
+      const rIdx = chosenRansomwareOrder.findIndex(i => i.id === 'p5');
+      if (rIdx < eIdx) {
+        box.innerHTML = `
+          <div class="text-red-400 font-bold">
+            🚨 <strong>كارثة أمنية!</strong> بدأت الاستعادة من النسخ الاحتياطية قبل الاستئصال الكامل للفدية! البرمجية الخبيثة شفرت النسخ الاحتياطية المسترجعة فوراً! اعزل أولاً ثم استأصل ثم استعد!
+          </div>
+        `;
+        return;
+      }
+      const isCorrect = chosenRansomwareOrder.every((p, idx) => p.id === rPhases[idx].id);
+      if (isCorrect) {
+        box.innerHTML = `
+          <div class="text-emerald-400 font-bold">
+            ✅ <strong>خطة استجابة نموذجية واحترافية!</strong> تم عزل الأجهزة المصابة، واستئصال البرمجية، ثم استعادة البيانات بأمان وتوثيق الحادث لمنع تكراره.
+          </div>
+        `;
+      } else {
+        box.innerHTML = `<span class="text-yellow-400">⚠️ الترتيب غير دقيق تماماً، تذكر: التحضير ⟶ الاكتشاف ⟶ الاحتواء ⟶ الاستئصال ⟶ الاستعادة ⟶ الدروس المستفادة.</span>`;
+      }
+    }
+
+    // 6. Risk Calculator
+    function actionCalculateCyberRisk() {
+      const impact = parseInt(document.getElementById('ch2ImpactSlider').value);
+      const prob = parseInt(document.getElementById('ch2ProbSlider').value);
+      const score = impact * prob;
+      const box = document.getElementById('riskCalculationDisplay');
+
+      let label = "خطر منخفض (Low)";
+      let color = "text-emerald-400";
+      let advice = "مخاطرة مقبولة؛ مراجعة أمنية دورية كل عام.";
+
+      if (score > 16) {
+        label = "خطر حرج جداً (Critical)";
+        color = "text-red-500 font-bold";
+        advice = "حالة طوارئ! إيقاف الخدمات المعرضة فوراً وتطبيق حماية عاجلة 24/7 لمنع اختراق المنظومة.";
+      } else if (score > 10) {
+        label = "خطر مرتفع (High)";
+        color = "text-orange-400 font-bold";
+        advice = "خطة علاج أمني خلال أسبوع وتطبيق المصادقة متعددة العوامل فوراً.";
+      } else if (score > 5) {
+        label = "خطر متوسط (Medium)";
+        color = "text-yellow-400 font-bold";
+        advice = "سد الثغرات وتدريب الموظفين على كشف رسائل التصيد الاحتيالي.";
+      }
+
+      box.innerHTML = `
+        <div>
+          معادلة المخاطر: التأثير (${impact}) × الاحتمالية (${prob}) = <span class="font-bold font-mono text-base ${color}">${score} / 25</span><br/>
+          مستوى الخطر: <strong class="${color}">${label}</strong><br/>
+          التوصية الهندسية: <span class="text-gray-300">${advice}</span>
+        </div>
+      `;
+    }
+
+    // 7. Think Like an Engineer
+    function actionAnswerCh2Engineer(opt) {
+      const box = document.getElementById('ch2EngineerFeedback');
+      box.classList.remove('hidden');
+      if (opt === 'isolate') {
+        box.innerHTML = `
+          ✅ <strong>قرار مهندس أمن محترف وصحيح!</strong><br/>
+          الخطوة رقم 1 دائماً هي الاحتواء (Containment) عبر عزل الحسابات المخترقة ووقف الجلسات النشطة وسد باب التسلل لمنع المخترق من سحب مزيد من الملفات.
+        `;
+      } else {
+        box.innerHTML = `
+          ❌ <strong>إجراء خاطئ وغير فعال!</strong><br/>
+          استعادة نسخة قديمة دون عزل حساب المخترق يعني أنه لا يزال يمتلك الصلاحية وسيقوم بسرقة البيانات المستعادة فوراً!
+        `;
+      }
+    }
+
+    // 8. Quiz
+    const ch2Questions = [
+      {
+        q: "في مصافحة TLS، ما هو الغرض من الشهادة الرقمية التي يرسلها الخادم؟",
+        options: ["ضغط ملفات الموقع", "إثبات الهوية الحقيقية للموقع ومنع التزوير والانتحال", "تسريع الإنترنت", "تغيير كلمة المرور"],
+        correct: 1,
+        exp: "الشهادة الرقمية موقعة من جهة CA معتمدة لتؤكد للمتصفح أن الخادم حقيقي وآمن."
+      },
+      {
+        q: "المبدأ الأساسي في استراتيجية 'انعدام الثقة' (Zero Trust) هو: لا تثق بأحد أبداً، وتحقق دائماً.",
+        options: ["صح", "خطأ"],
+        correct: 0,
+        exp: "صح؛ لا يتم منح ثقة افتراضية لأي شخص أو جهاز حتى لو كان داخل مبنى الشركة."
+      },
+      {
+        q: "عند وقوع هجوم برمجية الفدية (Ransomware)، ما الخطوة التي يجب أن تسبق استعادة الملفات فوراً؟",
+        options: ["دفع الفدية للمخترقين", "الاستئصال التام وإزالة البرمجية الخبيثة", "إغلاق شاشة الكمبيوتر فقط", "حذف النسخ الاحتياطية"],
+        correct: 1,
+        exp: "الاستئصال (Eradication) شرط أساسي قبل الاستعادة (Recovery) حتى لا تعيد الفدية تشفير الملفات المسترجعة."
+      }
+    ];
+
+    // Dynamic Content Area Switcher
+    function switchActiveLesson(lessonId) {
+      playBeep(580, 'sine', 0.1);
+      const lessons = ['lesson2-1', 'lesson2-2', 'lesson2-3'];
+      const tabs = ['tab_lesson2-1', 'tab_lesson2-2', 'tab_lesson2-3', 'tab_all'];
+
+      tabs.forEach(t => {
+        const btn = document.getElementById(t);
+        if (btn) btn.className = 'btn-secondary text-xs flex items-center gap-1.5 py-2 px-3.5';
+      });
+
+      if (lessonId === 'all') {
+        const tabAll = document.getElementById('tab_all');
+        if (tabAll) tabAll.className = 'btn-action-red text-xs flex items-center gap-1.5 py-2 px-3.5';
+        lessons.forEach(id => {
+          const sec = document.getElementById(id);
+          if (sec) {
+            sec.classList.remove('hidden');
+            sec.classList.remove('border-red-400');
+          }
+        });
+        return;
+      }
+
+      const activeTab = document.getElementById(`tab_${lessonId}`);
+      if (activeTab) activeTab.className = 'btn-action-red text-xs flex items-center gap-1.5 py-2 px-3.5';
+
+      lessons.forEach(id => {
+        const sec = document.getElementById(id);
+        if (sec) {
+          if (id === lessonId) {
+            sec.classList.remove('hidden');
+            sec.classList.add('border-red-400');
+            sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            sec.classList.add('shadow-2xl', 'shadow-red-500/30');
+            setTimeout(() => sec.classList.remove('shadow-2xl', 'shadow-red-500/30'), 1500);
+          } else {
+            sec.classList.remove('border-red-400');
+          }
+        }
+      });
+      lucide.createIcons();
+    }
+
+    let ch2QuizIdx = 0;
+    let ch2QuizTimeout = null;
+
+    // Reset Answer (مسح الإجابة وإلغاء التحديد)
+    function resetCh2QuizAnswer() {
+      if (ch2QuizTimeout) clearTimeout(ch2QuizTimeout);
+      playBeep(450, 'sine', 0.1);
+      const q = ch2Questions[ch2QuizIdx];
+      if (q && q.options) {
+        q.options.forEach((_, i) => {
+          const el = document.getElementById(`ch2qopt_${i}`);
+          if (el) el.className = 'quiz-opt text-xs text-gray-300';
+        });
+      }
+      const exp = document.getElementById('ch2QuizExp');
+      if (exp) {
+        exp.classList.add('hidden');
+        exp.innerHTML = '';
+      }
+    }
+
+    // Next Question (السؤال التالي)
+    function nextCh2Question() {
+      if (ch2QuizTimeout) clearTimeout(ch2QuizTimeout);
+      playBeep(580, 'sine', 0.08);
+      ch2QuizIdx++;
+      renderCh2Quiz();
+    }
+
+    // Prev Question (السؤال السابق)
+    function prevCh2Question() {
+      if (ch2QuizTimeout) clearTimeout(ch2QuizTimeout);
+      playBeep(420, 'sine', 0.08);
+      if (ch2QuizIdx > 0) {
+        ch2QuizIdx--;
+        renderCh2Quiz();
+      }
+    }
+
+    // Shuffle & Clear Question Options
+    function shuffleAndResetCh2QuizQuestion() {
+      resetCh2QuizAnswer();
+      playBeep(700, 'triangle', 0.12);
+
+      const q = ch2Questions[ch2QuizIdx];
+      const correctOptionText = q.options[q.correct];
+
+      const shuffled = [...q.options];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+
+      q.options = shuffled;
+      q.correct = shuffled.indexOf(correctOptionText);
+
+      renderCh2Quiz();
+    }
+
+    function renderCh2Quiz() {
+      if (ch2QuizIdx >= ch2Questions.length) {
+        document.getElementById('ch2QuizBox').innerHTML = `
+          <div class="text-center py-6">
+            <div class="text-4xl mb-2">🛡️</div>
+            <h4 class="font-bold text-white text-sm mb-1">أحسنت! أتممت جميع أسئلة الفصل الثاني بنجاح</h4>
+            <button onclick="ch2QuizIdx=0;renderCh2Quiz()" class="btn-action-red text-xs mt-3 font-bold">إعادة الاختبار 🔄</button>
+          </div>
+        `;
+        document.getElementById('ch2QuizProg').textContent = 'مكتمل ✅';
+        if (window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
+        return;
+      }
+      const q = ch2Questions[ch2QuizIdx];
+      document.getElementById('ch2QuizProg').textContent = `السؤال ${ch2QuizIdx + 1} من ${ch2Questions.length}`;
+      document.getElementById('ch2QuizBox').innerHTML = `
+        <div class="flex items-center justify-between mb-3 flex-wrap gap-2 border-b border-slate-800 pb-2">
+          <div class="text-xs sm:text-sm font-bold text-white flex-1">${q.q}</div>
+          <div class="flex items-center gap-1.5">
+            <!-- زر مسح الإجابة -->
+            <button 
+              type="button" 
+              onclick="resetCh2QuizAnswer()" 
+              class="btn-reset-ans text-[11px] py-1 px-2.5 rounded-lg flex items-center gap-1 cursor-pointer font-bold shadow-sm"
+              title="مسح الإجابة المختارة وإلغاء التحديد للمحاولة من جديد"
+            >
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+              <span>مسح الإجابة 🔄</span>
+            </button>
+            <!-- زر خلط الخيارات -->
+            <button 
+              type="button" 
+              onclick="shuffleAndResetCh2QuizQuestion()" 
+              class="btn-secondary text-[11px] py-1 px-2 rounded-lg flex items-center gap-1 text-red-400 border border-red-500/30 hover:bg-red-500/10 cursor-pointer"
+              title="إعادة خلط وترتيب الخيارات"
+            >
+              <i data-lucide="shuffle" class="w-3.5 h-3.5"></i>
+              <span>خلط 🔀</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Options -->
+        <div class="space-y-2 mb-3">
+          ${q.options.map((opt, i) => `
+            <div onclick="checkCh2QuizOpt(${i})" id="ch2qopt_${i}" class="quiz-opt text-xs text-gray-300">
+              ${opt}
+            </div>
+          `).join('')}
+        </div>
+
+        <!-- Explanation Feedback -->
+        <div id="ch2QuizExp" class="hidden p-3 rounded-xl text-xs"></div>
+
+        <!-- Bottom Navigation (السؤال التالي / السابق) -->
+        <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-800/80 flex-wrap gap-2">
+          <div>
+            ${ch2QuizIdx > 0 ? `
+              <button type="button" onclick="prevCh2Question()" class="btn-prev-q text-xs py-1.5 px-3 rounded-xl flex items-center gap-1 text-gray-300 border border-slate-700 hover:bg-slate-800 transition-all font-medium cursor-pointer">
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                <span>السابق</span>
+              </button>
+            ` : ''}
+          </div>
+          <!-- زر الانتقال للسؤال التالي -->
+          <button type="button" onclick="nextCh2Question()" class="btn-next-q text-xs py-1.5 px-4 rounded-xl flex items-center gap-1.5 text-white bg-gradient-to-r from-red-600 to-purple-600 hover:from-red-500 hover:to-purple-500 transition-all font-bold shadow-md shadow-red-500/20 cursor-pointer">
+            <span>السؤال التالي</span>
+            <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      `;
+      if (window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
+    }
+
+    function checkCh2QuizOpt(i) {
+      const q = ch2Questions[ch2QuizIdx];
+      const isCorrect = i === q.correct;
+      playBeep(isCorrect ? 880 : 250, 'sine', 0.15);
+
+      document.getElementById(`ch2qopt_${i}`).className = isCorrect ? 'quiz-opt correct text-xs' : 'quiz-opt wrong text-xs';
+      if (!isCorrect) document.getElementById(`ch2qopt_${q.correct}`).className = 'quiz-opt correct text-xs';
+      const exp = document.getElementById('ch2QuizExp');
+      exp.classList.remove('hidden');
+      exp.className = isCorrect ? 'p-3 rounded-xl text-xs bg-emerald-950/40 border border-emerald-500/50 text-emerald-300' : 'p-3 rounded-xl text-xs bg-red-950/40 border border-red-500/50 text-red-300';
+      exp.innerHTML = `${isCorrect ? '✅ صحيح!' : '❌ خطأ!'} ${q.exp}`;
+
+      if (isCorrect) {
+        addXp(25);
+      }
+
+      if (ch2QuizTimeout) clearTimeout(ch2QuizTimeout);
+      ch2QuizTimeout = setTimeout(() => {
+        ch2QuizIdx++;
+        renderCh2Quiz();
+      }, 2500);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      const disp = document.getElementById('userXpDisplay');
+      if (disp) disp.textContent = getUserXp();
+      initRansomwareButtons();
+      renderCh2Quiz();
+    });
+  </script>
+</body>
+</html>

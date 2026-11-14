@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="تسجيل الدخول الأمني المزدوج - منصة آدم محمد التعليمية (Adam Mohamed Platform)" />
+  <title>تسجيل الدخول الأمني المزدوج | Adam Mohamed Platform</title>
+
+  <!-- Auto redirect to index.html if already logged in -->
+  <script>
+    if (localStorage.getItem('isLoggedIn') === 'true') {
+      window.location.replace('index.html');
+    }
+  </script>
+
+  <!-- Google Fonts: Cairo, Tajawal & Fira Code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            cairo: ['Cairo', 'sans-serif'],
+            tajawal: ['Tajawal', 'sans-serif'],
+            mono: ['Fira Code', 'monospace']
+          },
+          colors: {
+            cyber: '#00D4FF',
+            neon: {
+              blue: '#00D4FF',
+              purple: '#7C3AED',
+              green: '#10B981',
+              pink: '#EC4899',
+              yellow: '#F59E0B',
+              red: '#EF4444'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      font-family: 'Cairo', 'Tajawal', sans-serif;
+      box-sizing: border-box;
+    }
+    body {
+      background: #050814;
+      color: #f1f5f9;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    /* Light Theme Support */
+    body.light-theme {
+      background: #f8fafc !important;
+      color: #0f172a !important;
+    }
+    body.light-theme .neon-card {
+      background: #ffffff !important;
+      border-color: rgba(0, 0, 0, 0.12) !important;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08) !important;
+    }
+    body.light-theme .text-white {
+      color: #0f172a !important;
+    }
+    body.light-theme .text-gray-300, body.light-theme .text-gray-400 {
+      color: #334155 !important;
+    }
+    body.light-theme input {
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+
+    .neon-card {
+      background: rgba(12, 18, 34, 0.88);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(0, 212, 255, 0.25);
+      box-shadow: 0 0 35px rgba(0, 212, 255, 0.12), inset 0 0 20px rgba(0, 212, 255, 0.04);
+      border-radius: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .btn-gradient {
+      background: linear-gradient(135deg, #00D4FF 0%, #7C3AED 100%);
+      color: #ffffff;
+      font-weight: 800;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+    }
+    .btn-gradient:hover {
+      box-shadow: 0 0 25px rgba(0, 212, 255, 0.55);
+      transform: translateY(-2px);
+    }
+    .btn-gradient:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #e2e8f0;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: #00D4FF;
+      color: #00D4FF;
+    }
+
+    /* 6-Digit PIN input boxes */
+    .pin-digit {
+      width: 3.2rem;
+      height: 3.8rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 800;
+      font-family: 'Fira Code', monospace;
+      border-radius: 0.75rem;
+      background: rgba(2, 6, 23, 0.8);
+      border: 1.5px solid rgba(0, 212, 255, 0.3);
+      color: #00D4FF;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .pin-digit:focus {
+      border-color: #00D4FF;
+      box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+      transform: scale(1.05);
+    }
+
+    /* Error Shake Animation */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+    .shake-anim {
+      animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4 relative selection:bg-cyan-500 selection:text-black">
+
+  <!-- Top Theme Toggle Button -->
+  <div class="fixed top-4 left-4 z-50">
+    <button onclick="toggleTheme()" class="p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-cyan-400 shadow-lg transition-colors" title="تبديل الوضع (Dark/Light)">
+      <i data-lucide="sun-moon" class="w-4 h-4"></i>
+    </button>
+  </div>
+
+  <!-- Background Ambient Glow Effects -->
+  <div class="fixed top-1/4 -right-24 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="fixed bottom-1/4 -left-24 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl pointer-events-none"></div>
+
+  <!-- Main Login Container -->
+  <main class="w-full max-w-md relative z-10">
+    <div id="loginCard" class="p-8 sm:p-10 neon-card">
+      
+      <!-- Platform Header / Branding -->
+      <div class="text-center mb-6">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-cyan-400 via-blue-500 to-purple-600 flex items-center justify-center text-slate-950 font-black text-2xl mx-auto mb-3 shadow-xl shadow-cyan-500/30">
+          AM
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
+          Adam Mohamed Platform
+        </h1>
+        <div class="text-xs font-bold text-cyan-400 mt-1">
+          منصة آدم محمد التعليمية | نظام المصادقة الثنائية الآمن
+        </div>
+        <p class="text-[11px] text-gray-400 mt-1">
+          مادة البرمجة والذكاء الاصطناعي - الثانوية العامة المصرية
+        </p>
+      </div>
+
+      <!-- Stepper Indicator -->
+      <div class="flex items-center justify-center gap-2 mb-6">
+        <div id="stepDot1" class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-500/50 text-[11px] font-bold text-cyan-300">
+          <span class="w-4 h-4 rounded-full bg-cyan-400 text-slate-950 flex items-center justify-center text-[10px] font-black">1</span>
+          <span>بريد Gmail</span>
+        </div>
+        <div class="w-6 h-0.5 bg-slate-700"></div>
+        <div id="stepDot2" class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-[11px] font-bold text-gray-500">
+          <span class="w-4 h-4 rounded-full bg-slate-700 text-gray-300 flex items-center justify-center text-[10px] font-black">2</span>
+          <span>كود التحقق السري (6 أرقام)</span>
+        </div>
+      </div>
+
+      <!-- Alert / Status Message Box (Red on error, Green on success) -->
+      <div id="alertBox" class="hidden mb-5 p-3.5 rounded-xl text-xs flex items-center gap-2.5 transition-all"></div>
+
+      <!-- ========================================== -->
+      <!-- STEP 1: GMAIL INPUT FORM -->
+      <!-- ========================================== -->
+      <form id="step1Form" onsubmit="handleStep1Submit(event)" class="space-y-4">
+        <div>
+          <div class="flex items-center justify-between mb-1.5">
+            <label for="gmailInput" class="text-xs font-bold text-gray-300">
+              البريد الإلكتروني (Gmail):
+            </label>
+            <span class="text-[10px] text-cyan-400 font-mono">ينتهي بـ @gmail.com</span>
+          </div>
+          <div class="relative">
+            <input 
+              type="email" 
+              id="gmailInput" 
+              required 
+              autocomplete="email"
+              placeholder="example@gmail.com" 
+              class="w-full bg-slate-950/80 border border-slate-700 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 rounded-xl px-4 py-3 text-xs sm:text-sm text-white placeholder-gray-500 outline-none transition-all pr-10 dir-ltr text-left" 
+            />
+            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+              <i data-lucide="mail" class="w-4 h-4"></i>
+            </div>
+          </div>
+        </div>
+
+        <button 
+          type="submit" 
+          id="step1Btn" 
+          class="w-full btn-gradient py-3.5 px-4 rounded-xl text-xs sm:text-sm font-black flex items-center justify-center gap-2 mt-4 cursor-pointer border-none"
+        >
+          <span>التحقق ومتابعة إلى كود الدخول</span>
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Quick Demo Fill Buttons (Existing 710 XP vs New 0 XP) -->
+        <div class="space-y-1.5 pt-2">
+          <div class="text-[10px] text-gray-400 text-center flex items-center justify-center gap-1">
+            <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i>
+            <span>أمثلة بريد حقيقي معتمد لاختبار نظام الـ XP:</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <button 
+              type="button" 
+              onclick="fillDemoGmail('adam@gmail.com')" 
+              class="text-right text-[11px] p-2.5 rounded-xl bg-cyan-950/40 border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20 transition-all flex items-center justify-between"
+            >
+              <div>
+                <div class="font-bold text-white text-xs">حساب سابق معتمد</div>
+                <div class="font-mono text-[10px] text-cyan-400">adam@gmail.com</div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-bold text-[10px]">710 XP</span>
+            </button>
+
+            <button 
+              type="button" 
+              onclick="fillDemoGmail('ahmed.ali2026@gmail.com')" 
+              class="text-right text-[11px] p-2.5 rounded-xl bg-purple-950/40 border border-purple-500/30 text-purple-300 hover:bg-purple-500/20 transition-all flex items-center justify-between"
+            >
+              <div>
+                <div class="font-bold text-white text-xs">طالب حقيقي جديد</div>
+                <div class="font-mono text-[10px] text-purple-400">ahmed.ali2026@gmail.com</div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-bold text-[10px]">0 XP</span>
+            </button>
+          </div>
+          <p class="text-[10px] text-gray-500 text-center pt-1">
+            🔒 يُشترط إدخال بريد Gmail حقيقي ينتهي بـ @gmail.com ومكتوب باسم طبيعي ومقروء.
+          </p>
+        </div>
+      </form>
+
+      <!-- ========================================== -->
+      <!-- STEP 2: 6-DIGIT VERIFICATION CODE FORM -->
+      <!-- ========================================== -->
+      <form id="step2Form" onsubmit="handleStep2Submit(event)" class="space-y-5 hidden">
+        <div class="p-3 rounded-xl bg-cyan-950/30 border border-cyan-500/20 text-xs flex items-center justify-between">
+          <div class="text-right">
+            <div class="text-[10px] text-gray-400">البريد الإلكتروني للتحقق:</div>
+            <div id="displayTargetEmail" class="font-bold text-white font-mono text-xs"></div>
+          </div>
+          <button type="button" onclick="goToStep1()" class="text-xs text-cyan-400 hover:underline flex items-center gap-1">
+            <i data-lucide="edit-3" class="w-3 h-3"></i>
+            <span>تعديل</span>
+          </button>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-300 mb-2 text-center">
+            أدخل كود التحقق الأمني السري المكون من 6 أرقام:
+          </label>
+          
+          <!-- 6-Digit PIN Boxes -->
+          <div class="flex items-center justify-center gap-1.5 sm:gap-2 dir-ltr" id="pinContainer">
+            <input type="text" maxlength="1" inputmode="numeric" class="pin-digit" id="pin1" autofocus />
+            <input type="text" maxlength="1" inputmode="numeric" class="pin-digit" id="pin2" />
+            <input type="text" maxlength="1" inputmode="numeric" class="pin-digit" id="pin3" />
+            <input type="text" maxlength="1" inputmode="numeric" class="pin-digit" id="pin4" />
+            <input type="text" maxlength="1" inputmode="numeric" class="pin-digit" id="pin5" />
+            <input type="text" maxlength="1" inputmode="numeric" class="pin-digit" id="pin6" />
+          </div>
+          <p class="text-[10px] text-gray-400 text-center mt-2">
+            🔒 لن يُسمح بالدخول للمنصة إلا بكتابة هذا الكود السري المعتمد بدقة.
+          </p>
+        </div>
+
+        <div class="flex gap-2">
+          <button 
+            type="button" 
+            onclick="goToStep1()" 
+            class="btn-secondary py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-1"
+          >
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            <span>رجوع</span>
+          </button>
+          
+          <button 
+            type="submit" 
+            id="step2Btn" 
+            class="flex-1 btn-gradient py-3.5 px-4 rounded-xl text-xs sm:text-sm font-black flex items-center justify-center gap-2 cursor-pointer border-none"
+          >
+            <span>تأكيد الكود والدخول للمنصة</span>
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </form>
+
+      <!-- Footer Info -->
+      <div class="text-center mt-6 text-[11px] text-gray-500 border-t border-slate-800/80 pt-4">
+        منصة آدم محمد التعليمية • تأمين الدخول بواسطة: <strong class="text-gray-400">Adam Mohamed</strong><br/>
+        جميع الحقوق محفوظة © 2026 لمنصة Adam Mohamed Platform
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT TWO-STEP AUTHENTICATION LOGIC -->
+  <!-- ========================================== -->
+  <script>
+    // SECRET HARDCODED 6-DIGIT CODE
+    const SECRET_VERIFICATION_CODE = "202611";
+
+    let validatedEmail = "";
+
+    // Web Audio FX
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playBeep(freq = 520, type = 'sine', duration = 0.1) {
+      try {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Theme Toggle
+    function toggleTheme() {
+      const isLight = document.body.classList.toggle('light-theme');
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      playBeep(isLight ? 700 : 350, 'triangle', 0.1);
+    }
+    if (localStorage.getItem('theme') === 'light') {
+      document.body.classList.add('light-theme');
+    }
+
+    // Quick Demo Email Fill (Existing 710 XP vs New 0 XP)
+    function fillDemoGmail(email = 'adam@gmail.com') {
+      const emailIn = document.getElementById('gmailInput');
+      emailIn.value = email;
+      playBeep(650, 'sine', 0.08);
+      const isAdam = email.includes('adam');
+      showAlert(`تم ملء البريد التجريبي (${email}) بنجاح! ${isAdam ? 'هذا الحساب مرتبط بنقاط سابقة (710 XP).' : 'هذا حساب جديد وسيبدأ برصيد (0 XP).'} اضغط متابعة.`, 'info');
+    }
+
+    // Alert Display Helper
+    function showAlert(message, type = 'error') {
+      const box = document.getElementById('alertBox');
+      box.classList.remove('hidden');
+
+      if (type === 'error') {
+        box.className = 'mb-5 p-3.5 rounded-xl text-xs flex items-center gap-2.5 bg-red-950/80 border border-red-500/70 text-red-200 shadow-lg shadow-red-950/50';
+        box.innerHTML = `<i data-lucide="alert-circle" class="w-4 h-4 text-red-400 flex-shrink-0"></i><span>${message}</span>`;
+      } else if (type === 'success') {
+        box.className = 'mb-5 p-3.5 rounded-xl text-xs flex items-center gap-2.5 bg-emerald-950/80 border border-emerald-500/70 text-emerald-200 shadow-lg shadow-emerald-950/50';
+        box.innerHTML = `<i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i><span>${message}</span>`;
+      } else {
+        box.className = 'mb-5 p-3.5 rounded-xl text-xs flex items-center gap-2.5 bg-cyan-950/80 border border-cyan-500/60 text-cyan-200 shadow-lg shadow-cyan-950/50';
+        box.innerHTML = `<i data-lucide="info" class="w-4 h-4 text-cyan-400 flex-shrink-0"></i><span>${message}</span>`;
+      }
+      lucide.createIcons();
+    }
+
+    // Shake animation
+    function triggerShake() {
+      const card = document.getElementById('loginCard');
+      card.classList.remove('shake-anim');
+      void card.offsetWidth;
+      card.classList.add('shake-anim');
+      setTimeout(() => card.classList.remove('shake-anim'), 450);
+    }
+
+    // Comprehensive Real Gmail Verification Engine (يحظر الحروف العشوائية والوهمية)
+    function validateRealGmail(email) {
+      if (!email) {
+        return { valid: false, error: 'يرجى إدخال البريد الإلكتروني للمتابعة.' };
+      }
+
+      // 1. Must contain single @ and end with @gmail.com
+      if (!email.includes('@')) {
+        return { valid: false, error: 'صيغة البريد غير مكتملة! يجب إدخال بريد إلكتروني كامل بصيغة: example@gmail.com' };
+      }
+
+      const parts = email.split('@');
+      if (parts.length !== 2) {
+        return { valid: false, error: 'صيغة البريد غير صحيحة، يحتوي على أكثر من علامة @.' };
+      }
+
+      const username = parts[0];
+      const domain = parts[1];
+
+      // 2. Strict Domain Check
+      if (domain !== 'gmail.com') {
+        return { valid: false, error: 'عذراً، يجب استخدام بريد رسمي ينتهي بنطاق @gmail.com فقط.' };
+      }
+
+      // 3. Strict Google Gmail username character set: only letters (a-z), digits (0-9), and periods (.)
+      // Google does NOT permit hyphens (-), underscores (_), or plus signs (+) in username creation
+      if (!/^[a-z0-9.]+$/.test(username)) {
+        return { valid: false, error: 'بريد Gmail غير صالح! يُسمح فقط بالأحرف الإنجليزية والأرقام والنقطة (.)، وتُمنع الرموز مثل (- أو _).' };
+      }
+
+      // 4. Period rules: cannot start or end with period, cannot have consecutive periods (..)
+      if (username.startsWith('.') || username.endsWith('.')) {
+        return { valid: false, error: 'اسم المستخدم في Gmail لا يمكن أن يبدأ أو ينتهي بنقطة (.).' };
+      }
+      if (username.includes('..')) {
+        return { valid: false, error: 'بريد غير حقيقي: لا يمكن وضع نقطتين متتاليتين (..) في بريد Gmail.' };
+      }
+
+      // 5. Length rule: Allow 4+ for grandfathered names like adam, standard is 6-30 chars
+      if (username.length < 4) {
+        return { valid: false, error: `اسم المستخدم قصير جداً (${username.length} أحرف)! الحد الأدنى لبريد Gmail هو 6 خانات (أو 4 للأسماء التاريخية).` };
+      }
+      if (username.length > 30) {
+        return { valid: false, error: 'اسم المستخدم طويل جداً! الحد الأقصى لبريد Gmail هو 30 حرفاً.' };
+      }
+
+      // Recognized platform account exception
+      if (username === 'adam' || username === 'adam.mohamed') {
+        return { valid: true };
+      }
+
+      // Standard accounts minimum length
+      if (username.length < 6) {
+        return { valid: false, error: 'بريد Gmail الحقيقي يجب ألا يقل عن 6 خانات وفقاً لقواعد Google الرسمية (مثال: ahmed.ali2026@gmail.com).' };
+      }
+
+      // 6. Anti-repetition: reject strings with 3+ repeated characters (e.g. aaa, 111, zzz)
+      if (/(.)\1{2,}/.test(username)) {
+        return { valid: false, error: 'تم رفض البريد! اسم المستخدم يحتوي على تكرار عشوائي لنفس الحرف، يرجى كتابة بريدك الحقيقي.' };
+      }
+
+      // 7. Keyboard mash / sequential keys detection
+      const keyboardSequences = [
+        'qwerty', 'wertyu', 'ertyui', 'rtyuio', 'tyuiop',
+        'asdfgh', 'sdfghj', 'dfghjk', 'fghjkl',
+        'zxcvbn', 'xcvbnm',
+        '123456', '234567', '345678', '456789', '987654', '654321',
+        'poiuyt', 'lkjhgf', 'mnbvcx',
+        'asdf', 'qwer', 'zxcv', '1234', 'abcd'
+      ];
+      for (const seq of keyboardSequences) {
+        if (username.includes(seq)) {
+          return { valid: false, error: `تم رفض البريد! الجزء (${seq}) يمثل كتابة عشوائية من لوحة المفاتيح وليس اسماً حقيقياً.` };
+        }
+      }
+
+      // 8. Dummy / test words rejection
+      const dummyWords = [
+        'test', 'fake', 'dummy', 'temp', 'spam', 'none', 'null', 'example',
+        'sample', 'random', 'testing', 'admin123', 'user123', 'email', 'mail'
+      ];
+      for (const dummy of dummyWords) {
+        if (username === dummy || username.startsWith(dummy + '.') || username.endsWith('.' + dummy)) {
+          return { valid: false, error: `البريد (${username}@gmail.com) يبدو اسماً وهمياً أو تجريبياً! يرجى إدخال بريدك الشخصي الحقيقي.` };
+        }
+      }
+
+      // 9. Linguistic & Pronounceability Check (Must look like natural words or human names)
+      const lettersOnly = username.replace(/[^a-z]/g, '');
+      if (lettersOnly.length < 3) {
+        return { valid: false, error: 'بريد غير حقيقي! يجب أن يحتوي البريد على اسم حقيقي مكون من 3 أحرف هجائية على الأقل.' };
+      }
+
+      // Check vowels (a, e, i, o, u, y)
+      const vowels = lettersOnly.match(/[aeiouy]/g) || [];
+      const vowelRatio = vowels.length / lettersOnly.length;
+
+      if (vowels.length === 0) {
+        return { valid: false, error: 'بريد غير حقيقي! اسم المستخدم خالٍ تماماً من حروف العلة (vowels) ولا يشكل اسماً مقروءاً.' };
+      }
+      if (vowelRatio < 0.18) {
+        return { valid: false, error: 'البريد يبدو عشوائياً وغير مقروء (نسبة الحروف الساكنة غير طبيعية)! يرجى كتابة اسمك الحقيقي.' };
+      }
+
+      // 10. Check for unpronounceable consonant clusters (5+ consonants in a row)
+      if (/[bcdfghjklmnpqrstvwxz]{5,}/.test(lettersOnly)) {
+        return { valid: false, error: 'تم رصد حروف عشوائية غير مترابطة في البريد! يرجى كتابة بريدك الحقيقي المسجل باسمك.' };
+      }
+
+      // 11. Check for 4+ consecutive vowels (e.g. aeiou, uuuu)
+      if (/[aeiouy]{4,}/.test(lettersOnly)) {
+        return { valid: false, error: 'صيغة البريد غير طبيعية وتحتوي على حروف علة متتالية بشكل عشوائي.' };
+      }
+
+      return { valid: true };
+    }
+
+    // STEP 1: Handle Strict Gmail Validation & Transition
+    function handleStep1Submit(event) {
+      event.preventDefault();
+      const emailInput = document.getElementById('gmailInput');
+      const email = emailInput.value.trim().toLowerCase();
+
+      // Run Comprehensive Real-Email Validator
+      const check = validateRealGmail(email);
+
+      if (!check.valid) {
+        playBeep(180, 'sawtooth', 0.25);
+        triggerShake();
+        emailInput.classList.add('border-red-500');
+        setTimeout(() => emailInput.classList.remove('border-red-500'), 3500);
+        showAlert(check.error, 'error');
+        return;
+      }
+
+      // Success Step 1 -> Transition to Step 2
+      playBeep(700, 'sine', 0.15);
+      validatedEmail = email;
+      document.getElementById('displayTargetEmail').textContent = validatedEmail;
+
+      // Update UI steps
+      document.getElementById('step1Form').classList.add('hidden');
+      document.getElementById('step2Form').classList.remove('hidden');
+
+      document.getElementById('stepDot1').className = 'flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/50 text-[11px] font-bold text-emerald-300';
+      document.getElementById('stepDot2').className = 'flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-500/50 text-[11px] font-bold text-cyan-300';
+
+      showAlert('تم التحقق من أن البريد حقيقي وصحيح بنجاح! أدخل الآن كود التحقق الأمني السري.', 'info');
+      
+      // Auto-focus first PIN box
+      setTimeout(() => {
+        document.getElementById('pin1').focus();
+      }, 150);
+    }
+
+    // Go back to Step 1
+    function goToStep1() {
+      playBeep(450, 'sine', 0.08);
+      document.getElementById('step2Form').classList.add('hidden');
+      document.getElementById('step1Form').classList.remove('hidden');
+
+      document.getElementById('stepDot1').className = 'flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-500/50 text-[11px] font-bold text-cyan-300';
+      document.getElementById('stepDot2').className = 'flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-[11px] font-bold text-gray-500';
+
+      document.getElementById('alertBox').classList.add('hidden');
+      document.getElementById('gmailInput').focus();
+    }
+
+    // Auto-advance PIN digit inputs
+    const pinInputs = [
+      document.getElementById('pin1'),
+      document.getElementById('pin2'),
+      document.getElementById('pin3'),
+      document.getElementById('pin4'),
+      document.getElementById('pin5'),
+      document.getElementById('pin6')
+    ];
+
+    pinInputs.forEach((input, index) => {
+      input.addEventListener('input', (e) => {
+        const val = e.target.value.replace(/\D/g, '');
+        e.target.value = val;
+        if (val && index < pinInputs.length - 1) {
+          pinInputs[index + 1].focus();
+        }
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !input.value && index > 0) {
+          pinInputs[index - 1].focus();
+        }
+      });
+
+      // Handle paste
+      input.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '').slice(0, 6);
+        for (let i = 0; i < pasted.length; i++) {
+          if (pinInputs[i]) pinInputs[i].value = pasted[i];
+        }
+        if (pasted.length === 6) {
+          pinInputs[5].focus();
+        } else if (pasted.length > 0) {
+          pinInputs[Math.min(pasted.length, 5)].focus();
+        }
+      });
+    });
+
+    // STEP 2: Handle 6-Digit PIN Code Verification
+    function handleStep2Submit(event) {
+      event.preventDefault();
+      const enteredCode = pinInputs.map(input => input.value).join('');
+
+      if (enteredCode.length < 6) {
+        playBeep(200, 'sawtooth', 0.2);
+        showAlert('يرجى إكمال كتابة الـ 6 أرقام لكود التحقق كاملاً.', 'error');
+        triggerShake();
+        return;
+      }
+
+      // Check against secret code: 202611
+      if (enteredCode === SECRET_VERIFICATION_CODE) {
+        // SUCCESS
+        playBeep(880, 'sine', 0.25);
+        const submitBtn = document.getElementById('step2Btn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span>تم تأكيد الهوية! جاري الدخول... ⌛</span>`;
+
+        // Extract display name from Gmail
+        const userPrefix = validatedEmail.split('@')[0];
+        const formattedName = userPrefix
+          .split(/[._-]/)
+          .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+          .join(' ');
+
+        // Save authentication in localStorage
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('userEmail', validatedEmail);
+        localStorage.setItem('userName', formattedName || 'طالب متميز');
+        localStorage.setItem('authVerifiedAt', new Date().toISOString());
+
+        // USER-SPECIFIC XP INITIALIZATION (Independent per account)
+        const xpKey = 'xp_' + validatedEmail;
+        if (localStorage.getItem(xpKey) === null) {
+          // Account adam@gmail.com gets his saved 710 XP!
+          if (validatedEmail === 'adam@gmail.com' || validatedEmail === 'adam.mohamed@gmail.com') {
+            localStorage.setItem(xpKey, '710');
+          } else {
+            // Any new email starts strictly from 0 XP
+            localStorage.setItem(xpKey, '0');
+          }
+        }
+
+        showAlert(`✅ تم التحقق الأمني بنجاح! مرحباً بك (${validatedEmail})، جاري تحميل رصيد نقاطك والدخول...`, 'success');
+
+        // Redirect to index.html
+        setTimeout(() => {
+          window.location.replace('index.html');
+        }, 700);
+
+      } else {
+        // ERROR: Wrong code
+        playBeep(160, 'sawtooth', 0.3);
+        triggerShake();
+
+        pinInputs.forEach(input => {
+          input.classList.add('border-red-500');
+          input.value = '';
+        });
+        pinInputs[0].focus();
+
+        setTimeout(() => {
+          pinInputs.forEach(input => input.classList.remove('border-red-500'));
+        }, 3000);
+
+        showAlert('❌ رمز التحقق السري غير صحيح! يرجى إدخال الكود المكون من 6 أرقام بدقة.', 'error');
+      }
+    }
+  </script>
+</body>
+</html>

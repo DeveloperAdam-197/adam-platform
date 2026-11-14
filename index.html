@@ -1,0 +1,4045 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="منصة آدم محمد التعليمية (Adam Mohamed Platform) - مادة البرمجة والذكاء الاصطناعي للصف الثاني الثانوي" />
+  <title>منصة آدم محمد التعليمية | Adam Mohamed Platform - البرمجة والذكاء الاصطناعي</title>
+
+  <!-- Login Protection Guard -->
+  <script>
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+      window.location.replace('login.html');
+    }
+  </script>
+
+  <!-- Google Fonts: Cairo & Tajawal -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            cairo: ['Cairo', 'sans-serif'],
+            tajawal: ['Tajawal', 'sans-serif'],
+            mono: ['Fira Code', 'monospace']
+          },
+          colors: {
+            cyber: '#00D4FF',
+            neon: {
+              blue: '#00D4FF',
+              purple: '#7C3AED',
+              green: '#10B981',
+              pink: '#EC4899',
+              yellow: '#F59E0B',
+              red: '#EF4444'
+            },
+            dark: {
+              bg: '#050814',
+              card: '#0c1222',
+              card2: '#131b2e',
+              border: 'rgba(0, 212, 255, 0.18)'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --neon-blue: #00D4FF;
+      --neon-purple: #7C3AED;
+      --neon-green: #10B981;
+      --neon-pink: #EC4899;
+      --neon-yellow: #F59E0B;
+      --bg-dark: #050814;
+      --card-bg: #0c1222;
+      --border-glow: rgba(0, 212, 255, 0.25);
+    }
+
+    * {
+      font-family: 'Cairo', 'Tajawal', sans-serif;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: #050814;
+      color: #f1f5f9;
+      overflow-x: hidden;
+      min-height: 100vh;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    /* Light Theme Overrides */
+    body.light-theme {
+      background: #f8fafc !important;
+      color: #0f172a !important;
+    }
+    body.light-theme nav {
+      background: rgba(255, 255, 255, 0.95) !important;
+      border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+    }
+    body.light-theme .card-neon {
+      background: #ffffff !important;
+      border-color: rgba(0, 0, 0, 0.12) !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+    }
+    body.light-theme .text-white {
+      color: #0f172a !important;
+    }
+    body.light-theme .text-gray-300, body.light-theme .text-gray-400 {
+      color: #334155 !important;
+    }
+    body.light-theme .bg-slate-900, body.light-theme .bg-slate-950 {
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+    }
+    body.light-theme .border-slate-800, body.light-theme .border-slate-700 {
+      border-color: #e2e8f0 !important;
+    }
+
+    /* Glow & Animations */
+    .neon-text-blue {
+      color: #00D4FF;
+      text-shadow: 0 0 10px rgba(0, 212, 255, 0.6), 0 0 25px rgba(0, 212, 255, 0.3);
+    }
+    .neon-text-green {
+      color: #10B981;
+      text-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+    }
+    .neon-text-purple {
+      color: #A855F7;
+      text-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
+    }
+
+    .card-neon {
+      background: rgba(12, 18, 34, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 212, 255, 0.18);
+      border-radius: 1rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card-neon:hover {
+      border-color: rgba(0, 212, 255, 0.5);
+      box-shadow: 0 8px 30px rgba(0, 212, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .btn-cyber {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(124, 58, 237, 0.15));
+      border: 1px solid rgba(0, 212, 255, 0.4);
+      color: #00D4FF;
+      font-weight: 700;
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+    .btn-cyber:hover {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(124, 58, 237, 0.3));
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+      border-color: #00D4FF;
+      transform: translateY(-1px);
+    }
+
+    .btn-primary-gradient {
+      background: linear-gradient(135deg, #00D4FF, #7C3AED);
+      color: #ffffff;
+      font-weight: 800;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+    }
+    .btn-primary-gradient:hover {
+      box-shadow: 0 6px 25px rgba(0, 212, 255, 0.6);
+      transform: translateY(-2px);
+    }
+
+    /* Top Progress Bar */
+    #globalProgressBar {
+      height: 5px;
+      background: linear-gradient(90deg, #00D4FF, #7C3AED, #10B981, #F59E0B);
+      transition: width 0.4s ease-out;
+      box-shadow: 0 0 10px #00D4FF;
+    }
+
+    /* Toast Notification */
+    .toast-box {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 9999;
+      transform: translateY(120%);
+      transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .toast-box.show {
+      transform: translateY(0);
+    }
+
+    /* Floating Glossary Modal & Adaptive Cards */
+    #glossaryModal {
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    #glossaryModal.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    /* Modal Container & Header (Dark Mode Default) */
+    .glossary-modal-container {
+      background: #090e1d;
+      border: 1px solid rgba(0, 212, 255, 0.35);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 212, 255, 0.15);
+      transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .glossary-modal-header {
+      background: #0c1222;
+      border-bottom: 1px solid #1e293b;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+    .glossary-modal-title {
+      color: #ffffff;
+      transition: color 0.3s ease;
+    }
+    .glossary-modal-close {
+      color: #94a3b8;
+      transition: color 0.2s ease;
+    }
+    .glossary-modal-close:hover {
+      color: #ffffff;
+    }
+    .glossary-search-bar {
+      background: rgba(15, 23, 42, 0.7);
+      border-bottom: 1px solid #1e293b;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+    .glossary-search-input {
+      background: #050814;
+      border: 1px solid #334155;
+      color: #ffffff;
+      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    }
+    .glossary-search-input:focus {
+      border-color: #00D4FF;
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.25);
+    }
+    .glossary-filter-btn {
+      background: #1e293b;
+      color: #94a3b8;
+      border: 1px solid #334155;
+      transition: all 0.25s ease;
+    }
+    .glossary-filter-btn:hover {
+      background: #334155;
+      color: #f1f5f9;
+    }
+    .glossary-filter-btn.active {
+      background: rgba(6, 182, 212, 0.25) !important;
+      color: #38bdf8 !important;
+      border-color: rgba(6, 182, 212, 0.6) !important;
+      box-shadow: 0 0 12px rgba(6, 182, 212, 0.25);
+      font-weight: 700;
+    }
+
+    /* Glossary Cards (Dark Mode Default) */
+    .glossary-card {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid #1e293b;
+      border-radius: 0.875rem;
+      padding: 0.95rem 1rem;
+      transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    }
+    .glossary-card:hover {
+      background: rgba(22, 33, 62, 0.95);
+      border-color: rgba(0, 212, 255, 0.45);
+      box-shadow: 0 6px 20px rgba(0, 212, 255, 0.12);
+      transform: translateY(-2px);
+    }
+    .glossary-term-title {
+      color: #38bdf8; /* Cyan 400 */
+      font-weight: 700;
+      transition: color 0.3s ease;
+    }
+    .glossary-chapter-badge {
+      background: #020617;
+      color: #94a3b8;
+      border: 1px solid #1e293b;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+    /* نص التعريف في الوضع المظلم: فاتح وبارز ومريح للعين (text-slate-300) */
+    .glossary-term-def {
+      color: #cbd5e1; /* text-slate-300 */
+      font-size: 0.8125rem;
+      line-height: 1.65;
+      transition: color 0.3s ease;
+    }
+
+    /* ========================================================================= */
+    /* Light Mode Adaptive Overrides for Glossary Modal & Cards */
+    /* ========================================================================= */
+    body.light-theme .glossary-modal-container {
+      background: #ffffff !important;
+      border: 1px solid #cbd5e1 !important;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.18), 0 0 20px rgba(0, 0, 0, 0.05) !important;
+    }
+    body.light-theme .glossary-modal-header {
+      background: #f8fafc !important;
+      border-bottom: 1px solid #e2e8f0 !important;
+    }
+    body.light-theme .glossary-modal-title {
+      color: #0f172a !important;
+    }
+    body.light-theme .glossary-modal-close {
+      color: #64748b !important;
+    }
+    body.light-theme .glossary-modal-close:hover {
+      color: #0f172a !important;
+    }
+    body.light-theme .glossary-search-bar {
+      background: #f1f5f9 !important;
+      border-bottom: 1px solid #e2e8f0 !important;
+    }
+    body.light-theme .glossary-search-input {
+      background: #ffffff !important;
+      border: 1px solid #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+    body.light-theme .glossary-search-input::placeholder {
+      color: #94a3b8 !important;
+    }
+    body.light-theme .glossary-search-input:focus {
+      border-color: #0284c7 !important;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15) !important;
+    }
+    body.light-theme .glossary-filter-btn {
+      background: #e2e8f0 !important;
+      color: #475569 !important;
+      border: 1px solid #cbd5e1 !important;
+    }
+    body.light-theme .glossary-filter-btn:hover {
+      background: #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+    body.light-theme .glossary-filter-btn.active {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border-color: #0369a1 !important;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25) !important;
+    }
+
+    /* خلفيات بطاقات القاموس في الوضع الفاتح (تتغير بسلاسة ودون تداخل) */
+    body.light-theme .glossary-card {
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+    }
+    body.light-theme .glossary-card:hover {
+      background: #f8fafc !important;
+      border-color: #0284c7 !important;
+      box-shadow: 0 6px 18px rgba(2, 132, 199, 0.12) !important;
+      transform: translateY(-2px);
+    }
+
+    /* عنوان المصطلح في الوضع الفاتح */
+    body.light-theme .glossary-term-title {
+      color: #0369a1 !important; /* Sky-700 أزرق داكن جذاب ومقروء بوضوح */
+    }
+
+    /* شارة الفصل في الوضع الفاتح */
+    body.light-theme .glossary-chapter-badge {
+      background: #f1f5f9 !important;
+      color: #475569 !important;
+      border: 1px solid #cbd5e1 !important;
+    }
+
+    /* نص التعريف في الوضع الفاتح: داكن وواضح تماماً ولا يختفي (text-slate-700) */
+    body.light-theme .glossary-term-def {
+      color: #334155 !important; /* text-slate-700 */
+      font-weight: 500;
+    }
+
+    /* رسالة عدم وجود نتائج */
+    .glossary-empty-msg {
+      color: #64748b;
+    }
+    body.light-theme .glossary-empty-msg {
+      color: #64748b !important;
+    }
+
+    /* Reset XP & Quiz Interactive Controls */
+    .btn-reset-xp {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: #fbbf24;
+      transition: all 0.25s ease;
+    }
+    .btn-reset-xp:hover {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fde68a;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+    }
+    body.light-theme .btn-reset-xp {
+      background: #fef3c7 !important;
+      border-color: #f59e0b !important;
+      color: #b45309 !important;
+    }
+    body.light-theme .btn-reset-xp:hover {
+      background: #fde68a !important;
+      color: #92400e !important;
+    }
+
+    .btn-reset-ans {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: #fbbf24;
+      transition: all 0.25s ease;
+    }
+    .btn-reset-ans:hover {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fde68a;
+    }
+    body.light-theme .btn-reset-ans {
+      background: #fef3c7 !important;
+      border-color: #f59e0b !important;
+      color: #b45309 !important;
+    }
+    body.light-theme .btn-reset-ans:hover {
+      background: #fde68a !important;
+    }
+
+    body.light-theme .btn-next-q {
+      background: linear-gradient(135deg, #0284c7, #7c3aed) !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25) !important;
+    }
+    body.light-theme .btn-prev-q {
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      color: #334155 !important;
+    }
+
+    /* Timeline styles */
+    .timeline-dot {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 2px solid #00D4FF;
+      background: #0a0e1a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .timeline-dot:hover, .timeline-dot.active {
+      transform: scale(1.18);
+      border-color: #10B981;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+      background: rgba(0, 212, 255, 0.15);
+    }
+
+    /* Quiz Option */
+    .quiz-opt {
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 0.75rem;
+      padding: 0.85rem 1.25rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .quiz-opt:hover {
+      border-color: #00D4FF;
+      background: rgba(0, 212, 255, 0.07);
+    }
+    .quiz-opt.correct {
+      border-color: #10B981 !important;
+      background: rgba(16, 185, 129, 0.2) !important;
+      color: #10B981 !important;
+    }
+    .quiz-opt.wrong {
+      border-color: #EF4444 !important;
+      background: rgba(239, 68, 68, 0.2) !important;
+      color: #EF4444 !important;
+    }
+    .quiz-opt.disabled {
+      pointer-events: none;
+    }
+
+    /* TLS Handshake Steps */
+    .tls-step-box {
+      border-right: 4px solid rgba(255, 255, 255, 0.1);
+      padding: 0.75rem 1rem;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 0 0.5rem 0.5rem 0;
+      transition: all 0.3s ease;
+    }
+    .tls-step-box.active {
+      border-right-color: #00D4FF;
+      background: rgba(0, 212, 255, 0.1);
+      box-shadow: inset 0 0 15px rgba(0, 212, 255, 0.1);
+    }
+    .tls-step-box.done {
+      border-right-color: #10B981;
+      background: rgba(16, 185, 129, 0.05);
+    }
+
+    /* Interactive 3-Tier animation */
+    .tier-node {
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.4s ease;
+      background: rgba(12, 18, 34, 0.9);
+    }
+    .tier-node.active {
+      border-color: #00D4FF;
+      box-shadow: 0 0 25px rgba(0, 212, 255, 0.4);
+      transform: scale(1.04);
+    }
+
+    /* Wireframe preview toggle */
+    .wireframe-box {
+      border: 2px dashed #4b5563;
+      background: #111827;
+      color: #9ca3af;
+    }
+    .hifi-box {
+      border: 1px solid rgba(0, 212, 255, 0.4);
+      background: linear-gradient(135deg, rgba(12, 18, 34, 0.95), rgba(24, 15, 45, 0.95));
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.15);
+    }
+
+    /* CRAP demo box */
+    .design-preview-container {
+      min-height: 280px;
+      transition: all 0.35s ease;
+    }
+
+    /* Confetti canvas */
+    #confettiCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 10000;
+    }
+  </style>
+</head>
+<body class="selection:bg-cyan-500 selection:text-black">
+
+  <!-- Confetti Canvas -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- Global Progress Bar -->
+  <div class="fixed top-0 left-0 right-0 z-50">
+    <div id="globalProgressBar" style="width: 0%;"></div>
+  </div>
+
+  <!-- Header / Navigation Bar -->
+  <nav class="sticky top-0 z-40 bg-slate-950/85 backdrop-blur-md border-b border-cyan-500/20 py-3 px-4 sm:px-8">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo: Adam Mohamed Platform -->
+      <a href="#hero" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-400 to-purple-600 flex items-center justify-center text-xl shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
+          ⚡
+        </div>
+        <div>
+          <span class="text-base sm:text-lg font-black tracking-tight text-white flex items-center gap-1.5">
+            Adam Mohamed <span class="text-cyan-400">Platform</span>
+            <span class="text-[10px] bg-cyan-500/10 text-cyan-400 px-2 py-0.5 rounded-full border border-cyan-500/30">ثانوية عامة</span>
+          </span>
+          <span class="text-xs text-gray-400 block -mt-0.5">منصة آدم محمد | البرمجة والذكاء الاصطناعي</span>
+        </div>
+      </a>
+
+      <!-- Quick Chapter Links & Interactive Nav Buttons -->
+      <div class="hidden lg:flex items-center gap-1 font-semibold text-xs xl:text-sm">
+        <a href="chapter1.html" class="px-2.5 py-1.5 rounded-lg text-gray-300 hover:text-cyan-400 hover:bg-cyan-500/10 transition-colors flex items-center gap-1">
+          <span>🧠</span> ف1: الذكاء الاصطناعي
+        </a>
+        <a href="chapter2.html" class="px-2.5 py-1.5 rounded-lg text-gray-300 hover:text-red-400 hover:bg-red-500/10 transition-colors flex items-center gap-1">
+          <span>🛡️</span> ف2: الأمن السيبراني
+        </a>
+        <a href="chapter3.html" class="px-2.5 py-1.5 rounded-lg text-gray-300 hover:text-green-400 hover:bg-green-500/10 transition-colors flex items-center gap-1">
+          <span>💻</span> ف3: تطبيقات الويب
+        </a>
+        <a href="chapter4.html" class="px-2.5 py-1.5 rounded-lg text-gray-300 hover:text-pink-400 hover:bg-pink-500/10 transition-colors flex items-center gap-1">
+          <span>🎨</span> ف4: تصميم الوسائط
+        </a>
+      </div>
+
+      <!-- Action, Theme Toggle, User & XP Badges -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        
+        <!-- Dark / Light Mode Toggle Button -->
+        <button id="themeToggleBtn" onclick="toggleTheme()" class="p-2 rounded-xl bg-slate-900 border border-slate-700 text-gray-300 hover:text-yellow-400 hover:border-yellow-500/40 transition-colors" title="تبديل الوضع (Dark / Light Mode)">
+          <span id="themeIcon" class="text-base">🌙</span>
+        </button>
+
+        <!-- Sound Toggle -->
+        <button id="soundToggleBtn" onclick="toggleSound()" class="p-2 rounded-xl bg-slate-900 border border-slate-700 text-gray-300 hover:text-cyan-400 hover:border-cyan-500/40 transition-colors" title="تشغيل / كتم المؤثرات الصوتية">
+          <i data-lucide="volume-2" id="soundIcon" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Glossary Button -->
+        <button onclick="openGlossaryModal()" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-300 hover:bg-purple-500/20 transition-colors text-xs font-bold">
+          <span>📖</span>
+          <span class="hidden sm:inline">القاموس</span>
+        </button>
+
+        <!-- XP Pill Indicator -->
+        <div class="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-cyan-950/80 to-purple-950/80 border border-cyan-400/40 shadow-inner shadow-cyan-500/20">
+          <span class="text-base animate-pulse">⭐</span>
+          <div class="flex flex-col text-right">
+            <span class="text-[9px] text-gray-400 leading-tight">XP</span>
+            <span id="navXpCount" class="text-xs sm:text-sm font-black text-cyan-300 leading-tight">0 XP</span>
+          </div>
+        </div>
+
+        <!-- Reset XP Button -->
+        <button onclick="resetUserXp()" class="btn-reset-xp text-xs px-2.5 py-1.5 rounded-xl flex items-center gap-1 font-bold shadow-sm cursor-pointer" title="تصفير نقاط الـ XP لحسابك الحالي إلى 0 XP">
+          <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+          <span class="hidden sm:inline">تصفير XP</span>
+          <span class="sm:hidden">0 XP</span>
+        </button>
+
+        <!-- Logged-in User Info & Logout -->
+        <div class="hidden sm:flex items-center gap-2 pr-2 border-r border-slate-800">
+          <span id="currentUserDisplay" class="text-xs text-gray-300 font-bold max-w-[100px] truncate">طالب</span>
+          <button onclick="logoutUser()" class="text-xs text-red-400 hover:text-red-300 px-2 py-1 rounded-lg bg-red-950/50 border border-red-500/30 font-bold flex items-center gap-1" title="تسجيل الخروج">
+            <span>خروج</span>
+            <span>🚪</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <header id="hero" class="relative pt-16 pb-20 px-4 max-w-7xl mx-auto overflow-hidden text-center">
+    <!-- Glow Orb Backgrounds -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute top-1/3 right-1/4 w-80 h-80 bg-purple-600/15 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="relative z-10 max-w-3xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs sm:text-sm font-bold mb-6">
+        <span>🚀</span> المنهج الوزاري المطور 2024 / 2025 - الصف الثاني بكالوريا
+      </div>
+      <h1 class="text-4xl sm:text-6xl font-black text-white leading-tight mb-6">
+        احترف البرمجة والذكاء الاصطناعي
+        <span class="block bg-gradient-to-r from-cyan-400 via-purple-400 to-emerald-400 bg-clip-text text-transparent">
+          بالمحاكاة والتجربة الحية!
+        </span>
+      </h1>
+      <p class="text-gray-300 text-base sm:text-lg mb-8 leading-relaxed">
+        وداعاً للحفظ النظري الجاف! اكتشف كيف تعمل التكنولوجيا حولك بأمثلة واقعية من حياتنا في مصر (InstaPay، بنك المعرفة، والسيارات ذاتية القيادة)، مع ألعاب تفاعلية، ومحرر أكواد، ومحاكيات رقمية تجعلك تفكر كمهندس حقيقي.
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="flex items-center justify-center gap-4 flex-wrap mb-12">
+        <a href="#chapter1" class="btn-primary-gradient px-8 py-3.5 rounded-xl text-base flex items-center gap-2">
+          <span>ابدأ رحلة التعلم الآن</span>
+          <span>←</span>
+        </a>
+        <button onclick="openGlossaryModal()" class="btn-cyber px-6 py-3.5 rounded-xl text-base flex items-center gap-2">
+          <span>قاموس المصطلحات السريع</span>
+          <span>📖</span>
+        </button>
+      </div>
+
+      <!-- Quick Platform Stats -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 p-5 rounded-2xl bg-slate-900/60 border border-cyan-500/20 backdrop-blur-sm mb-8">
+        <div class="text-center">
+          <div class="text-2xl sm:text-3xl font-black text-cyan-400">4</div>
+          <div class="text-xs text-gray-400 mt-1">فصول المنهج كاملة</div>
+        </div>
+        <div class="text-center border-r border-slate-800">
+          <div class="text-2xl sm:text-3xl font-black text-purple-400">18+</div>
+          <div class="text-xs text-gray-400 mt-1">محاكياً وتجربة تفاعلية</div>
+        </div>
+        <div class="text-center border-r border-slate-800">
+          <div class="text-2xl sm:text-3xl font-black text-emerald-400">40+</div>
+          <div class="text-xs text-gray-400 mt-1">مصطلحاً في القاموس</div>
+        </div>
+        <div class="text-center border-r border-slate-800">
+          <div class="text-2xl sm:text-3xl font-black text-yellow-400">4</div>
+          <div class="text-xs text-gray-400 mt-1">أوسمة تفتح بالإنجاز</div>
+        </div>
+      </div>
+
+      <!-- Interactive Chapter Navigation Buttons Grid -->
+      <div class="text-center mb-4">
+        <span class="text-xs font-bold text-cyan-400 uppercase tracking-widest block mb-2">اختر مسار التعلم للبدء</span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-right">
+          
+          <!-- Ch 1 Button Card -->
+          <a href="chapter1.html" class="p-4 rounded-2xl bg-gradient-to-br from-cyan-950/50 to-slate-900 border border-cyan-500/30 hover:border-cyan-400 hover:scale-[1.02] transition-all group block shadow-lg">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-2xl group-hover:scale-110 transition-transform">🧠</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">الفصل 1</span>
+            </div>
+            <div class="font-black text-sm text-white group-hover:text-cyan-400 transition-colors">الذكاء الاصطناعي والمجتمع</div>
+            <p class="text-[11px] text-gray-400 mt-1 line-clamp-2">من ENIAC والكمومية إلى Edge Computing وInstaPay والهلوسة.</p>
+            <div class="mt-3 flex items-center justify-between text-xs text-cyan-400 font-bold pt-2 border-t border-slate-800">
+              <span>دخول الدرس التفاعلي</span>
+              <span>←</span>
+            </div>
+          </a>
+
+          <!-- Ch 2 Button Card -->
+          <a href="chapter2.html" class="p-4 rounded-2xl bg-gradient-to-br from-red-950/50 to-slate-900 border border-red-500/30 hover:border-red-400 hover:scale-[1.02] transition-all group block shadow-lg">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-2xl group-hover:scale-110 transition-transform">🛡️</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-red-500/20 text-red-300 border border-red-500/30">الفصل 2</span>
+            </div>
+            <div class="font-black text-sm text-white group-hover:text-red-400 transition-colors">الأمن السيبراني</div>
+            <p class="text-[11px] text-gray-400 mt-1 line-clamp-2">مصافحة TLS، 2FA، الدفاع في العمق، وعمليات صد هجوم الفدية.</p>
+            <div class="mt-3 flex items-center justify-between text-xs text-red-400 font-bold pt-2 border-t border-slate-800">
+              <span>دخول المعمل الأمني</span>
+              <span>←</span>
+            </div>
+          </a>
+
+          <!-- Ch 3 Button Card -->
+          <a href="chapter3.html" class="p-4 rounded-2xl bg-gradient-to-br from-emerald-950/50 to-slate-900 border border-emerald-500/30 hover:border-emerald-400 hover:scale-[1.02] transition-all group block shadow-lg">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-2xl group-hover:scale-110 transition-transform">💻</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">الفصل 3</span>
+            </div>
+            <div class="font-black text-sm text-white group-hover:text-emerald-400 transition-colors">تطبيقات الويب وبايثون</div>
+            <p class="text-[11px] text-gray-400 mt-1 line-clamp-2">معمارية 3-Tier، مختبر API، ومحرر بايثون لمعالجة البيانات.</p>
+            <div class="mt-3 flex items-center justify-between text-xs text-emerald-400 font-bold pt-2 border-t border-slate-800">
+              <span>دخول مختبر البرمجة</span>
+              <span>←</span>
+            </div>
+          </a>
+
+          <!-- Ch 4 Button Card -->
+          <a href="chapter4.html" class="p-4 rounded-2xl bg-gradient-to-br from-pink-950/50 to-slate-900 border border-pink-500/30 hover:border-pink-400 hover:scale-[1.02] transition-all group block shadow-lg">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-2xl group-hover:scale-110 transition-transform">🎨</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-pink-500/20 text-pink-300 border border-pink-500/30">الفصل 4</span>
+            </div>
+            <div class="font-black text-sm text-white group-hover:text-pink-400 transition-colors">تصميم الوسائط و UX</div>
+            <p class="text-[11px] text-gray-400 mt-1 line-clamp-2">مفتش CRAP، بناء Persona، واختبارات A/B ودورة PDCA التحسينية.</p>
+            <div class="mt-3 flex items-center justify-between text-xs text-pink-400 font-bold pt-2 border-t border-slate-800">
+              <span>دخول استوديو التصميم</span>
+              <span>←</span>
+            </div>
+          </a>
+
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- UNLOCKABLE BADGES SHOWCASE -->
+  <section class="max-w-7xl mx-auto px-4 mb-16">
+    <div class="p-6 rounded-2xl bg-slate-900/70 border border-slate-800">
+      <div class="flex items-center justify-between mb-6 flex-wrap gap-2">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <span>🏆</span> أوسمة التميز الهندسي
+          </h2>
+          <p class="text-xs text-gray-400">أنهِ الفصول وحل الاختبارات لفتح كل وسام والحصول على نقاط XP إضافية</p>
+        </div>
+        <div class="text-xs text-cyan-400 font-bold bg-cyan-950/60 px-3 py-1.5 rounded-lg border border-cyan-500/30" id="badgeUnlockCount">
+          0 من 4 أوسمة مفتوحة
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Badge 1 -->
+        <div id="badgeCard1" class="card-neon p-4 text-center opacity-60 border-dashed border-slate-700 transition-all">
+          <div class="text-4xl mb-2 grayscale" id="badgeIcon1">🤖</div>
+          <div class="font-bold text-sm text-white mb-1">خبير ذكاء اصطناعي</div>
+          <div class="text-xs text-gray-400 mb-2">أكمل الفصل الأول واختباره</div>
+          <div class="text-[11px] font-bold text-slate-500" id="badgeStatus1">🔒 مقفل</div>
+        </div>
+        <!-- Badge 2 -->
+        <div id="badgeCard2" class="card-neon p-4 text-center opacity-60 border-dashed border-slate-700 transition-all">
+          <div class="text-4xl mb-2 grayscale" id="badgeIcon2">🛡️</div>
+          <div class="font-bold text-sm text-white mb-1">حارس الشبكة</div>
+          <div class="text-xs text-gray-400 mb-2">أكمل الفصل الثاني واختباره</div>
+          <div class="text-[11px] font-bold text-slate-500" id="badgeStatus2">🔒 مقفل</div>
+        </div>
+        <!-- Badge 3 -->
+        <div id="badgeCard3" class="card-neon p-4 text-center opacity-60 border-dashed border-slate-700 transition-all">
+          <div class="text-4xl mb-2 grayscale" id="badgeIcon3">🏗️</div>
+          <div class="font-bold text-sm text-white mb-1">معماري الويب</div>
+          <div class="text-xs text-gray-400 mb-2">أكمل الفصل الثالث واختباره</div>
+          <div class="text-[11px] font-bold text-slate-500" id="badgeStatus3">🔒 مقفل</div>
+        </div>
+        <!-- Badge 4 -->
+        <div id="badgeCard4" class="card-neon p-4 text-center opacity-60 border-dashed border-slate-700 transition-all">
+          <div class="text-4xl mb-2 grayscale" id="badgeIcon4">🎨</div>
+          <div class="font-bold text-sm text-white mb-1">فنان تجربة المستخدم</div>
+          <div class="text-xs text-gray-400 mb-2">أكمل الفصل الرابع واختباره</div>
+          <div class="text-[11px] font-bold text-slate-500" id="badgeStatus4">🔒 مقفل</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- CHAPTER 1: تكنولوجيا المعلومات والمجتمع والذكاء الاصطناعي -->
+  <!-- ========================================================================= -->
+  <section id="chapter1" class="py-12 max-w-7xl mx-auto px-4 border-t border-cyan-500/20">
+    <div class="flex items-center gap-4 mb-8 flex-wrap">
+      <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-400/30 flex items-center justify-center text-3xl">
+        🧠
+      </div>
+      <div>
+        <div class="text-xs font-bold text-cyan-400 uppercase tracking-wider">الفصل الأول</div>
+        <h2 class="text-2xl sm:text-3xl font-black text-white">تكنولوجيا المعلومات والمجتمع والذكاء الاصطناعي</h2>
+        <p class="text-sm text-gray-400 mt-1">من حواسيب الصمامات المفرغة الضخمة إلى الحوسبة الكمومية وثورة النماذج التوليدية</p>
+      </div>
+      <div class="mr-auto">
+        <span class="text-xs bg-cyan-900/40 text-cyan-300 border border-cyan-500/30 px-3 py-1.5 rounded-full font-bold">
+          الدرس 1-1 إلى 1-4
+        </span>
+      </div>
+    </div>
+
+    <!-- 1.1: Interactive Timeline -->
+    <div class="card-neon p-6 mb-8">
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <span>📅</span> الخط الزمني التفاعلي: ثورة تطور الحواسيب
+        </h3>
+        <span class="text-xs text-cyan-400">اضغط على أي مرحلة لاستكشاف التحول التاريخي</span>
+      </div>
+
+      <!-- Horizontal Timeline Scroll -->
+      <div class="overflow-x-auto pb-4 pt-2">
+        <div class="flex items-center justify-between min-w-[700px] relative px-6">
+          <div class="absolute top-1/2 left-8 right-8 h-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-emerald-500 -translate-y-1/2 z-0"></div>
+
+          <!-- Timeline items -->
+          <div class="timeline-dot active z-10" onclick="showTimelineInfo(0)" id="tldot-0">
+            <span class="text-xl">🎛️</span>
+          </div>
+          <div class="timeline-dot z-10" onclick="showTimelineInfo(1)" id="tldot-1">
+            <span class="text-xl">💾</span>
+          </div>
+          <div class="timeline-dot z-10" onclick="showTimelineInfo(2)" id="tldot-2">
+            <span class="text-xl">🌐</span>
+          </div>
+          <div class="timeline-dot z-10" onclick="showTimelineInfo(3)" id="tldot-3">
+            <span class="text-xl">📱</span>
+          </div>
+          <div class="timeline-dot z-10" onclick="showTimelineInfo(4)" id="tldot-4">
+            <span class="text-xl">☁️</span>
+          </div>
+          <div class="timeline-dot z-10" onclick="showTimelineInfo(5)" id="tldot-5">
+            <span class="text-xl">⚛️</span>
+          </div>
+        </div>
+        <!-- Year labels -->
+        <div class="flex items-center justify-between min-w-[700px] px-2 text-xs text-gray-400 font-mono mt-3">
+          <span class="text-center w-20">1940s<br/><strong class="text-cyan-300">ENIAC</strong></span>
+          <span class="text-center w-20">1970s<br/><strong class="text-cyan-300">الحاسوب الشخصي</strong></span>
+          <span class="text-center w-20">1990s<br/><strong class="text-cyan-300">الإنترنت</strong></span>
+          <span class="text-center w-20">2007<br/><strong class="text-cyan-300">الهواتف الذكية</strong></span>
+          <span class="text-center w-20">2010s<br/><strong class="text-cyan-300">الحوسبة السحابية</strong></span>
+          <span class="text-center w-20">2020s+<br/><strong class="text-cyan-300">الحوسبة الكمومية</strong></span>
+        </div>
+      </div>
+
+      <!-- Timeline Detail Display Card -->
+      <div id="timelineDetailCard" class="mt-6 p-5 rounded-xl bg-slate-900/90 border border-cyan-500/30 text-sm">
+        <!-- Content populated by JS -->
+      </div>
+
+      <!-- Quantum bit vs Classical Bit interactive widget -->
+      <div class="mt-8 p-5 rounded-xl bg-slate-950/70 border border-purple-500/30">
+        <h4 class="font-bold text-white mb-2 flex items-center gap-2">
+          <span>⚛️</span> تجربة تفاعلية: البت التقليدي (Bit) مقابل الكيوبت الكمي (Qubit)
+        </h4>
+        <p class="text-xs text-gray-400 mb-4">
+          الحاسوب التقليدي يتعامل مع البت كقيمة قطعية: إما 0 أو 1. أما الحوسبة الكمومية فتعتمد على ظاهرة <strong>التراكب الكمي (Quantum Superposition)</strong>؛ حيث يكون الكيوبت في حالتي 0 و 1 معاً حتى لحظة القياس!
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Classical Bit -->
+          <div class="p-4 rounded-xl bg-slate-900 border border-slate-700 text-center">
+            <div class="text-xs font-bold text-gray-400 mb-2">البت التقليدي (Classical Bit)</div>
+            <div class="text-4xl font-mono font-black text-cyan-400 my-3" id="classicalBitVal">0</div>
+            <button onclick="flipClassicalBit()" class="btn-cyber px-4 py-1.5 rounded-lg text-xs">
+              تبديل البت (0 ⟷ 1)
+            </button>
+            <p class="text-[11px] text-gray-400 mt-2">حالة واحدة فقط في أي لحظة زمنية</p>
+          </div>
+          <!-- Quantum Qubit -->
+          <div class="p-4 rounded-xl bg-purple-950/30 border border-purple-500/40 text-center relative overflow-hidden">
+            <div class="text-xs font-bold text-purple-300 mb-2">الكيوبت الكمي (Qubit) في حالة تراكب</div>
+            <div class="text-3xl font-mono font-black text-purple-300 my-3 animate-pulse" id="qubitStateVal">
+              |ψ⟩ = α|0⟩ + β|1⟩
+            </div>
+            <button onclick="measureQubit()" class="btn-primary-gradient px-4 py-1.5 rounded-lg text-xs">
+              ⚡ إجراء القياس (Collapse Wavefunction)
+            </button>
+            <p class="text-[11px] text-purple-300/80 mt-2" id="qubitMeasureLog">
+              اضغط القياس لمشاهدة الانهيار إلى 0 أو 1 باحتمالات متساوية!
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 1.1: Moore's Law & Autonomous Car Simulator -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      
+      <!-- Moore's Law Chart -->
+      <div class="card-neon p-6 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <span>📈</span> قانون مور (Moore's Law)
+            </h3>
+            <span class="text-xs text-cyan-400 bg-cyan-950/80 px-2.5 py-1 rounded-md border border-cyan-500/30">
+              تضاعف كل 18-24 شهراً
+            </span>
+          </div>
+          <p class="text-xs text-gray-400 mb-4 leading-relaxed">
+            لاحظ جوردون مور (مؤسس إنتل) عام 1965 أن عدد الترانزستورات داخل الشريحة الإلكترونية يتضاعف كل عامين تقريباً مع انخفاض التكلفة؛ مما قاد طفرة الهواتف الذكية والذكاء الاصطناعي الحديث.
+          </p>
+          <div class="relative bg-slate-950 p-2 rounded-xl border border-slate-800">
+            <canvas id="mooreCanvas" width="500" height="240" class="w-full block"></canvas>
+          </div>
+        </div>
+        <div class="mt-4 text-[11px] text-gray-500 text-center">
+          حرك المؤشر فوق النقاط لمشاهدة سنة المعالج واسمه وعدد الترانزستورات (بالملايين والمليارات)
+        </div>
+      </div>
+
+      <!-- Autonomous Vehicle: Edge vs Cloud Simulator -->
+      <div class="card-neon p-6">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>🚗</span> محاكاة الحوسبة الطرفية vs السحابية
+          </h3>
+          <span class="text-xs text-emerald-400 bg-emerald-950/60 px-2.5 py-1 rounded-md border border-emerald-500/30">
+            Edge vs Cloud
+          </span>
+        </div>
+        <p class="text-xs text-gray-400 mb-4 leading-relaxed">
+          سيارة ذاتية القيادة تسير بسرعة 60 كم/س وفجأة عبر أحد المشاة على بعد 25 متراً. شاهد الفرق الحاسم بين اتخاذ القرار على حاسوب السيارة الداخلي (Edge) وبين إرسال البيانات لسحابة بعيدة!
+        </p>
+
+        <!-- Visual simulation track -->
+        <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 relative overflow-hidden mb-4 min-h-[120px] flex items-center">
+          <div class="w-full relative h-10 border-b-2 border-dashed border-gray-600 flex items-center">
+            <!-- Car -->
+            <div id="simCar" class="absolute right-0 text-3xl transition-all duration-700 ease-out">
+              🚗
+            </div>
+            <!-- Pedestrian -->
+            <div class="absolute left-6 text-3xl">
+              🚶‍♂️
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-3 mb-4">
+          <button onclick="runEdgeCarSimulation()" class="btn-primary-gradient px-4 py-2 rounded-xl text-xs flex-1">
+            ⚡ اختبار الحوسبة الطرفية (Edge)
+          </button>
+          <button onclick="runCloudCarSimulation()" class="btn-cyber px-4 py-2 rounded-xl text-xs flex-1 border-red-500/50 text-red-400 hover:text-red-300">
+            ☁️ اختبار الحوسبة السحابية (Cloud)
+          </button>
+        </div>
+
+        <div id="carSimResult" class="p-3 rounded-xl bg-slate-900 border border-slate-700 text-xs text-gray-300 min-h-[50px] flex items-center">
+          اختر نوع المعالجة لمشاهدة زمن الاستجابة (Latency) ومسافة التوقف وقرار الفرملة الفوري!
+        </div>
+
+        <!-- Egyptian Real-World Examples -->
+        <div class="mt-4 pt-4 border-t border-slate-800">
+          <div class="text-xs font-bold text-cyan-300 mb-2 flex items-center gap-1.5">
+            <span>🇪🇬</span> أمثلة من واقعنا المصري:
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+            <div class="p-2.5 rounded-lg bg-cyan-950/20 border border-cyan-500/20">
+              <strong class="text-cyan-400 block mb-1">الدفع الفوري (InstaPay & QR):</strong>
+              معالجة مشفرة وطرفية لحظية لربط الحسابات البنكية ومحافظ الهاتف عبر شبكة المدفوعات اللحظية IPN.
+            </div>
+            <div class="p-2.5 rounded-lg bg-purple-950/20 border border-purple-500/20">
+              <strong class="text-purple-400 block mb-1">التعلم عن بعد (EKB & التابلت):</strong>
+              استخدام بنك المعرفة المصري ومنصات الامتحانات السحابية مع التخزين المؤقت على أجهزة التابلت المدرسية.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- 1.2: How AI Works - Concentric Circles & Hallucination Detector -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      
+      <!-- AI Layers Concentric Circles -->
+      <div class="card-neon p-6">
+        <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+          <span>🧩</span> كيف يعمل الذكاء الاصطناعي؟ (الطبقات المتداخلة)
+        </h3>
+        <p class="text-xs text-gray-400 mb-4">
+          مرّر المؤشر أو انقر على كل طبقة لفهم التسلسل الهرمي: الذكاء الاصطناعي ⟵ التعلم الآلي ⟵ التعلم العميق ⟵ الذكاء التوليدي
+        </p>
+
+        <!-- Nested Circles Container -->
+        <div class="relative w-full max-w-sm mx-auto aspect-square flex items-center justify-center my-2">
+          <!-- Layer 1: AI (Outermost) -->
+          <div onclick="selectAiLayer('ai')" class="absolute inset-0 rounded-full border-2 border-cyan-400/50 bg-cyan-500/10 hover:bg-cyan-500/20 transition-all flex items-start justify-center pt-3 cursor-pointer group">
+            <span class="text-xs font-black text-cyan-300 group-hover:scale-105 transition-transform">AI - الذكاء الاصطناعي الشامل</span>
+          </div>
+          <!-- Layer 2: Machine Learning -->
+          <div onclick="selectAiLayer('ml')" class="absolute inset-8 rounded-full border-2 border-purple-500/60 bg-purple-600/15 hover:bg-purple-600/25 transition-all flex items-start justify-center pt-3 cursor-pointer group">
+            <span class="text-xs font-black text-purple-300 group-hover:scale-105 transition-transform">ML - التعلم الآلي</span>
+          </div>
+          <!-- Layer 3: Deep Learning -->
+          <div onclick="selectAiLayer('dl')" class="absolute inset-16 rounded-full border-2 border-emerald-400/70 bg-emerald-500/20 hover:bg-emerald-500/30 transition-all flex items-start justify-center pt-3 cursor-pointer group">
+            <span class="text-xs font-black text-emerald-300 group-hover:scale-105 transition-transform">DL - التعلم العميق (الشبكات العصبية)</span>
+          </div>
+          <!-- Layer 4: Generative AI (Innermost) -->
+          <div onclick="selectAiLayer('genai')" class="absolute inset-24 rounded-full border-2 border-pink-400 bg-pink-500/30 hover:bg-pink-500/40 transition-all flex items-center justify-center cursor-pointer group shadow-lg shadow-pink-500/20">
+            <span class="text-xs font-black text-pink-200 text-center px-2 group-hover:scale-105 transition-transform">GenAI<br/>التوليدي</span>
+          </div>
+        </div>
+
+        <div id="aiLayerInfoBox" class="mt-4 p-3.5 rounded-xl bg-slate-900 border border-cyan-500/30 text-xs text-gray-300 leading-relaxed min-h-[75px]">
+          اضغط على أي دائرة لاستكشاف تعريفها وأمثلتها الواقعية.
+        </div>
+      </div>
+
+      <!-- Hallucination Detector Game -->
+      <div class="card-neon p-6 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <span>🕵️</span> لعبة صائد الهلوسة (AI Hallucination Detector)
+            </h3>
+            <span class="text-xs text-pink-400 font-bold bg-pink-950/60 px-2.5 py-1 rounded-md border border-pink-500/30">
+              كن مدققاً ذكياً
+            </span>
+          </div>
+          <p class="text-xs text-gray-400 mb-4 leading-relaxed">
+            الذكاء الاصطناعي التوليدي قد يولّد إجابات تبدو مقنعة وفصيحة للغاية ولكنها تحتوي على معلومة خاطئة كلياً تسمى <strong>(الهلوسة - Hallucination)</strong>. أمامك 3 إجابات، اكتشف الإجابة التي تشتمل على هلوسة!
+          </p>
+
+          <div class="space-y-3" id="hallucinationCardsContainer">
+            <!-- Cards rendered by JS -->
+          </div>
+        </div>
+
+        <div id="hallucinationFeedback" class="mt-4 p-3.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-gray-300 min-h-[60px] flex items-center">
+          اضغط على البطاقة التي تظن أنها تحتوي على هلوسة لاختبار حدسك التقني!
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 1.3 & 1.4: AI in Industry & Ethics Lab -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      
+      <!-- Industry & Daily Life Cards -->
+      <div class="card-neon p-6">
+        <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+          <span>🏭</span> تطبيقات الذكاء الاصطناعي في الصناعة والحياة
+        </h3>
+        <p class="text-xs text-gray-400 mb-4">
+          نماذج عملية لكيفية إحداث الذكاء الاصطناعي ثورة إنتاجية واقتصادية:
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="p-3.5 rounded-xl bg-slate-900/90 border border-cyan-500/20 hover:border-cyan-400 transition-colors">
+            <div class="text-2xl mb-1">🩻</div>
+            <h4 class="font-bold text-xs text-cyan-300 mb-1">تشخيص الأشعة السينية (الرعاية الصحية)</h4>
+            <p class="text-[11px] text-gray-400 leading-normal">
+              نماذج رؤية حاسوبية (Computer Vision) مدربة على ملايين صور الصدر لاكتشاف الأورام المبكرة والالتهاب الرئوي بدقة تتجاوز 96%.
+            </p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-900/90 border border-emerald-500/20 hover:border-emerald-400 transition-colors">
+            <div class="text-2xl mb-1">🌾</div>
+            <h4 class="font-bold text-xs text-emerald-300 mb-1">الزراعة الذكية والري الآلي</h4>
+            <p class="text-[11px] text-gray-400 leading-normal">
+              تحليل صور الأقمار الصناعية ومستشعرات رطوبة التربة لجدولة الري بالتنقيط وتوفير ما يصل إلى 40% من مياه الري الزراعي.
+            </p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-900/90 border border-purple-500/20 hover:border-purple-400 transition-colors">
+            <div class="text-2xl mb-1">⚙️</div>
+            <h4 class="font-bold text-xs text-purple-300 mb-1">الصيانة التنبؤية (المصانع)</h4>
+            <p class="text-[11px] text-gray-400 leading-normal">
+              مراقبة اهتزازات المحركات والحرارة بالـ IoT وتوقع الأعطال الميكانيكية قبل حدوثها بأسابيع لتفادي التوقف المفاجئ.
+            </p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-900/90 border border-yellow-500/20 hover:border-yellow-400 transition-colors">
+            <div class="text-2xl mb-1">🚚</div>
+            <h4 class="font-bold text-xs text-yellow-300 mb-1">تحسين مسارات الشحن والتوصيل</h4>
+            <p class="text-[11px] text-gray-400 leading-normal">
+              خوارزميات توجيه لحظية تحلل حركة المرور والطقس لخفض استهلاك وقود أساطيل النقل وسرعة توصيل الطلبات في المدن المزدحمة.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ethics Lab & Algorithmic Bias -->
+      <div class="card-neon p-6">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>⚖️</span> مختبر أخلاقيات الذكاء الاصطناعي (Ethics Lab)
+          </h3>
+          <span class="text-xs text-yellow-400 font-bold bg-yellow-950/60 px-2 py-0.5 rounded border border-yellow-500/30">
+            معضلة التوظيف الآلي
+          </span>
+        </div>
+        <p class="text-xs text-gray-400 mb-3">
+          شركة وظفت نموذج AI لفرز آلاف السير الذاتية، لكن اتضح أن النموذج يعاني من <strong>تحيز خوارزمي (Algorithmic Bias)</strong> لأنه تدرب على بيانات تاريخية قديمة استبعدت فئات معينة، كما يعاني من <strong>مشكلة الصندوق الأسود (Black Box)</strong>!
+        </p>
+
+        <div class="p-3 rounded-xl bg-red-950/30 border border-red-500/40 text-xs text-red-300 mb-4">
+          🚨 <strong>الخلل الأخلاقي المرصود:</strong> يرفض النظام المتقدمات الإناث والمرشحين من محافظات الصعيد تلقائياً دون إبداء أي تفسير منطقي!
+        </div>
+
+        <div class="text-xs font-bold text-white mb-2">اختر المبدأ الأخلاقي لتطبيقه على النظام:</div>
+        <div class="grid grid-cols-2 gap-2 mb-4">
+          <button onclick="applyEthicsSolution('fairness')" class="p-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-emerald-400 text-right text-xs transition-colors">
+            <span class="font-bold text-emerald-400 block">⚖️ 1. العدالة (Fairness)</span>
+            <span class="text-[11px] text-gray-400">إعادة موازنة بيانات التدريب وحذف الانحياز</span>
+          </button>
+          <button onclick="applyEthicsSolution('transparency')" class="p-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-cyan-400 text-right text-xs transition-colors">
+            <span class="font-bold text-cyan-400 block">🔍 2. الشفافية و XAI</span>
+            <span class="text-[11px] text-gray-400">تفسير أسباب القبول والرفض بنموذج قابل للتفسير</span>
+          </button>
+          <button onclick="applyEthicsSolution('privacy')" class="p-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-purple-400 text-right text-xs transition-colors">
+            <span class="font-bold text-purple-400 block">🔒 3. حماية الخصوصية</span>
+            <span class="text-[11px] text-gray-400">حجب البيانات الحساسة غير المؤثرة في الكفاءة</span>
+          </button>
+          <button onclick="applyEthicsSolution('accountability')" class="p-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-yellow-400 text-right text-xs transition-colors">
+            <span class="font-bold text-yellow-400 block">📋 4. المساءلة البشرية</span>
+            <span class="text-[11px] text-gray-400">إبقاء القرار النهائي والطعن للجنة بشرية مختصة</span>
+          </button>
+        </div>
+
+        <div id="ethicsSolutionResult" class="p-3 rounded-xl bg-slate-900 border border-cyan-500/30 text-xs text-cyan-300 min-h-[50px] flex items-center">
+          انقر فوق أي من المبادئ الأربعة لمعرفة الحل الهندسي وكيف يعالج الخلل.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Chapter 1 Quiz & Think like an Engineer -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- Quiz Card (2 cols) -->
+      <div class="lg:col-span-2 card-neon p-6 border-cyan-500/40">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>📝</span> بنك أسئلة الفصل الأول (اختبار تفاعلي)
+          </h3>
+          <span class="text-xs text-cyan-400 font-mono" id="ch1QuizProgress">السؤال 1 من 4</span>
+        </div>
+        <div id="ch1QuizContainer">
+          <!-- Quiz rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Think Like an Engineer (1 col) -->
+      <div class="card-neon p-6 bg-gradient-to-b from-slate-900 to-cyan-950/40 border-cyan-500/30">
+        <div class="flex items-center gap-2 text-yellow-400 font-black text-sm mb-3">
+          <span>💡</span> فكّر كمهندس (Think Like an Engineer)
+        </div>
+        <h4 class="text-sm font-bold text-white mb-2">سيناريو مترو الأنفاق الذكي في القاهرة:</h4>
+        <p class="text-xs text-gray-300 mb-4 leading-relaxed">
+          طُلب منك تصميم نظام للتحكم في بوابات المترو بالتعرف على الوجه وخصم التذكرة فورياً. هل تفضل تصميم المعالجة باستخدام الحوسبة الطرفية (Edge) أم الحوسبة السحابية (Cloud)؟ ولماذا؟
+        </p>
+        <div class="space-y-2 text-xs">
+          <button onclick="revealEngineerAnswer(1, 'edge')" class="w-full text-right p-2.5 rounded-lg bg-slate-950/70 border border-slate-700 hover:border-cyan-400 transition-colors">
+            🔘 الخيار أ: الحوسبة الطرفية (Edge) عند كل بوابة
+          </button>
+          <button onclick="revealEngineerAnswer(1, 'cloud')" class="w-full text-right p-2.5 rounded-lg bg-slate-950/70 border border-slate-700 hover:border-cyan-400 transition-colors">
+            🔘 الخيار ب: إرسال جميع الصور لسحابة خارجية مركزية
+          </button>
+        </div>
+        <div id="engineerAnswerBox1" class="hidden mt-3 p-3 rounded-lg bg-cyan-950/60 border border-cyan-500/40 text-xs text-cyan-200"></div>
+      </div>
+
+    </div>
+
+    <!-- Chapter 1 Complete Action -->
+    <div class="mt-8 text-center">
+      <button onclick="completeChapterAction(1)" id="ch1CompleteBtn" class="btn-primary-gradient px-8 py-3 rounded-xl text-sm font-bold shadow-lg shadow-cyan-500/20">
+        ✅ إنهاء الفصل الأول وتأكيد نقاط XP (+100 XP)
+      </button>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- CHAPTER 2: الأمن السيبراني (Cybersecurity) -->
+  <!-- ========================================================================= -->
+  <section id="chapter2" class="py-12 max-w-7xl mx-auto px-4 border-t border-red-500/20">
+    <div class="flex items-center gap-4 mb-8 flex-wrap">
+      <div class="w-14 h-14 rounded-2xl bg-red-500/10 border border-red-400/30 flex items-center justify-center text-3xl">
+        🛡️
+      </div>
+      <div>
+        <div class="text-xs font-bold text-red-400 uppercase tracking-wider">الفصل الثاني</div>
+        <h2 class="text-2xl sm:text-3xl font-black text-white">الأمن السيبراني (Cybersecurity)</h2>
+        <p class="text-sm text-gray-400 mt-1">تقنيات التشفير، المصادقة المتعددة، الدفاع في العمق، وإدارة حوادث برمجيات الفدية</p>
+      </div>
+      <div class="mr-auto">
+        <span class="text-xs bg-red-900/40 text-red-300 border border-red-500/30 px-3 py-1.5 rounded-full font-bold">
+          الدرس 2-1 إلى 2-3
+        </span>
+      </div>
+    </div>
+
+    <!-- 2.1: TLS Handshake Simulator & 2FA Challenge -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      
+      <!-- TLS Handshake -->
+      <div class="card-neon p-6">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>🔐</span> محاكي مصافحة TLS (HTTPS Handshake)
+          </h3>
+          <span class="text-xs text-cyan-400 font-mono">خطوة بخطوة</span>
+        </div>
+        <p class="text-xs text-gray-400 mb-4">
+          كيف يقوم متصفحك بإنشاء اتصال آمن ومشفّر مع الخادم قبل إرسال بياناتك البنكية؟
+        </p>
+
+        <!-- Visual representation of client & server -->
+        <div class="flex items-center justify-between px-6 py-3 bg-slate-950 rounded-xl border border-slate-800 mb-4">
+          <div class="text-center">
+            <div class="text-3xl mb-1">💻</div>
+            <div class="text-xs font-bold text-cyan-400">متصفح العميل (Client)</div>
+          </div>
+          <div id="tlsDirectionArrow" class="text-2xl text-purple-400 font-mono transition-all">
+            ↔️
+          </div>
+          <div class="text-center">
+            <div class="text-3xl mb-1">🌐</div>
+            <div class="text-xs font-bold text-emerald-400">خادم الويب (Server)</div>
+          </div>
+        </div>
+
+        <!-- Handshake Steps -->
+        <div class="space-y-2 mb-4" id="tlsStepsList">
+          <div class="tls-step-box text-xs active" id="tlsStep0">
+            <strong>1. Client Hello:</strong> المتصفح يرسل قائمة خوارزميات التشفير المدعومة ورقم عشوائي.
+          </div>
+          <div class="tls-step-box text-xs" id="tlsStep1">
+            <strong>2. Server Hello + الشهادة الرقمية:</strong> الخادم يختار الخوارزمية ويرسل شهادة رقمية موقعة من CA ومفتاحه العام.
+          </div>
+          <div class="tls-step-box text-xs" id="tlsStep2">
+            <strong>3. التحقق من الشهادة:</strong> المتصفح يفحص توقيع الجهة المانحة للتأكد من هوية الموقع ومنع هجمات الانتحال.
+          </div>
+          <div class="tls-step-box text-xs" id="tlsStep3">
+            <strong>4. تبادل مفتاح الجلسة:</strong> استخدام التشفير غير المتماثل (المفتاح العام) لتبادل مفتاح جلسة سري متماثل.
+          </div>
+          <div class="tls-step-box text-xs" id="tlsStep4">
+            <strong>5. رسالة الجاهزية (Finished):</strong> الطرفان يؤكدان تفعيل التشفير والتطابق التام للمفاتيح.
+          </div>
+          <div class="tls-step-box text-xs" id="tlsStep5">
+            <strong>6. نقل البيانات السريع بـ AES:</strong> التحول للتشفير المتماثل فائق السرعة لنقل صفحات الويب ومقاطع الفيديو بأمان تام!
+          </div>
+        </div>
+
+        <div class="flex gap-3">
+          <button onclick="advanceTlsStep()" class="btn-primary-gradient px-4 py-2 rounded-xl text-xs flex-1">
+            ▶️ الخطوة التالية
+          </button>
+          <button onclick="resetTlsSimulation()" class="btn-cyber px-4 py-2 rounded-xl text-xs">
+            🔄 إعادة من البداية
+          </button>
+        </div>
+      </div>
+
+      <!-- 2FA / MFA Challenge -->
+      <div class="card-neon p-6 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <span>🔑</span> تحدي المصادقة متعددة العوامل (2FA / MFA)
+            </h3>
+            <span class="text-xs text-yellow-400 bg-yellow-950/60 px-2 py-0.5 rounded border border-yellow-500/30">
+              تأمين الحساب البنكي
+            </span>
+          </div>
+          <p class="text-xs text-gray-400 mb-4">
+            المصادقة تتطلب عوامل من فئات مختلفة (المعرفة، الحيازة، السمات الحيوية). اختر عاملين لتأمين حسابك:
+          </p>
+
+          <div class="grid grid-cols-3 gap-2.5 mb-4 text-center">
+            <!-- Knowledge -->
+            <div class="p-2.5 rounded-xl bg-slate-900 border border-cyan-500/30">
+              <span class="text-xs font-bold text-cyan-300 block mb-2">1. ما تعرفه (المعرفة)</span>
+              <div class="space-y-1.5">
+                <button onclick="toggleMfaSelection('pass')" id="mfa_pass" class="w-full py-1.5 px-2 rounded-lg bg-slate-800 text-[11px] text-gray-300 hover:border-cyan-400 border border-transparent">
+                  🔑 كلمة مرور
+                </button>
+                <button onclick="toggleMfaSelection('pin')" id="mfa_pin" class="w-full py-1.5 px-2 rounded-lg bg-slate-800 text-[11px] text-gray-300 hover:border-cyan-400 border border-transparent">
+                  🔢 رمز PIN
+                </button>
+              </div>
+            </div>
+            <!-- Possession -->
+            <div class="p-2.5 rounded-xl bg-slate-900 border border-purple-500/30">
+              <span class="text-xs font-bold text-purple-300 block mb-2">2. ما تملكه (الحيازة)</span>
+              <div class="space-y-1.5">
+                <button onclick="toggleMfaSelection('otp')" id="mfa_otp" class="w-full py-1.5 px-2 rounded-lg bg-slate-800 text-[11px] text-gray-300 hover:border-purple-400 border border-transparent">
+                  📲 رسالة OTP
+                </button>
+                <button onclick="toggleMfaSelection('token')" id="mfa_token" class="w-full py-1.5 px-2 rounded-lg bg-slate-800 text-[11px] text-gray-300 hover:border-purple-400 border border-transparent">
+                  📟 مفتاح أمان USB
+                </button>
+              </div>
+            </div>
+            <!-- Biometrics -->
+            <div class="p-2.5 rounded-xl bg-slate-900 border border-emerald-500/30">
+              <span class="text-xs font-bold text-emerald-300 block mb-2">3. ما أنت عليه (السمات)</span>
+              <div class="space-y-1.5">
+                <button onclick="toggleMfaSelection('finger')" id="mfa_finger" class="w-full py-1.5 px-2 rounded-lg bg-slate-800 text-[11px] text-gray-300 hover:border-emerald-400 border border-transparent">
+                  👆 بصمة الإصبع
+                </button>
+                <button onclick="toggleMfaSelection('face')" id="mfa_face" class="w-full py-1.5 px-2 rounded-lg bg-slate-800 text-[11px] text-gray-300 hover:border-emerald-400 border border-transparent">
+                  😊 بصمة الوجه
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <button onclick="validateMfaCombination()" class="btn-primary-gradient w-full py-2.5 rounded-xl text-xs font-bold mb-3">
+            تحقق من صحة المصادقة الثنائية 🛡️
+          </button>
+          <div id="mfaFeedbackBox" class="p-3 rounded-xl bg-slate-900 border border-slate-700 text-xs text-gray-300 min-h-[50px] flex items-center">
+            اختر وسيلتين من الأعمدة أعلاه واضغط على زر التحقق.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 2.2: Defense in Depth & Zero Trust Comparison -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      
+      <!-- Defense in Depth Interactive Network -->
+      <div class="card-neon p-6">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>🏰</span> الدفاع في العمق (Defense in Depth)
+          </h3>
+          <button onclick="triggerSimulatedCyberAttack()" class="btn-cyber px-3 py-1 rounded-lg text-xs border-red-500/40 text-red-400">
+            ⚔️ شن هجوم تجريبي
+          </button>
+        </div>
+        <p class="text-xs text-gray-400 mb-4">
+          لا نعتمد على جدار حماية واحد؛ بل طبقات متعددة تحمي قاعدة بيانات الشركة:
+        </p>
+
+        <!-- Network Schematic Layers -->
+        <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
+          <!-- Layer 1: Internet to Firewall -->
+          <div class="flex items-center gap-3 p-2.5 rounded-lg bg-slate-900 border border-red-500/30">
+            <span class="text-2xl">🔥</span>
+            <div class="flex-1">
+              <div class="text-xs font-bold text-red-400">الطبقة 1: جدار الحماية (Firewall)</div>
+              <div class="text-[11px] text-gray-400">يفحص حزم البيانات ويحظر المنافذ المشبوهة وحركات المرور الضارة.</div>
+            </div>
+          </div>
+          <!-- Layer 2: DMZ -->
+          <div class="flex items-center gap-3 p-2.5 rounded-lg bg-slate-900 border border-yellow-500/30">
+            <span class="text-2xl">🏢</span>
+            <div class="flex-1">
+              <div class="text-xs font-bold text-yellow-400">الطبقة 2: المنطقة المعزولة (DMZ)</div>
+              <div class="text-[11px] text-gray-400">تستضيف خوادم الويب العامة المعرضة للإنترنت بمعزل عن شبكة الشركة الداخلية.</div>
+            </div>
+          </div>
+          <!-- Layer 3: VPN Gateway -->
+          <div class="flex items-center gap-3 p-2.5 rounded-lg bg-slate-900 border border-purple-500/30">
+            <span class="text-2xl">🔒</span>
+            <div class="flex-1">
+              <div class="text-xs font-bold text-purple-400">الطبقة 3: بوابة الشبكة الافتراضية (VPN Gateway)</div>
+              <div class="text-[11px] text-gray-400">نفق مشفر يمنح وصولاً آمناً فقط للموظفين المصرح لهم من خارج المقر.</div>
+            </div>
+          </div>
+          <!-- Layer 4: Endpoint & Internal DB -->
+          <div class="flex items-center gap-3 p-2.5 rounded-lg bg-slate-900 border border-emerald-500/30">
+            <span class="text-2xl">🗄️</span>
+            <div class="flex-1">
+              <div class="text-xs font-bold text-emerald-400">الطبقة 4: حماية الأجهزة الطرفية وقاعدة البيانات المشفرة</div>
+              <div class="text-[11px] text-gray-400">تشفير البيانات في حالة السكون (At Rest) وتطبيق الصلاحيات الأدنى (Least Privilege).</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="attackSimLog" class="mt-4 p-3 rounded-xl bg-slate-900 border border-slate-700 text-xs text-gray-400 min-h-[40px] font-mono">
+          حالة الشبكة: مستقرة ومحمية بكافة طبقات الدفاع.
+        </div>
+      </div>
+
+      <!-- Zero Trust vs Traditional Security (Castle & Moat) -->
+      <div class="card-neon p-6">
+        <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+          <span>⚔️</span> مقارنة تفاعلية: الأمان التقليدي vs انعدام الثقة (Zero Trust)
+        </h3>
+        <p class="text-xs text-gray-400 mb-4">
+          كيف غيرت التهديدات الحديثة مفهوم الثقة داخل بيئات العمل السحابية؟
+        </p>
+
+        <div class="grid grid-cols-2 gap-3 mb-4">
+          <!-- Traditional -->
+          <div class="p-3.5 rounded-xl bg-slate-900 border border-yellow-500/30">
+            <div class="text-xs font-bold text-yellow-400 mb-1">النموذج التقليدي (القلعة والخندق)</div>
+            <div class="text-[11px] text-gray-300 italic mb-2">"ثق بالجميع بمجرد دخولهم السور الداخلي"</div>
+            <ul class="text-[11px] text-gray-400 space-y-1 list-disc list-inside">
+              <li>أي شخص داخل الشبكة المحلية يُعتبر موثوقاً.</li>
+              <li>إذا تم اختراق جهاز موظف، يمكن للمخترق التنقل بحرية.</li>
+              <li>لم يعد مناسباً لعصر العمل عن بعد والسحابة.</li>
+            </ul>
+          </div>
+          <!-- Zero Trust -->
+          <div class="p-3.5 rounded-xl bg-slate-900 border border-emerald-500/30">
+            <div class="text-xs font-bold text-emerald-400 mb-1">نهج انعدام الثقة (Zero Trust)</div>
+            <div class="text-[11px] text-gray-300 italic mb-2">"لا تثق بأحد أبداً، وتحقق دائماً وبشكل مستمر"</div>
+            <ul class="text-[11px] text-gray-400 space-y-1 list-disc list-inside">
+              <li>التحقق الصارم من الهوية والصلاحيات عند كل طلب.</li>
+              <li>عزل الشبكة إلى قطاعات متناهية الصغر (Microsegmentation).</li>
+              <li>افتراض وجود اختراق دائم والحد من نطاق الضرر.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/30 text-xs text-emerald-300">
+          💡 <strong>الخلاصة للثانوية العامة:</strong> في Zero Trust، لا يحصل أي مستخدم أو جهاز على صلاحيات كاملة لمجرد اتصاله بشبكة Wi-Fi الشركة، بل يخضع لتقييم سلوكي وتأكيد مستمر.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 2.3: Ransomware Incident Response & Risk Calculator -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      
+      <!-- Ransomware Operations Room -->
+      <div class="card-neon p-6">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>🚨</span> غرفة عمليات الطوارئ: هجوم برمجية الفدية (Ransomware)
+          </h3>
+          <span class="text-xs text-red-400 font-bold bg-red-950/60 px-2 py-0.5 rounded border border-red-500/30">
+            ترتيب المراحل الـ 6
+          </span>
+        </div>
+        <p class="text-xs text-gray-400 mb-4">
+          تعرضت أجهزة معمل المدرسة لهجوم فدية شفر الملفات! رتّب المراحل الهندسية الست بالترتيب السليم لمعالجة الحادث:
+        </p>
+
+        <!-- Clickable phase buttons -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4" id="ransomwarePhasePool">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 mb-4">
+          <div class="text-[11px] text-gray-400 mb-1">ترتيبك المختار:</div>
+          <div id="ransomwareSelectedOrder" class="text-xs text-cyan-300 font-mono">
+            — اختر المراحل بالترتيب الهندسي الصحيح —
+          </div>
+        </div>
+
+        <div class="flex gap-3">
+          <button onclick="checkRansomwareOrder()" class="btn-primary-gradient px-4 py-2 rounded-xl text-xs flex-1">
+            ✅ التحقق من سلامة خطة الاستجابة
+          </button>
+          <button onclick="resetRansomwareOrder()" class="btn-cyber px-4 py-2 rounded-xl text-xs">
+            🔄 إعادة تعيين
+          </button>
+        </div>
+
+        <div id="ransomwareFeedbackBox" class="mt-3 p-3 rounded-xl bg-slate-900 border border-slate-700 text-xs text-gray-300 min-h-[50px] flex items-center">
+          تحذير: لا تبدأ الاستعادة من النسخ الاحتياطية قبل الاستئصال التام للبرمجية الخبيثة!
+        </div>
+      </div>
+
+      <!-- Cyber Risk Calculator -->
+      <div class="card-neon p-6 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <span>📊</span> حاسبة المخاطر السيبرانية التفاعلية
+            </h3>
+            <span class="text-xs text-yellow-400 font-mono">Risk = Impact × Probability</span>
+          </div>
+          <p class="text-xs text-gray-400 mb-6">
+            معادلة تقييم الخطر القياسية: <strong>درجة الخطر = حجم التأثير × احتمالية الحدوث</strong> (من 1 إلى 5)
+          </p>
+
+          <div class="space-y-4 mb-6">
+            <div>
+              <div class="flex justify-between text-xs mb-1.5">
+                <span class="text-gray-300 font-bold">حجم التأثير على العمليات (Impact):</span>
+                <span id="impactValLabel" class="text-cyan-400 font-mono font-bold">3 / 5</span>
+              </div>
+              <input type="range" min="1" max="5" value="3" id="riskImpactSlider" oninput="updateRiskScoreCalculation()" class="w-full accent-cyan-400" />
+              <div class="flex justify-between text-[10px] text-gray-500">
+                <span>1 (ضرر بسيط)</span>
+                <span>5 (كارثة وتوقف كامل)</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1.5">
+                <span class="text-gray-300 font-bold">احتمالية وقوع الهجوم (Probability):</span>
+                <span id="probValLabel" class="text-purple-400 font-mono font-bold">3 / 5</span>
+              </div>
+              <input type="range" min="1" max="5" value="3" id="riskProbSlider" oninput="updateRiskScoreCalculation()" class="w-full accent-purple-400" />
+              <div class="flex justify-between text-[10px] text-gray-500">
+                <span>1 (نادر جداً)</span>
+                <span>5 (مؤكد ومتكرر)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="riskScoreResultBox" class="p-5 rounded-2xl bg-yellow-950/20 border-2 border-yellow-500/50 text-center transition-all">
+          <div class="text-4xl font-black text-yellow-400 mb-1" id="riskScoreNumber">9</div>
+          <div class="text-sm font-bold text-yellow-300" id="riskScoreLevel">خطر متوسط (Medium Risk)</div>
+          <div class="text-xs text-gray-400 mt-2" id="riskScoreAdvice">
+            مطلوب خطة معالجة وتطبيق جدران حماية إضافية خلال 30 يوماً.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Chapter 2 Quiz & Think like an Engineer -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="lg:col-span-2 card-neon p-6 border-red-500/40">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>📝</span> بنك أسئلة الفصل الثاني (اختبار تفاعلي)
+          </h3>
+          <span class="text-xs text-red-400 font-mono" id="ch2QuizProgress">السؤال 1 من 4</span>
+        </div>
+        <div id="ch2QuizContainer"></div>
+      </div>
+
+      <div class="card-neon p-6 bg-gradient-to-b from-slate-900 to-red-950/40 border-red-500/30">
+        <div class="flex items-center gap-2 text-yellow-400 font-black text-sm mb-3">
+          <span>💡</span> فكّر كمهندس (Think Like an Engineer)
+        </div>
+        <h4 class="text-sm font-bold text-white mb-2">أزمة تسريب بيانات في تطبيق حكومي:</h4>
+        <p class="text-xs text-gray-300 mb-4 leading-relaxed">
+          اكتشفت تسريب بيانات مستخدمين على منتدى قرصنة. الفحص الأولي أظهر أن أحد الموظفين تم سرقة حسابه. ما الإجراء الفوري الأول الذي تتخذه دون تردد؟
+        </p>
+        <div class="space-y-2 text-xs">
+          <button onclick="revealEngineerAnswer(2, 'isolate')" class="w-full text-right p-2.5 rounded-lg bg-slate-950/70 border border-slate-700 hover:border-red-400 transition-colors">
+            🔘 الخيار أ: عزل الحساب فوراً وإلغاء جميع الجلسات النشطة (Revoke Sessions)
+          </button>
+          <button onclick="revealEngineerAnswer(2, 'backup')" class="w-full text-right p-2.5 rounded-lg bg-slate-950/70 border border-slate-700 hover:border-red-400 transition-colors">
+            🔘 الخيار ب: استعادة نسخة احتياطية من الأسبوع الماضي
+          </button>
+        </div>
+        <div id="engineerAnswerBox2" class="hidden mt-3 p-3 rounded-lg bg-red-950/60 border border-red-500/40 text-xs text-red-200"></div>
+      </div>
+    </div>
+
+    <!-- Chapter 2 Complete Action -->
+    <div class="mt-8 text-center">
+      <button onclick="completeChapterAction(2)" id="ch2CompleteBtn" class="btn-primary-gradient px-8 py-3 rounded-xl text-sm font-bold shadow-lg shadow-red-500/20">
+        ✅ إنهاء الفصل الثاني وتأكيد نقاط XP (+100 XP)
+      </button>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- CHAPTER 3: تطبيقات الويب (Web Applications) -->
+  <!-- ========================================================================= -->
+  <section id="chapter3" class="py-12 max-w-7xl mx-auto px-4 border-t border-emerald-500/20">
+    <div class="flex items-center gap-4 mb-8 flex-wrap">
+      <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-400/30 flex items-center justify-center text-3xl">
+        💻
+      </div>
+      <div>
+        <div class="text-xs font-bold text-emerald-400 uppercase tracking-wider">الفصل الثالث</div>
+        <h2 class="text-2xl sm:text-3xl font-black text-white">تطبيقات الويب (Web Applications)</h2>
+        <p class="text-sm text-gray-400 mt-1">المعمارية ثلاثية الطبقات، اتصال العميل والخادم عبر الـ APIs، ومختبر بايثون لمعالجة البيانات</p>
+      </div>
+      <div class="mr-auto">
+        <span class="text-xs bg-emerald-900/40 text-emerald-300 border border-emerald-500/30 px-3 py-1.5 rounded-full font-bold">
+          الدرس 3-1 إلى 3-3
+        </span>
+      </div>
+    </div>
+
+    <!-- 3.1: 3-Tier Architecture Simulator -->
+    <div class="card-neon p-6 mb-8">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <span>🏛️</span> محاكي المعمارية ثلاثية الطبقات (3-Tier Architecture)
+        </h3>
+        <span class="text-xs text-emerald-400 font-mono">رحلة الطلب الرقمي</span>
+      </div>
+      <p class="text-xs text-gray-400 mb-6">
+        اكتب اسم منتج مصري للبحث عنه (مثل: تابلت، كتاب برمجة، كوتشي)، وشاهد حركة الطلب بصرياً عبر الطبقات الثلاث:
+      </p>
+
+      <div class="flex gap-3 max-w-xl mx-auto mb-8">
+        <input type="text" id="tierSearchInput" value="تابلت مدرسي" placeholder="اكتب اسم المنتج..." class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-cyan-400 transition-colors" />
+        <button onclick="runThreeTierSimulation()" class="btn-primary-gradient px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold">
+          🔍 أرسل طلب البحث
+        </button>
+      </div>
+
+      <!-- 3 Tier Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+        <!-- Tier 1: Frontend -->
+        <div class="tier-node" id="tierFrontendNode">
+          <div class="text-4xl mb-2">💻</div>
+          <div class="text-xs font-bold text-cyan-400 uppercase">الطبقة الأولى: الواجهة الأمامية</div>
+          <div class="text-sm font-bold text-white mt-1">Presentation Layer (Frontend)</div>
+          <p class="text-[11px] text-gray-400 mt-2">
+            HTML5, CSS3, JavaScript.<br/>استقبال مدخلات المستخدم وعرض النتيجة بشكل جذاب.
+          </p>
+          <div id="tierStatus1" class="mt-3 text-[11px] font-mono text-cyan-300 min-h-[20px]">في انتظار الإرسال...</div>
+        </div>
+
+        <!-- Tier 2: Backend -->
+        <div class="tier-node" id="tierBackendNode">
+          <div class="text-4xl mb-2">⚙️</div>
+          <div class="text-xs font-bold text-purple-400 uppercase">الطبقة الثانية: منطق الأعمال</div>
+          <div class="text-sm font-bold text-white mt-1">Application Layer (Backend / Python)</div>
+          <p class="text-[11px] text-gray-400 mt-2">
+            معالجة الطلب، التحقق من الصلاحيات، وتوليد استعلامات قواعد البيانات الآمنة.
+          </p>
+          <div id="tierStatus2" class="mt-3 text-[11px] font-mono text-purple-300 min-h-[20px]">جاهز...</div>
+        </div>
+
+        <!-- Tier 3: Database -->
+        <div class="tier-node" id="tierDatabaseNode">
+          <div class="text-4xl mb-2">🗄️</div>
+          <div class="text-xs font-bold text-emerald-400 uppercase">الطبقة الثالثة: قاعدة البيانات</div>
+          <div class="text-sm font-bold text-white mt-1">Data Layer (Database / SQL)</div>
+          <p class="text-[11px] text-gray-400 mt-2">
+            تخزين منظم للبيانات وجداول المنتجات والأسعار والكميات المتاحة في المخزن.
+          </p>
+          <div id="tierStatus3" class="mt-3 text-[11px] font-mono text-emerald-300 min-h-[20px]">مستقر...</div>
+        </div>
+      </div>
+
+      <div id="tierFinalResult" class="hidden mt-6 p-4 rounded-xl bg-emerald-950/30 border border-emerald-500/40 text-xs text-emerald-300 text-center"></div>
+    </div>
+
+    <!-- 3.2: Client-Server & API Lab -->
+    <div class="card-neon p-6 mb-8">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <span>🔌</span> مختبر العميل والخادم والـ APIs (Client-Server & API Lab)
+        </h3>
+        <span class="text-xs text-cyan-400 font-mono">RESTful JSON API</span>
+      </div>
+      <p class="text-xs text-gray-400 mb-4">
+        أرسل طلبات HTTP حقيقية بصيغة JSON واقرأ استجابة الخادم ورموز الحالة (Status Codes):
+      </p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Controls Column -->
+        <div class="space-y-3">
+          <div class="text-xs font-bold text-gray-300 mb-1">اختر الطلب للتجربة:</div>
+          <button onclick="triggerApiRequest('weather')" class="w-full text-right p-3 rounded-xl bg-slate-900 border border-emerald-500/30 hover:border-emerald-400 text-xs transition-colors flex items-center justify-between">
+            <div>
+              <span class="font-mono font-bold text-emerald-400">GET</span>
+              <span class="text-gray-300 mr-2">/api/weather/cairo</span>
+            </div>
+            <span class="text-[10px] text-gray-400">استرجاع طقس القاهرة</span>
+          </button>
+
+          <button onclick="triggerApiRequest('products')" class="w-full text-right p-3 rounded-xl bg-slate-900 border border-emerald-500/30 hover:border-emerald-400 text-xs transition-colors flex items-center justify-between">
+            <div>
+              <span class="font-mono font-bold text-emerald-400">GET</span>
+              <span class="text-gray-300 mr-2">/api/products</span>
+            </div>
+            <span class="text-[10px] text-gray-400">قائمة منتجات المتجر</span>
+          </button>
+
+          <button onclick="triggerApiRequest('order')" class="w-full text-right p-3 rounded-xl bg-slate-900 border border-cyan-500/30 hover:border-cyan-400 text-xs transition-colors flex items-center justify-between">
+            <div>
+              <span class="font-mono font-bold text-cyan-400">POST</span>
+              <span class="text-gray-300 mr-2">/api/orders</span>
+            </div>
+            <span class="text-[10px] text-gray-400">إرسال طلب شراء جديد</span>
+          </button>
+
+          <button onclick="triggerApiRequest('notfound')" class="w-full text-right p-3 rounded-xl bg-slate-900 border border-red-500/30 hover:border-red-400 text-xs transition-colors flex items-center justify-between">
+            <div>
+              <span class="font-mono font-bold text-red-400">GET</span>
+              <span class="text-gray-300 mr-2">/api/student/9999</span>
+            </div>
+            <span class="text-[10px] text-gray-400">طلب مورد غير موجود</span>
+          </button>
+        </div>
+
+        <!-- JSON Response Console (2 cols) -->
+        <div class="lg:col-span-2 bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
+              <span class="text-xs font-mono text-gray-400">استجابة خادم الويب (Response Body):</span>
+              <span id="apiHttpStatusBadge" class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/30">
+                200 OK
+              </span>
+            </div>
+            <pre id="apiJsonDisplay" class="font-mono text-xs text-cyan-300 overflow-x-auto p-2 bg-slate-900/80 rounded-lg min-h-[160px] dir-ltr text-left">
+{
+  "status": 200,
+  "message": "اضغط على أحد الأزرار لإرسال طلب HTTP ومشاهدة استجابة JSON الفورية!"
+}</pre>
+          </div>
+          <div class="mt-3 pt-3 border-t border-slate-800/80 text-[11px] text-gray-400 flex items-center justify-between flex-wrap gap-2">
+            <span>💡 رموز شائعة: <strong class="text-emerald-400">200</strong> نجاح | <strong class="text-cyan-400">201</strong> تم الإنشاء | <strong class="text-yellow-400">404</strong> غير موجود | <strong class="text-red-400">500</strong> خطأ خادم</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3.3: Frontend Live Playground & Semantic HTML & Python Sandbox -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      
+      <!-- Live Web Playground (HTML/CSS/JS) -->
+      <div class="card-neon p-6">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>🛝</span> محرر الويب الحي (Live Playground)
+          </h3>
+          <div class="flex gap-1">
+            <button onclick="setPlaygroundTemplate('html')" id="pgBtnHtml" class="px-2.5 py-1 rounded bg-slate-800 text-[11px] font-bold text-cyan-300 border border-cyan-500/40">HTML</button>
+            <button onclick="setPlaygroundTemplate('css')" id="pgBtnCss" class="px-2.5 py-1 rounded bg-slate-800 text-[11px] font-bold text-gray-400 border border-slate-700">+ CSS</button>
+            <button onclick="setPlaygroundTemplate('js')" id="pgBtnJs" class="px-2.5 py-1 rounded bg-slate-800 text-[11px] font-bold text-gray-400 border border-slate-700">+ JS</button>
+          </div>
+        </div>
+        <p class="text-xs text-gray-400 mb-3">
+          شاهد تحول الكود من هيكل نصوص مجرد إلى تصميم وتفاعل حقيقي:
+        </p>
+
+        <textarea id="playgroundCodeArea" class="w-full h-36 bg-slate-950 border border-slate-800 rounded-xl p-3 font-mono text-xs text-cyan-300 focus:outline-none focus:border-cyan-400 mb-3 dir-ltr text-left" spellcheck="false"></textarea>
+        
+        <div class="flex justify-between items-center mb-2">
+          <button onclick="runPlaygroundCode()" class="btn-primary-gradient px-4 py-1.5 rounded-lg text-xs font-bold">
+            ▶️ تشغيل وتحديث النتيجة
+          </button>
+          <span class="text-[11px] text-gray-400">المعاينة الحية:</span>
+        </div>
+
+        <iframe id="playgroundIframe" class="w-full h-36 bg-white rounded-xl border border-slate-700"></iframe>
+      </div>
+
+      <!-- Semantic HTML vs Non-Semantic Visualizer -->
+      <div class="card-neon p-6 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <span>🏷️</span> أهمية الـ Semantic HTML لمحركات البحث (SEO)
+            </h3>
+            <span class="text-xs text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">
+              دلالات العناصر
+            </span>
+          </div>
+          <p class="text-xs text-gray-400 mb-4">
+            لماذا نستخدم &lt;nav&gt; و &lt;article&gt; و &lt;header&gt; بدلاً من حشو الصفحة بـ &lt;div&gt; عشوائي؟
+          </p>
+
+          <div class="grid grid-cols-2 gap-3 mb-4">
+            <!-- Non-semantic -->
+            <div class="p-3 rounded-xl bg-slate-900 border border-red-500/30">
+              <div class="text-xs font-bold text-red-400 mb-2">❌ كود بدون دلالة (Div Soup)</div>
+              <pre class="font-mono text-[10px] text-gray-400 bg-slate-950 p-2 rounded dir-ltr text-left overflow-x-auto">
+&lt;div class="nav"&gt;روابط&lt;/div&gt;
+&lt;div class="post"&gt;المقال&lt;/div&gt;
+&lt;div class="foot"&gt;حقوق&lt;/div&gt;</pre>
+              <div class="text-[10px] text-red-400 mt-2">
+                محركات البحث وقارئات الشاشة للمكفوفين لا تفهم معنى هذه الأقسام!
+              </div>
+            </div>
+
+            <!-- Semantic -->
+            <div class="p-3 rounded-xl bg-slate-900 border border-emerald-500/30">
+              <div class="text-xs font-bold text-emerald-400 mb-2">✅ كود دلالي سليم (Semantic)</div>
+              <pre class="font-mono text-[10px] text-emerald-300 bg-slate-950 p-2 rounded dir-ltr text-left overflow-x-auto">
+&lt;header&gt;ترويسة&lt;/header&gt;
+&lt;nav&gt;قائمة التنقل&lt;/nav&gt;
+&lt;article&gt;محتوى مستقل&lt;/article&gt;
+&lt;footer&gt;تذييل الصفحة&lt;/footer&gt;</pre>
+              <div class="text-[10px] text-emerald-400 mt-2">
+                تصدر نتائج Google وملاءمة كاملة لتقنيات مساعدة ذوي الهمم (Accessibility).
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-cyan-950/20 border border-cyan-500/30 text-xs text-cyan-300">
+          🔍 <strong>فائدة الامتحان:</strong> عناصر Semantic HTML تمنح المتصفح ومحركات البحث معنى مباشراً لطبيعة المحتوى وتزيد من تقييم SEO لموقعك.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Python Data & AI Interactive Sandbox -->
+    <div class="card-neon p-6 mb-8 border-purple-500/30">
+      <div class="flex items-center justify-between mb-2 flex-wrap gap-2">
+        <div>
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>🐍</span> مختبر لغة Python لمعالجة البيانات والذكاء الاصطناعي
+          </h3>
+          <p class="text-xs text-gray-400">أكواد بايثون الحية وفق المنهج لتحليل البيانات واتخاذ القرارات الذكية</p>
+        </div>
+        <div class="flex gap-1.5 flex-wrap">
+          <button onclick="loadPythonSnippet('grades')" id="pyTabGrades" class="px-3 py-1.5 rounded-lg bg-purple-900/60 text-purple-200 border border-purple-500/40 text-xs font-bold">1. درجات الطلاب</button>
+          <button onclick="loadPythonSnippet('api')" id="pyTabApi" class="px-3 py-1.5 rounded-lg bg-slate-800 text-gray-400 border border-slate-700 text-xs font-bold">2. معالجة JSON</button>
+          <button onclick="loadPythonSnippet('ai')" id="pyTabAi" class="px-3 py-1.5 rounded-lg bg-slate-800 text-gray-400 border border-slate-700 text-xs font-bold">3. شجرة قرار الذكاء الاصطناعي</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
+        <!-- Python Code Editor -->
+        <div>
+          <div class="text-xs text-gray-400 mb-1 flex items-center justify-between">
+            <span>كود Python (قابل للتعديل):</span>
+            <span class="text-[11px] text-purple-400 font-mono">Python 3.x</span>
+          </div>
+          <textarea id="pythonCodeEditor" class="w-full h-56 bg-slate-950 border border-slate-800 rounded-xl p-3.5 font-mono text-xs text-purple-200 focus:outline-none focus:border-purple-400 dir-ltr text-left" spellcheck="false"></textarea>
+          <div class="mt-2 flex justify-between items-center">
+            <button onclick="executePythonSimulation()" class="btn-primary-gradient px-5 py-2 rounded-xl text-xs font-bold flex items-center gap-2">
+              <span>▶️ تشغيل ومحاكاة مخرجات بايثون</span>
+            </button>
+            <span class="text-[11px] text-gray-400">تحديث فوري لنتائج التحليل</span>
+          </div>
+        </div>
+
+        <!-- Python Output Console -->
+        <div>
+          <div class="text-xs text-gray-400 mb-1 flex items-center justify-between">
+            <span>شاشة مخرجات الكونسول (Output Console):</span>
+            <button onclick="document.getElementById('pythonConsoleOutput').textContent=''" class="text-[10px] text-gray-500 hover:text-white">مسح الشاشة</button>
+          </div>
+          <pre id="pythonConsoleOutput" class="w-full h-56 bg-slate-950 border border-slate-800 rounded-xl p-3.5 font-mono text-xs text-emerald-400 overflow-y-auto dir-ltr text-left">
+اضغط "تشغيل ومحاكاة مخرجات بايثون" لمشاهدة معالجة البيانات وتصنيفها الفوري!</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chapter 3 Quiz & Think like an Engineer -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="lg:col-span-2 card-neon p-6 border-emerald-500/40">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>📝</span> بنك أسئلة الفصل الثالث (اختبار تفاعلي)
+          </h3>
+          <span class="text-xs text-emerald-400 font-mono" id="ch3QuizProgress">السؤال 1 من 4</span>
+        </div>
+        <div id="ch3QuizContainer"></div>
+      </div>
+
+      <div class="card-neon p-6 bg-gradient-to-b from-slate-900 to-emerald-950/40 border-emerald-500/30">
+        <div class="flex items-center gap-2 text-yellow-400 font-black text-sm mb-3">
+          <span>💡</span> فكّر كمهندس (Think Like an Engineer)
+        </div>
+        <h4 class="text-sm font-bold text-white mb-2">معضلة تطبيق توصيل الطعام في القاهرة:</h4>
+        <p class="text-xs text-gray-300 mb-4 leading-relaxed">
+          تبني نظاماً لتطبيق توصيل طعام مثل "طلبات". عند إرسال العميل لبيانات بطاقة الائتمان والدفع، هل تستخدم طريقة GET أم POST؟ ولماذا؟
+        </p>
+        <div class="space-y-2 text-xs">
+          <button onclick="revealEngineerAnswer(3, 'get')" class="w-full text-right p-2.5 rounded-lg bg-slate-950/70 border border-slate-700 hover:border-emerald-400 transition-colors">
+            🔘 الخيار أ: طريقة GET لأنها أسرع في نقل البيانات
+          </button>
+          <button onclick="revealEngineerAnswer(3, 'post')" class="w-full text-right p-2.5 rounded-lg bg-slate-950/70 border border-slate-700 hover:border-emerald-400 transition-colors">
+            🔘 الخيار ب: طريقة POST لأنها تشفر البيانات في جسم الطلب وتمنع ظهورها في الرابط
+          </button>
+        </div>
+        <div id="engineerAnswerBox3" class="hidden mt-3 p-3 rounded-lg bg-emerald-950/60 border border-emerald-500/40 text-xs text-emerald-200"></div>
+      </div>
+    </div>
+
+    <!-- Chapter 3 Complete Action -->
+    <div class="mt-8 text-center">
+      <button onclick="completeChapterAction(3)" id="ch3CompleteBtn" class="btn-primary-gradient px-8 py-3 rounded-xl text-sm font-bold shadow-lg shadow-emerald-500/20">
+        ✅ إنهاء الفصل الثالث وتأكيد نقاط XP (+100 XP)
+      </button>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- CHAPTER 4: تصميم الويب والوسائط (Web Design & Media) -->
+  <!-- ========================================================================= -->
+  <section id="chapter4" class="py-12 max-w-7xl mx-auto px-4 border-t border-pink-500/20">
+    <div class="flex items-center gap-4 mb-8 flex-wrap">
+      <div class="w-14 h-14 rounded-2xl bg-pink-500/10 border border-pink-400/30 flex items-center justify-center text-3xl">
+        🎨
+      </div>
+      <div>
+        <div class="text-xs font-bold text-pink-400 uppercase tracking-wider">الفصل الرابع</div>
+        <h2 class="text-2xl sm:text-3xl font-black text-white">تصميم الويب والوسائط (Web Design & Media)</h2>
+        <p class="text-sm text-gray-400 mt-1">أنواع الوسائط، تجربة المستخدم UX، مبادئ CRAP الأربعة، واختبارات A/B ودورة PDCA</p>
+      </div>
+      <div class="mr-auto">
+        <span class="text-xs bg-pink-900/40 text-pink-300 border border-pink-500/30 px-3 py-1.5 rounded-full font-bold">
+          الدرس 4-1 إلى 4-4
+        </span>
+      </div>
+    </div>
+
+    <!-- 4.1: Media Matrix Comparison -->
+    <div class="card-neon p-6 mb-8">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <span>📡</span> أداة المقارنة التفاعلية بين وسائل الإعلام
+        </h3>
+        <span class="text-xs text-pink-400 font-mono">اتجاه الاتصال والخصائص</span>
+      </div>
+      <p class="text-xs text-gray-400 mb-6">
+        انقر على أي وسيلة إعلامية لاكتشاف اتجاه الاتصال، نقاط القوة، وأبرز القيود:
+      </p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6" id="mediaCardsBar">
+        <button onclick="selectMediaComparison('tv')" id="mcard_tv" class="p-3 rounded-xl bg-slate-900 border border-cyan-500/40 text-center hover:border-cyan-400 transition-colors">
+          <div class="text-2xl mb-1">📺</div>
+          <div class="text-xs font-bold text-white">التلفزيون</div>
+        </button>
+        <button onclick="selectMediaComparison('radio')" id="mcard_radio" class="p-3 rounded-xl bg-slate-900 border border-slate-700 text-center hover:border-cyan-400 transition-colors">
+          <div class="text-2xl mb-1">📻</div>
+          <div class="text-xs font-bold text-white">الراديو</div>
+        </button>
+        <button onclick="selectMediaComparison('newspaper')" id="mcard_newspaper" class="p-3 rounded-xl bg-slate-900 border border-slate-700 text-center hover:border-cyan-400 transition-colors">
+          <div class="text-2xl mb-1">📰</div>
+          <div class="text-xs font-bold text-white">الصحيفة الورقية</div>
+        </button>
+        <button onclick="selectMediaComparison('website')" id="mcard_website" class="p-3 rounded-xl bg-slate-900 border border-slate-700 text-center hover:border-cyan-400 transition-colors">
+          <div class="text-2xl mb-1">🌐</div>
+          <div class="text-xs font-bold text-white">الموقع الإلكتروني</div>
+        </button>
+        <button onclick="selectMediaComparison('social')" id="mcard_social" class="p-3 rounded-xl bg-slate-900 border border-slate-700 text-center hover:border-cyan-400 transition-colors">
+          <div class="text-2xl mb-1">📱</div>
+          <div class="text-xs font-bold text-white">التواصل الاجتماعي</div>
+        </button>
+      </div>
+
+      <div id="mediaDetailDisplay" class="p-5 rounded-xl bg-slate-950 border border-pink-500/30">
+        <!-- Content rendered by JS -->
+      </div>
+    </div>
+
+    <!-- 4.2: Persona Builder & Wireframe-to-HiFi Preview -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      
+      <!-- Persona Builder -->
+      <div class="card-neon p-6">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>👤</span> بطاقة بناء شخصية المستخدم (User Persona Builder)
+          </h3>
+          <span class="text-xs text-cyan-400">التصميم المتمحور حول المستخدم</span>
+        </div>
+        <p class="text-xs text-gray-400 mb-4">
+          قبل كتابة أي سطر كود، نبني شخصية تمثل جمهورنا المستهدف لفهم احتياجاتهم:
+        </p>
+
+        <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
+          <div class="flex items-center gap-3">
+            <div class="text-4xl p-2 rounded-xl bg-slate-900 border border-slate-700">🧑‍🎓</div>
+            <div>
+              <div class="text-sm font-bold text-white">يوسف أحمد (17 سنة)</div>
+              <div class="text-xs text-cyan-400">طالب بالصف الثاني الثانوي - القاهرة</div>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-2">
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <strong class="text-emerald-400 block mb-1">🎯 أهدافه:</strong>
+              فهم مادة الذكاء الاصطناعي دون حفظ جاف، والحصول على درجات التفوق للالتحاق بكلية الحاسبات.
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <strong class="text-red-400 block mb-1">⚠️ نقاط الألم (Pain Points):</strong>
+              الملل من قراءة النصوص النظرية الطويلة، وبطء باقة الإنترنت أحياناً على هاتفه المحمول.
+            </div>
+          </div>
+          <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 text-xs">
+            <strong class="text-purple-400 block mb-1">💻 سلوكه التقني المفضل:</strong>
+            استخدام الهاتف الذكي في التصفح السريع، وتفضيل الرسوم البيانية التفاعلية والألعاب ذات النقاط التنافسية.
+          </div>
+        </div>
+      </div>
+
+      <!-- Wireframe to Hi-Fi Preview -->
+      <div class="card-neon p-6 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <span>📐</span> تحول الإطار الهيكلي (Wireframe) إلى واجهة حقيقية
+            </h3>
+            <button onclick="toggleWireframeMode()" id="wireframeToggleBtn" class="btn-cyber px-3 py-1 rounded-lg text-xs">
+              🔄 تبديل إلى: تصميم نهائي Hi-Fi
+            </button>
+          </div>
+          <p class="text-xs text-gray-400 mb-4">
+            الإطار الهيكلي يحدد توزيع العناصر قبل تضييع الوقت في اختيار الألوان والخطوط:
+          </p>
+
+          <div id="wireframeDisplayBox" class="p-4 rounded-xl wireframe-box min-h-[190px] flex flex-col justify-between transition-all">
+            <div class="flex justify-between items-center border-b border-gray-700 pb-2">
+              <span class="text-xs">[شعار الموقع]</span>
+              <span class="text-xs">[روابط التنقل 1 | 2 | 3]</span>
+            </div>
+            <div class="my-4 text-center">
+              <div class="text-sm font-bold">[العنوان الرئيسي للصفحة الهيكلية]</div>
+              <div class="text-xs mt-1">[صندوق الوصف النصي المختصر ومكان الفيديو التعليمي]</div>
+            </div>
+            <div class="flex justify-center gap-3">
+              <div class="px-4 py-1.5 border border-dashed border-gray-600 rounded text-xs">[زر الإجراء الأساسي CTA]</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-3 text-[11px] text-gray-500 text-center">
+          اضغط زر التبديل بالأعلى لمشاهدة كيف يتحول الهيكل العظمي إلى واجهة نيون عصرية!
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 4.2: CRAP Design Principles Inspector -->
+    <div class="card-neon p-6 mb-8">
+      <div class="flex items-center justify-between mb-2 flex-wrap gap-2">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <span>🔍</span> مفتش مبادئ التصميم الأربعة (CRAP Principles)
+        </h3>
+        <span class="text-xs text-purple-300 font-mono">Contrast • Repetition • Alignment • Proximity</span>
+      </div>
+      <p class="text-xs text-gray-400 mb-4">
+        طبّق المبادئ الأربعة بالتدريج وشاهد كيف يتحول التصميم السيئ إلى تصميم احترافي مريح للعين:
+      </p>
+
+      <div class="flex gap-2 flex-wrap mb-4">
+        <button onclick="toggleCrapPrinciple('contrast')" id="crapBtn_contrast" class="btn-cyber px-3 py-1.5 rounded-lg text-xs">
+          1. التباين (Contrast)
+        </button>
+        <button onclick="toggleCrapPrinciple('repetition')" id="crapBtn_repetition" class="btn-cyber px-3 py-1.5 rounded-lg text-xs">
+          2. التكرار (Repetition)
+        </button>
+        <button onclick="toggleCrapPrinciple('alignment')" id="crapBtn_alignment" class="btn-cyber px-3 py-1.5 rounded-lg text-xs">
+          3. المحاذاة (Alignment)
+        </button>
+        <button onclick="toggleCrapPrinciple('proximity')" id="crapBtn_proximity" class="btn-cyber px-3 py-1.5 rounded-lg text-xs">
+          4. التقارب (Proximity)
+        </button>
+        <button onclick="resetCrapPrinciples()" class="px-3 py-1.5 rounded-lg bg-slate-800 text-xs text-gray-400 hover:text-white mr-auto">
+          إعادة للتصميم البدائي
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Live Editable Canvas Preview -->
+        <div class="p-6 rounded-xl bg-slate-950 border border-slate-800 design-preview-container flex flex-col justify-center" id="crapPreviewCard">
+          <div id="crapTitle" class="text-gray-400 text-sm mb-4">أكاديمية البرمجة والذكاء الاصطناعي</div>
+          <div id="crapDesc" class="text-gray-500 text-xs leading-normal mb-4">
+            تعلم أحدث المهارات البرمجية لتطوير الويب وبناء النماذج الذكية بأعلى كفاءة لطلاب الثانوية العامة المصرية.
+          </div>
+          <div>
+            <span id="crapBtn" class="text-[11px] text-gray-400 border border-gray-600 px-3 py-1 inline-block">سجل الآن</span>
+          </div>
+        </div>
+
+        <!-- Explanation Column -->
+        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 flex flex-col justify-between">
+          <div id="crapExplanationText" class="text-xs text-gray-300 leading-relaxed">
+            اضغط على أزرار المبادئ أعلاه لمشاهدة تحسن وضوح التباين اللوني، واتساق أنماط الأزرار، وضبط محاذاة النص على خط وهمي، وضم العناصر المتشابهة في مجموعات متقاربة.
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-cyan-400">
+            ✅ الهدف: توجيه بصر المستخدم بسلاسة نحو المعلومة الأهم والإجراء المطلوب دون تشتيت.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4.3 & 4.4: Quantitative vs Qualitative & PDCA + A/B Testing -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      
+      <!-- Quantitative vs Qualitative Evaluation -->
+      <div class="card-neon p-6">
+        <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+          <span>📊</span> تقييم المواقع: التقييم الكمي مقابل التقييم النوعي
+        </h3>
+        <p class="text-xs text-gray-400 mb-4">
+          كيف يقيم مهندس الويب نجاح الموقع وسهولة استخدامه؟
+        </p>
+
+        <div class="space-y-3">
+          <!-- Quantitative -->
+          <div class="p-3.5 rounded-xl bg-slate-900 border border-cyan-500/30">
+            <div class="text-xs font-bold text-cyan-400 mb-1">1. التقييم الكمي (Quantitative Metrics)</div>
+            <p class="text-[11px] text-gray-300 mb-2">بيانات رقمية يتم قياسها بأدوات التحليل (مثل Google Analytics):</p>
+            <div class="grid grid-cols-3 gap-2 text-center">
+              <div class="p-2 rounded bg-slate-950">
+                <span class="text-xs font-bold text-white block">PV</span>
+                <span class="text-[10px] text-gray-400">مشاهدات الصفحة (Page Views)</span>
+              </div>
+              <div class="p-2 rounded bg-slate-950">
+                <span class="text-xs font-bold text-yellow-400 block">Bounce Rate</span>
+                <span class="text-[10px] text-gray-400">معدل الارتداد (الخروج السريع)</span>
+              </div>
+              <div class="p-2 rounded bg-slate-950">
+                <span class="text-xs font-bold text-emerald-400 block">CVR</span>
+                <span class="text-[10px] text-gray-400">معدل التحويل (Conversion)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Qualitative -->
+          <div class="p-3.5 rounded-xl bg-slate-900 border border-purple-500/30">
+            <div class="text-xs font-bold text-purple-400 mb-1">2. التقييم النوعي (Qualitative Evaluation)</div>
+            <p class="text-[11px] text-gray-300 mb-2">فهم أسباب المشاعر والسلوكيات من خلال التواصل المباشر:</p>
+            <ul class="text-[11px] text-gray-400 space-y-1 list-disc list-inside">
+              <li><strong>اختبار قابلية الاستخدام (Usability Testing):</strong> مراقبة مستخدم حقيقي أثناء أداء مهمة محددة.</li>
+              <li><strong>المقابلات والاستبيانات:</strong> سؤال الطلاب عن آرائهم في تصميم الموقع.</li>
+              <li><strong>التقييم الإرشادي (Heuristic Evaluation):</strong> مراجعة خبراء التصميم لقواعد سهولة الاستخدام.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- PDCA Cycle & Live A/B Testing Simulator -->
+      <div class="card-neon p-6 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <span>🧪</span> دورة PDCA ومحاكي اختبار A/B
+            </h3>
+            <span class="text-xs text-emerald-400 font-mono">Plan • Do • Check • Act</span>
+          </div>
+          <p class="text-xs text-gray-400 mb-4">
+            أجرينا اختبار A/B للزر الأساسي لزيادة تسجيل الطلاب. اضغط على الزرين لتسجيل تفاعل الزوار وشاهد حساب معدل التحويل (CVR) في الوقت الحقيقي:
+          </p>
+
+          <div class="grid grid-cols-2 gap-4 mb-4 text-center">
+            <!-- Variant A -->
+            <div class="p-3.5 rounded-xl bg-slate-950 border border-cyan-500/40">
+              <span class="text-[11px] text-cyan-400 font-bold block mb-2">النسخة A (الزر الأزرق)</span>
+              <button onclick="clickAbButton('a')" class="px-4 py-2 rounded-xl bg-cyan-500 text-black font-bold text-xs hover:bg-cyan-400 transition-colors w-full">
+                سجّل الآن 🚀
+              </button>
+              <div class="text-xs font-mono text-cyan-300 mt-2" id="abCountA">0 نقرة (CVR: 0%)</div>
+            </div>
+
+            <!-- Variant B -->
+            <div class="p-3.5 rounded-xl bg-slate-950 border border-emerald-500/40">
+              <span class="text-[11px] text-emerald-400 font-bold block mb-2">النسخة B (الزر الأخضر)</span>
+              <button onclick="clickAbButton('b')" class="px-4 py-2 rounded-xl bg-emerald-500 text-black font-bold text-xs hover:bg-emerald-400 transition-colors w-full">
+                ابدأ مجاناً 🎁
+              </button>
+              <div class="text-xs font-mono text-emerald-300 mt-2" id="abCountB">0 نقرة (CVR: 0%)</div>
+            </div>
+          </div>
+
+          <div id="abWinnerBadge" class="p-2.5 rounded-lg bg-slate-900 border border-slate-700 text-xs text-center text-yellow-400 font-bold mb-3">
+            اضغط على الزرين لتسجيل أصوات الزوار وتحديد النسخة الرابحة!
+          </div>
+        </div>
+
+        <!-- PDCA Steps summary -->
+        <div class="pt-3 border-t border-slate-800 text-[11px] text-gray-400 flex items-center justify-between">
+          <span>📋 <strong>Plan:</strong> فرضية التجربة</span>
+          <span>⚡ <strong>Do:</strong> إطلاق A/B</span>
+          <span>🔍 <strong>Check:</strong> تحليل CVR</span>
+          <span>🚀 <strong>Act:</strong> اعتماد الرابح</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Chapter 4 Quiz & Think like an Engineer -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="lg:col-span-2 card-neon p-6 border-pink-500/40">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>📝</span> بنك أسئلة الفصل الرابع (اختبار تفاعلي)
+          </h3>
+          <span class="text-xs text-pink-400 font-mono" id="ch4QuizProgress">السؤال 1 من 4</span>
+        </div>
+        <div id="ch4QuizContainer"></div>
+      </div>
+
+      <div class="card-neon p-6 bg-gradient-to-b from-slate-900 to-pink-950/40 border-pink-500/30">
+        <div class="flex items-center gap-2 text-yellow-400 font-black text-sm mb-3">
+          <span>💡</span> فكّر كمهندس (Think Like an Engineer)
+        </div>
+        <h4 class="text-sm font-bold text-white mb-2">معدل ارتداد 82% في موقع تسوق مصري:</h4>
+        <p class="text-xs text-gray-300 mb-4 leading-relaxed">
+          أظهرت أداة التحليلات أن 82% من الزوار يغادرون الصفحة الرئيسية خلال 3 ثوانٍ. استناداً لدورة PDCA، ما الخطوة الأولى التي يجب عليك اتخاذها؟
+        </p>
+        <div class="space-y-2 text-xs">
+          <button onclick="revealEngineerAnswer(4, 'redesign')" class="w-full text-right p-2.5 rounded-lg bg-slate-950/70 border border-slate-700 hover:border-pink-400 transition-colors">
+            🔘 الخيار أ: إعادة برمجة وتصميم الموقع بالكامل فوراً وتغيير السيرفر
+          </button>
+          <button onclick="revealEngineerAnswer(4, 'analyze')" class="w-full text-right p-2.5 rounded-lg bg-slate-950/70 border border-slate-700 hover:border-pink-400 transition-colors">
+            🔘 الخيار ب: مرحلة (Plan): قياس سرعة تحميل الموقع وفحص وضوح زر الإجراء وشريط البحث
+          </button>
+        </div>
+        <div id="engineerAnswerBox4" class="hidden mt-3 p-3 rounded-lg bg-pink-950/60 border border-pink-500/40 text-xs text-pink-200"></div>
+      </div>
+    </div>
+
+    <!-- Chapter 4 Complete Action -->
+    <div class="mt-8 text-center">
+      <button onclick="completeChapterAction(4)" id="ch4CompleteBtn" class="btn-primary-gradient px-8 py-3 rounded-xl text-sm font-bold shadow-lg shadow-pink-500/20">
+        ✅ إنهاء الفصل الرابع وتأكيد نقاط XP (+100 XP)
+      </button>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- FOOTER -->
+  <!-- ========================================================================= -->
+  <footer class="mt-20 border-t border-slate-800 bg-slate-950/90 py-12 px-4 text-center text-xs text-gray-400">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="text-xl">⚡</span>
+        <span class="font-bold text-white">Adam Mohamed Platform | تِكأكاديمي</span>
+      </div>
+      <div>
+        إعداد وتطوير وإشراف: <strong class="text-cyan-400 font-bold">Adam Mohamed</strong> | منهج البرمجة والذكاء الاصطناعي - الثانوية العامة المصرية
+      </div>
+      <div class="flex items-center gap-4">
+        <button onclick="logoutUser()" class="text-red-400 hover:underline font-bold">
+          تسجيل الخروج 🚪
+        </button>
+        <span class="text-gray-600">|</span>
+        <button onclick="resetAllProgressConfirm()" class="text-yellow-400 hover:underline">
+          إعادة تعيين التقدم 🔄
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- FLOATING GLOSSARY BUTTON & MODAL -->
+  <!-- ========================================================================= -->
+  <div class="fixed bottom-6 right-6 z-40">
+    <button onclick="openGlossaryModal()" class="flex items-center gap-2 px-4 py-3 rounded-2xl bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-black text-sm shadow-xl shadow-cyan-500/30 hover:scale-105 transition-all">
+      <span class="text-lg">📖</span>
+      <span>قاموس المصطلحات</span>
+    </button>
+  </div>
+
+  <div id="glossaryModal" onclick="if(event.target === this) closeGlossaryModal()" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm opacity-0 invisible flex items-center justify-center p-4">
+    <div id="glossaryModalContent" class="glossary-modal-container rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+      <!-- Modal Header -->
+      <div class="glossary-modal-header p-4 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">📚</span>
+          <h3 class="glossary-modal-title font-bold text-base">قاموس مصطلحات المنهج الشامل</h3>
+        </div>
+        <button onclick="closeGlossaryModal()" class="glossary-modal-close p-1 rounded-lg" title="إغلاق">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Search & Filters -->
+      <div class="glossary-search-bar p-4 flex flex-col sm:flex-row gap-2">
+        <input type="text" id="glossarySearchInput" oninput="filterGlossaryItems()" placeholder="ابحث عن أي مصطلح (مثل: TLS, Edge, CRAP, XAI)..." class="glossary-search-input flex-1 rounded-xl px-4 py-2 text-xs focus:outline-none" />
+        <div class="flex gap-1 overflow-x-auto pb-1 sm:pb-0">
+          <button onclick="filterGlossaryByChapter('all')" class="glossary-filter-btn active px-2.5 py-1.5 rounded-lg text-xs font-bold" id="gfilter_all">الكل</button>
+          <button onclick="filterGlossaryByChapter('1')" class="glossary-filter-btn px-2.5 py-1.5 rounded-lg text-xs font-medium" id="gfilter_1">ف1</button>
+          <button onclick="filterGlossaryByChapter('2')" class="glossary-filter-btn px-2.5 py-1.5 rounded-lg text-xs font-medium" id="gfilter_2">ف2</button>
+          <button onclick="filterGlossaryByChapter('3')" class="glossary-filter-btn px-2.5 py-1.5 rounded-lg text-xs font-medium" id="gfilter_3">ف3</button>
+          <button onclick="filterGlossaryByChapter('4')" class="glossary-filter-btn px-2.5 py-1.5 rounded-lg text-xs font-medium" id="gfilter_4">ف4</button>
+        </div>
+      </div>
+
+      <!-- Glossary List Body -->
+      <div class="p-4 overflow-y-auto space-y-3 flex-1" id="glossaryListContainer">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toastBox" class="toast-box p-4 rounded-xl bg-slate-900 border border-cyan-400/50 shadow-2xl shadow-cyan-500/30 flex items-center gap-3">
+    <div id="toastIcon" class="text-2xl">⭐</div>
+    <div>
+      <div id="toastTitle" class="text-xs font-bold text-white">إنجاز جديد!</div>
+      <div id="toastSub" class="text-[11px] text-cyan-300">+25 XP</div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT LOGIC & SIMULATORS -->
+  <!-- ========================================================================= -->
+  <script>
+    // Audio Synthesizer (Web Audio API)
+    let audioCtx = null;
+    let isSoundMuted = false;
+
+    function playTone(freq = 440, type = 'sine', duration = 0.15) {
+      if (isSoundMuted) return;
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        // Audio context fallback
+      }
+    }
+
+    function toggleSound() {
+      isSoundMuted = !isSoundMuted;
+      const icon = document.getElementById('soundIcon');
+      if (isSoundMuted) {
+        icon.setAttribute('data-lucide', 'volume-x');
+        showToast('🔇', 'تم كتم الصوت', '');
+      } else {
+        icon.setAttribute('data-lucide', 'volume-2');
+        showToast('🔊', 'تم تشغيل المؤثرات الصوتية', '');
+        playTone(580, 'sine', 0.2);
+      }
+      lucide.createIcons();
+    }
+
+    // User-Specific XP Management Functions
+    function getCurrentUserEmail() {
+      return (localStorage.getItem('userEmail') || 'adam@gmail.com').trim().toLowerCase();
+    }
+
+    function getUserXp() {
+      const email = getCurrentUserEmail();
+      const xpKey = 'xp_' + email;
+      const stored = localStorage.getItem(xpKey);
+      if (stored !== null) {
+        return parseInt(stored, 10) || 0;
+      }
+      // If user is adam@gmail.com (previous user), preserve/seed 710 XP!
+      if (email === 'adam@gmail.com' || email === 'adam.mohamed@gmail.com') {
+        localStorage.setItem(xpKey, '710');
+        return 710;
+      }
+      // Brand new email starts at 0 XP
+      localStorage.setItem(xpKey, '0');
+      return 0;
+    }
+
+    function saveUserXp(xp) {
+      const email = getCurrentUserEmail();
+      localStorage.setItem('xp_' + email, xp.toString());
+    }
+
+    function resetUserXp() {
+      const email = getCurrentUserEmail();
+      if (confirm(`هل أنت متأكد من رغبتك في إعادة ضبط الحساب (${email}) وتصفير نقاط الـ XP إلى 0 وإغلاق وقفل كافة الأوسمة والإنجازات؟`)) {
+        // 1. تصفير الـ XP في LocalStorage
+        saveUserXp(0);
+        appState.xp = 0;
+
+        // 2. إغلاق وإزالة جميع الأوسمة والإنجازات
+        appState.badgesUnlocked = { 1: false, 2: false, 3: false, 4: false };
+        appState.completedChapters = { 1: false, 2: false, 3: false, 4: false };
+        appState.quizProgress = { 1: 0, 2: 0, 3: 0, 4: 0 };
+        saveAppState();
+
+        // 3. تحديث واجهة المستخدم (UI) فوراً دون الحاجة لتحديث الصفحة
+        updateNavDisplay();
+
+        // إعادة ضبط وعرض أسئلة الفصول الأربعة على الصفحة الرئيسية
+        for (let ch = 1; ch <= 4; ch++) {
+          if (typeof renderChapterQuiz === 'function') {
+            renderChapterQuiz(ch);
+          }
+        }
+
+        playTone(330, 'triangle', 0.2);
+        showToast('🔄', 'تمت إعادة ضبط الحساب بالكامل!', 'أصبحت نقاطك 0 XP وتم قفل جميع الأوسمة والإنجازات بنجاح');
+      }
+    }
+
+    // State & Gamification Persistence
+    function loadAppState() {
+      const email = getCurrentUserEmail();
+      const userStateKey = 'state_' + email;
+      let raw = localStorage.getItem(userStateKey) || localStorage.getItem('ai_edu_grade11_state');
+      let state = {};
+      try {
+        state = JSON.parse(raw || '{}');
+      } catch (e) {
+        state = {};
+      }
+      state.xp = getUserXp();
+      if (!state.completedChapters) state.completedChapters = { 1: false, 2: false, 3: false, 4: false };
+      if (!state.badgesUnlocked) state.badgesUnlocked = { 1: false, 2: false, 3: false, 4: false };
+      if (!state.quizProgress) state.quizProgress = { 1: 0, 2: 0, 3: 0, 4: 0 };
+      return state;
+    }
+
+    let appState = loadAppState();
+
+    function saveAppState() {
+      const email = getCurrentUserEmail();
+      saveUserXp(appState.xp);
+      const str = JSON.stringify(appState);
+      localStorage.setItem('state_' + email, str);
+      localStorage.setItem('ai_edu_grade11_state', str);
+    }
+
+    function addXP(amount, reason = '') {
+      appState.xp = getUserXp() + amount;
+      saveUserXp(appState.xp);
+      saveAppState();
+      updateNavDisplay();
+      playTone(523.25, 'triangle', 0.2); // C5
+      setTimeout(() => playTone(659.25, 'triangle', 0.25), 100); // E5
+      showToast('⭐', reason || 'نقاط خبرة جديدة!', `+${amount} XP`);
+    }
+
+    function updateNavDisplay() {
+      appState.xp = getUserXp();
+      const xpEl = document.getElementById('navXpCount');
+      if (xpEl) xpEl.textContent = `${appState.xp} XP`;
+      
+      // Progress calculation
+      let totalCompleted = 0;
+      for (let ch = 1; ch <= 4; ch++) {
+        if (appState.completedChapters && appState.completedChapters[ch]) totalCompleted += 25;
+      }
+      const progressBar = document.getElementById('globalProgressBar');
+      if (progressBar) progressBar.style.width = `${Math.min(100, Math.max(totalCompleted, (appState.xp / 600) * 100))}%`;
+
+      // Badge check & UI update (إغلاق وتعتيم أو فتح كل وسام بدقة فورية)
+      let unlockedCount = 0;
+      const isLight = document.body.classList.contains('light-theme');
+      for (let ch = 1; ch <= 4; ch++) {
+        const card = document.getElementById(`badgeCard${ch}`);
+        const icon = document.getElementById(`badgeIcon${ch}`);
+        const stat = document.getElementById(`badgeStatus${ch}`);
+
+        if (appState.badgesUnlocked && appState.badgesUnlocked[ch]) {
+          unlockedCount++;
+          if (card) {
+            card.classList.remove('opacity-60', 'border-dashed', 'border-slate-700', 'border-slate-300');
+            card.classList.add('border-cyan-400/60');
+            if (isLight) {
+              card.classList.add('bg-cyan-50/80');
+              card.classList.remove('bg-cyan-950/20');
+            } else {
+              card.classList.add('bg-cyan-950/20');
+              card.classList.remove('bg-cyan-50/80');
+            }
+          }
+          if (icon) icon.classList.remove('grayscale');
+          if (stat) {
+            stat.textContent = '✅ مفتوح!';
+            stat.className = isLight ? 'text-[11px] font-bold text-emerald-600' : 'text-[11px] font-bold text-emerald-400';
+          }
+        } else {
+          // Locked state: يعود مظلماً ومقفلاً تماماً مع تأثير التعتيم (grayscale & opacity)
+          if (card) {
+            card.classList.remove('border-cyan-400/60', 'bg-cyan-950/20', 'bg-cyan-50/80');
+            card.classList.add('opacity-60', 'border-dashed');
+            if (isLight) {
+              card.classList.add('border-slate-300');
+              card.classList.remove('border-slate-700');
+            } else {
+              card.classList.add('border-slate-700');
+              card.classList.remove('border-slate-300');
+            }
+          }
+          if (icon) icon.classList.add('grayscale');
+          if (stat) {
+            stat.textContent = '🔒 مقفل';
+            stat.className = 'text-[11px] font-bold text-slate-500';
+          }
+        }
+      }
+      const countEl = document.getElementById('badgeUnlockCount');
+      if (countEl) countEl.textContent = `${unlockedCount} من 4 أوسمة مفتوحة`;
+    }
+
+    function showToast(icon, title, sub) {
+      const box = document.getElementById('toastBox');
+      document.getElementById('toastIcon').textContent = icon;
+      document.getElementById('toastTitle').textContent = title;
+      document.getElementById('toastSub').textContent = sub;
+      box.classList.add('show');
+      setTimeout(() => box.classList.remove('show'), 3500);
+    }
+
+    function completeChapterAction(ch) {
+      if (!appState.completedChapters[ch]) {
+        appState.completedChapters[ch] = true;
+        appState.badgesUnlocked[ch] = true;
+        addXP(100, `مبروك! أكملت الفصل ${ch} بنجاح 🎓`);
+        fireConfettiEffect();
+        updateNavDisplay();
+      } else {
+        showToast('✅', `الفصل ${ch} مكتمل بالفعل!`, 'واصل الإبداع!');
+      }
+    }
+
+    // Confetti Effect (HTML5 Canvas)
+    function fireConfettiEffect() {
+      const canvas = document.getElementById('confettiCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ['#00D4FF', '#7C3AED', '#10B981', '#EC4899', '#F59E0B'];
+      for (let i = 0; i < 90; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          vx: (Math.random() - 0.5) * 16,
+          vy: (Math.random() - 0.7) * 18,
+          size: Math.random() * 8 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          alpha: 1
+        });
+      }
+
+      let frames = 0;
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.4; // gravity
+          p.alpha -= 0.015;
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = Math.max(0, p.alpha);
+          ctx.fillRect(p.x, p.y, p.size, p.size);
+        });
+        frames++;
+        if (frames < 80) {
+          requestAnimationFrame(animate);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+      animate();
+    }
+
+    // =========================================================================
+    // CHAPTER 1 LOGIC
+    // =========================================================================
+    const timelineData = [
+      {
+        title: "حاسوب ENIAC والصمامات المفرغة (الأربعينيات)",
+        icon: "🎛️",
+        text: "أول حاسوب إلكتروني رقمي للأغراض العامة (1945). كان يزن أكثر من 30 طناً ويشغل مساحة غرفة ضخمة (167 متراً مربعاً) ويستهلك 150 كيلوواط من الكهرباء، مستخدماً 18,000 صمام مفرغ (Vacuum Tube)."
+      },
+      {
+        title: "ظهور الحواسيب الشخصية (السبعينيات والثمانينيات)",
+        icon: "💾",
+        text: "بفضل اختراع المعالجات الدقيقة (Microprocessors)، انتقلت الحواسيب من المؤسسات الحكومية إلى المكاتب والمنازل (مثل Apple II و IBM PC)، مما جعل الحوسبة متاحة للأفراد لأول مرة في التاريخ."
+      },
+      {
+        title: "ثورة الإنترنت والويب العالمي (التسعينيات)",
+        icon: "🌐",
+        text: "ابتكر السير تيم بيرنرز لي شبكة الويب العالمية (WWW) عام 1989، لتربط الملايين حول العالم عبر بروتوكولات HTTP ولغة HTML؛ متيحة تبادل المعرفة والبريد الإلكتروني والتجارة الإلكترونية."
+      },
+      {
+        title: "عصر الهواتف الذكية والتطبيقات (2007+)",
+        icon: "📱",
+        text: "إطلاق الهواتف الذكية جعل قوة الحوسبة الفائقة في جيب كل إنسان؛ معتمدة على شاشات اللمس والاتصال المستمر بالإنترنت (3G/4G/5G) ومستشعرات الـ GPS والكاميرات عالية الدقة."
+      },
+      {
+        title: "الحوسبة السحابية والبيانات الضخمة (2010s)",
+        icon: "☁️",
+        text: "التحول من الخوادم المحلية إلى مراكز البيانات السحابية المركزية (Cloud Providers)، مما مكّن الشركات من تدريب نماذج الذكاء الاصطناعي العملاقة وتخزين ومعالجة مليارات البيانات يومياً."
+      },
+      {
+        title: "الحوسبة الكمومية وثورة الذكاء التوليدي (2020s+)",
+        icon: "⚛️",
+        text: "البت التقليدي (0 أو 1) يفسح المجال للكيوبت (Qubit) القادر على التواجد في حالات تراكب كمي متزامنة؛ مما يمكنه من حل معادلات التشفير واكتشاف الأدوية في دقائق بدلاً من آلاف السنين!"
+      }
+    ];
+
+    function showTimelineInfo(index) {
+      for (let i = 0; i <= 5; i++) {
+        const dot = document.getElementById(`tldot-${i}`);
+        if (dot) dot.classList.toggle('active', i === index);
+      }
+      const data = timelineData[index];
+      const box = document.getElementById('timelineDetailCard');
+      box.innerHTML = `
+        <div class="flex items-center gap-3 mb-2">
+          <span class="text-3xl">${data.icon}</span>
+          <h4 class="font-bold text-base text-cyan-300">${data.title}</h4>
+        </div>
+        <p class="text-gray-300 text-xs sm:text-sm leading-relaxed">${data.text}</p>
+      `;
+      playTone(400 + index * 50, 'sine', 0.1);
+    }
+
+    // Classical Bit vs Qubit
+    let classicalBit = 0;
+    function flipClassicalBit() {
+      classicalBit = classicalBit === 0 ? 1 : 0;
+      document.getElementById('classicalBitVal').textContent = classicalBit;
+      playTone(classicalBit ? 600 : 300, 'square', 0.1);
+    }
+
+    function measureQubit() {
+      const measured = Math.random() < 0.5 ? 0 : 1;
+      const logEl = document.getElementById('qubitMeasureLog');
+      logEl.innerHTML = `⚡ انهار التراكب إلى القيمة القطعية: <strong class="text-cyan-300 text-sm font-mono">${measured}</strong>! تم إنجاز عملية القياس.`;
+      playTone(750, 'triangle', 0.2);
+      addXP(5, 'أجريت تجربة قياس كمي!');
+    }
+
+    // Moore's Law Canvas Chart
+    function renderMooresLawChart() {
+      const canvas = document.getElementById('mooreCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      const points = [
+        { year: 1971, chips: 0.0023, name: 'Intel 4004' },
+        { year: 1978, chips: 0.029, name: 'Intel 8086' },
+        { year: 1985, chips: 0.275, name: '386' },
+        { year: 1993, chips: 3.1, name: 'Pentium' },
+        { year: 2000, chips: 42, name: 'Pentium 4' },
+        { year: 2008, chips: 731, name: 'Core i7' },
+        { year: 2017, chips: 4300, name: 'Apple A11' },
+        { year: 2024, chips: 19000, name: 'M3 / A17 Pro' }
+      ];
+
+      // Grid lines
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.07)';
+      ctx.lineWidth = 1;
+      for (let i = 1; i <= 4; i++) {
+        ctx.beginPath();
+        ctx.moveTo(40, (h / 5) * i);
+        ctx.lineTo(w - 20, (h / 5) * i);
+        ctx.stroke();
+      }
+
+      // Curve
+      ctx.strokeStyle = '#00D4FF';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      points.forEach((p, idx) => {
+        const x = 50 + (idx / (points.length - 1)) * (w - 80);
+        const logVal = Math.log10(p.chips + 0.001);
+        const minLog = Math.log10(0.0023);
+        const maxLog = Math.log10(25000);
+        const y = h - 35 - ((logVal - minLog) / (maxLog - minLog)) * (h - 60);
+
+        if (idx === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+
+      // Dots & Labels
+      points.forEach((p, idx) => {
+        const x = 50 + (idx / (points.length - 1)) * (w - 80);
+        const logVal = Math.log10(p.chips + 0.001);
+        const minLog = Math.log10(0.0023);
+        const maxLog = Math.log10(25000);
+        const y = h - 35 - ((logVal - minLog) / (maxLog - minLog)) * (h - 60);
+
+        ctx.fillStyle = '#10B981';
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '10px Cairo';
+        ctx.textAlign = 'center';
+        if (idx % 2 === 0 || idx === points.length - 1) {
+          ctx.fillText(p.year, x, h - 12);
+        }
+      });
+    }
+
+    // Autonomous Car Simulation (Edge vs Cloud)
+    function runEdgeCarSimulation() {
+      const car = document.getElementById('simCar');
+      const res = document.getElementById('carSimResult');
+      car.style.transform = 'translateX(160px)';
+      playTone(500, 'square', 0.15);
+      setTimeout(() => {
+        res.innerHTML = `
+          <div>
+            <strong class="text-emerald-400 block text-xs">⚡ الحوسبة الطرفية (Edge Computing):</strong>
+            تأخير المعالجة: <span class="font-mono text-cyan-300">2 ملي ثانية</span> فقط! تمت معالجة صورة الكاميرا على حاسوب السيارة وتوقفت بأمان قبل المشاة بـ 5 أمتار. ✅
+          </div>
+        `;
+        addXP(10, 'جربت محاكاة الحوسبة الطرفية');
+      }, 500);
+    }
+
+    function runCloudCarSimulation() {
+      const car = document.getElementById('simCar');
+      const res = document.getElementById('carSimResult');
+      car.style.transform = 'translateX(280px)';
+      playTone(250, 'sawtooth', 0.3);
+      setTimeout(() => {
+        res.innerHTML = `
+          <div>
+            <strong class="text-red-400 block text-xs">⚠️ الحوسبة السحابية (Cloud Latency):</strong>
+            تأخير الإرسال والاستقبال: <span class="font-mono text-red-300">320 ملي ثانية</span>! استمرت السيارة في الحركة وتجاوزت مسافة الأمان وكادت تصطدم بالمشاة! الحوسبة الطرفية ضرورية للتطبيقات الحرجة في الوقت الفعلي.
+          </div>
+        `;
+        addXP(10, 'فهمت مخاطر التأخير السحابي');
+      }, 700);
+    }
+
+    // AI Layers
+    const aiLayersData = {
+      ai: {
+        title: "الذكاء الاصطناعي (Artificial Intelligence - AI)",
+        text: "المظلة الشاملة لجميع الأنظمة الحاسوبية القادرة على محاكاة القدرات الذهنية البشرية كالتفكير، حل المشكلات، والتعلم. يضم الأنظمة الخبيرة وخوارزميات البحث وتصنيف البيانات."
+      },
+      ml: {
+        title: "التعلم الآلي (Machine Learning - ML)",
+        text: "فرع من الذكاء الاصطناعي يعتمد على تعليم الخوارزميات من خلال استخراج الأنماط من البيانات السابقة بدلاً من برمجتها بقواعد ثابتة صريحة (Explicit Programming)."
+      },
+      dl: {
+        title: "التعلم العميق (Deep Learning - DL)",
+        text: "فئة فرعية من التعلم الآلي تستند إلى الشبكات العصبية الاصطناعية العميقة ذات الطبقات المتعددة (Multi-layer Neural Networks)؛ مما يتيح التعرف على الأنماط المعقدة كالأصوات والصور الطبية."
+      },
+      genai: {
+        title: "الذكاء الاصطناعي التوليدي (Generative AI)",
+        text: "أحدث نماذج التعلم العميق (مثل نماذج المحولات Transformers) القادرة على ابتكار وإنشاء محتوى بشري أصيل جديد؛ ككتابة المقالات، توليد الصور الرقمية، البرمجة، والتأليف الموسيقي."
+      }
+    };
+
+    function selectAiLayer(layerKey) {
+      const box = document.getElementById('aiLayerInfoBox');
+      const item = aiLayersData[layerKey];
+      box.innerHTML = `
+        <h4 class="font-bold text-sm text-cyan-300 mb-1">${item.title}</h4>
+        <p class="text-gray-300 text-xs leading-relaxed">${item.text}</p>
+      `;
+      playTone(450, 'sine', 0.1);
+    }
+
+    // Hallucination Detector Game
+    const hallucinationRounds = [
+      {
+        q: "اختر البطاقة التي تولدت عن نموذج AI لكنها تشتمل على 'هلوسة' علمية أو تاريخية:",
+        options: [
+          { text: "أول قمر صناعي مصري للاتصالات كان نايل سات 101 وأُطلق عام 1998.", isHallucination: false },
+          { text: "يستخدم المخ البشري 10% فقط من قدراته وخلاياه، ويمكن تدريب الباقي بالذكاء الاصطناعي.", isHallucination: true, explanation: "هلوسة شهيرة! العلم أثبت أن الإنسان يستخدم كل مناطق الدماغ تقريباً على مدار اليوم." },
+          { text: "تعتمد خوارزمية البحث الثنائي (Binary Search) على تقسيم مصفوفة مرتبة إلى نصفين.", isHallucination: false }
+        ]
+      }
+    ];
+
+    function renderHallucinationCards() {
+      const container = document.getElementById('hallucinationCardsContainer');
+      const round = hallucinationRounds[0];
+      container.innerHTML = round.options.map((opt, i) => `
+        <div onclick="checkHallucinationCard(${i})" id="hallucCard_${i}" class="p-3.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-pink-500/50 cursor-pointer transition-all text-xs text-gray-300">
+          <span class="text-pink-400 font-bold ml-1">رد ${i + 1}:</span> ${opt.text}
+        </div>
+      `).join('');
+    }
+
+    function checkHallucinationCard(index) {
+      const opt = hallucinationRounds[0].options[index];
+      const feedback = document.getElementById('hallucinationFeedback');
+      if (opt.isHallucination) {
+        document.getElementById(`hallucCard_${index}`).className = 'p-3.5 rounded-xl bg-emerald-950/40 border border-emerald-500 text-xs text-emerald-300';
+        feedback.innerHTML = `
+          <div>
+            <strong class="text-emerald-400 block text-xs mb-1">🎯 أحسنت! كشفت الهلوسة بنجاح:</strong>
+            ${opt.explanation} تمكنت من إدراك أن الفصاحة اللغوية للذكاء الاصطناعي لا تعني دائماً صدق المعلومة!
+          </div>
+        `;
+        addXP(15, 'كشفت هلوسة الذكاء الاصطناعي!');
+      } else {
+        document.getElementById(`hallucCard_${index}`).className = 'p-3.5 rounded-xl bg-red-950/40 border border-red-500 text-xs text-red-300';
+        feedback.innerHTML = `
+          <div>
+            <strong class="text-red-400 block text-xs mb-1">❌ هذه حقيقة مؤكدة علمياً وليست هلوسة!</strong>
+            ابحث عن العبارة التي يرددها البعض كشائعة أو خرافة ويصيغها الذكاء الاصطناعي بثقة مزيفة.
+          </div>
+        `;
+        playTone(200, 'sawtooth', 0.2);
+      }
+    }
+
+    // Ethics Lab Solutions
+    const ethicsSolutions = {
+      fairness: {
+        title: "تطبيق مبدأ العدالة (Fairness)",
+        desc: "تم فحص بيانات التدريب وتنقيتها من التمثيل المنحاز تاريخياً، وإعادة تدريب النموذج بأوزان متساوية لمنع أي تمييز ضد الإناث أو المتقدمين من أي منطقة جغرافية."
+      },
+      transparency: {
+        title: "الشفافية والذكاء الاصطناعي القابل للتفسير (XAI)",
+        desc: "تم استبدال نظام 'الصندوق الأسود' بنموذج XAI يرفق مع كل قرار تقريراً بالمعايير: (مثلاً: سنوات الخبرة ساهمت بـ 40%، وإتقان لغة بايثون ساهم بـ 35%)."
+      },
+      privacy: {
+        title: "حماية الخصوصية (Privacy & Data Minimization)",
+        desc: "تشفير وحجب الأسماء والنوع والصور والعناوين أثناء مرحلة الفرز الآلي، مما يضمن تقييم الجدارة الفنية الخالصة دون تحيزات غير واعية."
+      },
+      accountability: {
+        title: "المساءلة وحق الطعن (Accountability)",
+        desc: "إلزام وجود مهندس مختص يتحمل المسؤولية القانونية والأخلاقية عن أي قرار، مع إتاحة نافذة رسمية لأي متقدم للاعتراض ومراجعة ملفه بشرياً."
+      }
+    };
+
+    function applyEthicsSolution(type) {
+      const res = document.getElementById('ethicsSolutionResult');
+      const sol = ethicsSolutions[type];
+      res.innerHTML = `
+        <div>
+          <strong class="text-cyan-300 block mb-1">✅ تم تفعيل: ${sol.title}</strong>
+          <span class="text-gray-300">${sol.desc}</span>
+        </div>
+      `;
+      addXP(10, 'طبقت مبدأ أخلاقياً في الذكاء الاصطناعي');
+    }
+
+    // =========================================================================
+    // CHAPTER 2 LOGIC (CYBERSECURITY)
+    // =========================================================================
+    let currentTlsStep = 0;
+    function advanceTlsStep() {
+      if (currentTlsStep < 5) {
+        document.getElementById(`tlsStep${currentTlsStep}`).classList.remove('active');
+        document.getElementById(`tlsStep${currentTlsStep}`).classList.add('done');
+        currentTlsStep++;
+        document.getElementById(`tlsStep${currentTlsStep}`).classList.add('active');
+        playTone(400 + currentTlsStep * 60, 'sine', 0.1);
+      } else {
+        showToast('🔒', 'اكتملت مصافحة TLS وتأسس الاتصال المشفر!', '+20 XP');
+        addXP(20, 'أتممت محاكاة مصافحة TLS');
+      }
+    }
+
+    function resetTlsSimulation() {
+      for (let i = 0; i <= 5; i++) {
+        const el = document.getElementById(`tlsStep${i}`);
+        el.classList.remove('active', 'done');
+      }
+      currentTlsStep = 0;
+      document.getElementById('tlsStep0').classList.add('active');
+    }
+
+    // 2FA Selection State
+    let selectedMfa = new Set();
+    function toggleMfaSelection(mfaKey) {
+      const btn = document.getElementById(`mfa_${mfaKey}`);
+      if (selectedMfa.has(mfaKey)) {
+        selectedMfa.delete(mfaKey);
+        btn.classList.remove('border-cyan-400', 'bg-cyan-950/60');
+      } else {
+        if (selectedMfa.size >= 2) {
+          showToast('⚠️', 'يمكنك اختيار عاملين فقط للمصادقة الثنائية', '');
+          return;
+        }
+        selectedMfa.add(mfaKey);
+        btn.classList.add('border-cyan-400', 'bg-cyan-950/60');
+      }
+      playTone(500, 'sine', 0.08);
+    }
+
+    function validateMfaCombination() {
+      const box = document.getElementById('mfaFeedbackBox');
+      if (selectedMfa.size < 2) {
+        box.innerHTML = `<span class="text-yellow-400">⚠️ يرجى اختيار وسيلتين مختلفتين أولاً.</span>`;
+        return;
+      }
+
+      const arr = Array.from(selectedMfa);
+      const isKnowledge = (k) => ['pass', 'pin'].includes(k);
+      const isPossession = (k) => ['otp', 'token'].includes(k);
+      const isBiometric = (k) => ['finger', 'face'].includes(k);
+
+      // Check if both are from the same category
+      if (isKnowledge(arr[0]) && isKnowledge(arr[1])) {
+        box.innerHTML = `
+          <div class="text-red-400">
+            ❌ <strong>فشل المصادقة الثنائية!</strong> اخترت كلمتي مرور أو PIN وكلاهما من فئة واحدة (ما تعرفه). إذا تسربت كلمة مرورك قد تتسرب الأخرى! لا بد من عامل من فئة أخرى.
+          </div>
+        `;
+        playTone(200, 'sawtooth', 0.2);
+      } else {
+        box.innerHTML = `
+          <div class="text-emerald-400">
+            ✅ <strong>مصادقة ثنائية حقيقية وناجحة!</strong> جمعت بين فئتين مختلفتين (مثال: ما تعرفه + ما تملكه أو سماتك الحيوية). هذا يضمن صد محاولات الاختراق حتى لو سُرقت كلمة المرور.
+          </div>
+        `;
+        addXP(15, 'أتقنت فئات المصادقة الثنائية 2FA');
+      }
+    }
+
+    // Attack simulation on Defense in Depth
+    function triggerSimulatedCyberAttack() {
+      const log = document.getElementById('attackSimLog');
+      log.innerHTML = `<span class="text-yellow-400 animate-pulse">⚡ بدء محاكاة هجوم DDoS واختراق خبيث...</span>`;
+      playTone(300, 'sawtooth', 0.15);
+
+      setTimeout(() => {
+        log.innerHTML = `<span class="text-red-400">1. Firewall: تم رصد هجوم فحص منافذ وتم حظر 98% من حزم الـ Syn-Flood.</span>`;
+        setTimeout(() => {
+          log.innerHTML += `<br/><span class="text-yellow-400">2. DMZ: الخادم المعزول امتص الضغط دون أن يصل للملفات الداخلية.</span>`;
+          setTimeout(() => {
+            log.innerHTML += `<br/><span class="text-emerald-400 font-bold">3. نجاح الدفاع في العمق! قاعدة البيانات الداخلية آمنة 100%!</span>`;
+            addXP(15, 'صد هجوم سيبراني بالدفاع في العمق');
+          }, 600);
+        }, 600);
+      }, 600);
+    }
+
+    // Ransomware 6 Phases
+    const ransomwareCorrectPhases = [
+      { id: 'prep', name: '1. التحضير والوقاية' },
+      { id: 'detect', name: '2. الاكتشاف والتحليل' },
+      { id: 'contain', name: '3. الاحتواء (عزل الأجهزة)' },
+      { id: 'eradicate', name: '4. الاستئصال ومسح البرمجية' },
+      { id: 'recover', name: '5. الاستعادة من النسخ النظيفة' },
+      { id: 'lessons', name: '6. الدروس المستفادة والتوثيق' }
+    ];
+
+    let userRansomwareOrder = [];
+    function renderRansomwarePool() {
+      const pool = document.getElementById('ransomwarePhasePool');
+      const shuffled = [...ransomwareCorrectPhases].sort(() => Math.random() - 0.5);
+      pool.innerHTML = shuffled.map(p => `
+        <button onclick="addRansomwarePhase('${p.id}', '${p.name}')" id="rbtn_${p.id}" class="p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-gray-300 hover:border-red-400 text-center">
+          ${p.name}
+        </button>
+      `).join('');
+    }
+
+    function addRansomwarePhase(id, name) {
+      if (userRansomwareOrder.find(item => item.id === id)) return;
+      userRansomwareOrder.push({ id, name });
+      document.getElementById(`rbtn_${id}`).classList.add('opacity-40', 'border-red-500');
+      document.getElementById('ransomwareSelectedOrder').textContent = userRansomwareOrder.map(i => i.name).join(' ⟶ ');
+      playTone(550, 'sine', 0.08);
+    }
+
+    function resetRansomwareOrder() {
+      userRansomwareOrder = [];
+      document.getElementById('ransomwareSelectedOrder').textContent = '— اختر المراحل بالترتيب الهندسي الصحيح —';
+      document.getElementById('ransomwareFeedbackBox').textContent = 'تحذير: لا تبدأ الاستعادة من النسخ الاحتياطية قبل الاستئصال التام للبرمجية الخبيثة!';
+      renderRansomwarePool();
+    }
+
+    function checkRansomwareOrder() {
+      const box = document.getElementById('ransomwareFeedbackBox');
+      if (userRansomwareOrder.length < 6) {
+        box.innerHTML = `<span class="text-yellow-400">⚠️ يرجى ترتيب جميع المراحل الست أولاً.</span>`;
+        return;
+      }
+
+      // Check if recovery is before eradication
+      const eradicateIdx = userRansomwareOrder.findIndex(i => i.id === 'eradicate');
+      const recoverIdx = userRansomwareOrder.findIndex(i => i.id === 'recover');
+      if (recoverIdx < eradicateIdx) {
+        box.innerHTML = `
+          <div class="text-red-400">
+            🚨 <strong>خطأ كارثي!</strong> قمت بمحاولة الاستعادة قبل استئصال البرمجية الخبيثة! سيؤدي ذلك إلى إعادة تشفير النسخ الاحتياطية وتدميرها! تذكر: الاحتواء ثم الاستئصال ثم الاستعادة.
+          </div>
+        `;
+        playTone(180, 'sawtooth', 0.3);
+        return;
+      }
+
+      // Check complete sequence
+      const isPerfect = userRansomwareOrder.every((p, idx) => p.id === ransomwareCorrectPhases[idx].id);
+      if (isPerfect) {
+        box.innerHTML = `
+          <div class="text-emerald-400">
+            ✅ <strong>ممتاز يا مهندس!</strong> ترتيب سليم 100%: (التحضير ⟶ الاكتشاف ⟶ الاحتواء ⟶ الاستئصال ⟶ الاستعادة ⟶ الدروس المستفادة). هذا هو المعيار العالمي للاستجابة للحوادث السيبرانية.
+          </div>
+        `;
+        addXP(25, 'أتقنت خطة الاستجابة لهجمات الفدية');
+      } else {
+        box.innerHTML = `
+          <div class="text-yellow-400">
+            ⚠️ هناك خطوة أو أكثر في غير مكانها الصحيح. راجع الترتيب: اعزل الأجهزة أولاً، ثم استأصل الخبيث، ثم استعد الملفات، وفي النهاية وثق الدروس.
+          </div>
+        `;
+      }
+    }
+
+    // Cyber Risk Calculator
+    function updateRiskScoreCalculation() {
+      const impact = parseInt(document.getElementById('riskImpactSlider').value);
+      const prob = parseInt(document.getElementById('riskProbSlider').value);
+      document.getElementById('impactValLabel').textContent = `${impact} / 5`;
+      document.getElementById('probValLabel').textContent = `${prob} / 5`;
+
+      const score = impact * prob;
+      const numEl = document.getElementById('riskScoreNumber');
+      const lvlEl = document.getElementById('riskScoreLevel');
+      const advEl = document.getElementById('riskScoreAdvice');
+      const box = document.getElementById('riskScoreResultBox');
+
+      numEl.textContent = score;
+
+      if (score <= 5) {
+        box.className = 'p-5 rounded-2xl bg-emerald-950/20 border-2 border-emerald-500/50 text-center transition-all';
+        numEl.className = 'text-4xl font-black text-emerald-400 mb-1';
+        lvlEl.textContent = 'خطر منخفض (Low Risk)';
+        lvlEl.className = 'text-sm font-bold text-emerald-300';
+        advEl.textContent = 'مخاطرة مقبولة ويمكن التعايش معها مع مراجعة دورية سنوية.';
+      } else if (score <= 12) {
+        box.className = 'p-5 rounded-2xl bg-yellow-950/20 border-2 border-yellow-500/50 text-center transition-all';
+        numEl.className = 'text-4xl font-black text-yellow-400 mb-1';
+        lvlEl.textContent = 'خطر متوسط (Medium Risk)';
+        lvlEl.className = 'text-sm font-bold text-yellow-300';
+        advEl.textContent = 'مطلوب خطة معالجة وتطبيق جدران حماية إضافية خلال 30 يوماً.';
+      } else if (score <= 19) {
+        box.className = 'p-5 rounded-2xl bg-orange-950/20 border-2 border-orange-500/50 text-center transition-all';
+        numEl.className = 'text-4xl font-black text-orange-400 mb-1';
+        lvlEl.textContent = 'خطر مرتفع (High Risk)';
+        lvlEl.className = 'text-sm font-bold text-orange-300';
+        advEl.textContent = 'إجراءات عاجلة لعزل الأنظمة وسد الثغرات وتطبيق مراقبة 24/7.';
+      } else {
+        box.className = 'p-5 rounded-2xl bg-red-950/30 border-2 border-red-500/80 text-center transition-all';
+        numEl.className = 'text-4xl font-black text-red-500 mb-1';
+        lvlEl.textContent = 'خطر حرج جداً (Critical Risk)';
+        lvlEl.className = 'text-sm font-bold text-red-400';
+        advEl.textContent = 'حالة طوارئ قصوى! إيقاف الخدمات المعرضة للهجوم فوراً لتفادي الكارثة.';
+      }
+    }
+
+    // =========================================================================
+    // CHAPTER 3 LOGIC (WEB APPLICATIONS & PYTHON)
+    // =========================================================================
+    function runThreeTierSimulation() {
+      const q = document.getElementById('tierSearchInput').value || 'تابلت';
+      const fNode = document.getElementById('tierFrontendNode');
+      const bNode = document.getElementById('tierBackendNode');
+      const dNode = document.getElementById('tierDatabaseNode');
+      const res = document.getElementById('tierFinalResult');
+
+      res.classList.add('hidden');
+      document.getElementById('tierStatus1').textContent = `📡 إرسال طلب البحث: "${q}"`;
+      fNode.classList.add('active');
+      playTone(450, 'sine', 0.15);
+
+      setTimeout(() => {
+        fNode.classList.remove('active');
+        bNode.classList.add('active');
+        document.getElementById('tierStatus2').textContent = `⚙️ فحص الطلب وتحويله إلى استعلام SQL...`;
+        playTone(550, 'sine', 0.15);
+
+        setTimeout(() => {
+          bNode.classList.remove('active');
+          dNode.classList.add('active');
+          document.getElementById('tierStatus3').textContent = `🗄️ SELECT * FROM products WHERE name LIKE '%${q}%'`;
+          playTone(650, 'sine', 0.15);
+
+          setTimeout(() => {
+            dNode.classList.remove('active');
+            fNode.classList.add('active');
+            res.classList.remove('hidden');
+            res.innerHTML = `
+              🎉 <strong>اكتملت الرحلة في 85 ملي ثانية!</strong><br/>
+              تم جلب نتائج المنتج "<strong>${q}</strong>" بنجاح وعرضها داخل واجهة المستخدم.
+            `;
+            setTimeout(() => fNode.classList.remove('active'), 800);
+            addXP(10, 'فهمت المعمارية ثلاثية الطبقات 3-Tier');
+          }, 700);
+        }, 700);
+      }, 700);
+    }
+
+    // API Lab Handlers
+    const mockApiResponses = {
+      weather: {
+        status: 200,
+        badge: '200 OK',
+        data: {
+          city: "القاهرة (Cairo)",
+          temperature_c: 31,
+          humidity_pct: 42,
+          condition: "مشمس ☀️",
+          wind_speed: "14 كم/س",
+          cached: true
+        }
+      },
+      products: {
+        status: 200,
+        badge: '200 OK',
+        data: [
+          { id: 1, name: "تابلت تعليمي للثانوية العامة", price_egp: 4200, stock: 35 },
+          { id: 2, name: "كتاب البرمجة والذكاء الاصطناعي", price_egp: 120, stock: 120 },
+          { id: 3, name: "سماعة ذكية لتعليم اللغات", price_egp: 850, stock: 15 }
+        ]
+      },
+      order: {
+        status: 201,
+        badge: '201 Created',
+        data: {
+          order_id: 84920,
+          customer: "طالب مصري متفوق",
+          items_count: 1,
+          status: "تم تسجيل وتأكيد الطلب بنجاح وجارٍ التجهيز للشحن 🚚",
+          created_at: new Date().toLocaleTimeString('ar-EG')
+        }
+      },
+      notfound: {
+        status: 404,
+        badge: '404 Not Found',
+        data: {
+          error: "المورد غير موجود (Resource Not Found)",
+          message: "لا يوجد طالب مسجل برقم القيد 9999",
+          timestamp: new Date().toISOString()
+        }
+      }
+    };
+
+    function triggerApiRequest(type) {
+      const res = mockApiResponses[type];
+      const badge = document.getElementById('apiHttpStatusBadge');
+      const display = document.getElementById('apiJsonDisplay');
+
+      display.textContent = 'جاري إرسال الطلب عبر بروتوكول HTTP...';
+      playTone(500, 'sine', 0.1);
+
+      setTimeout(() => {
+        badge.textContent = res.badge;
+        badge.className = res.status < 300 
+          ? 'text-xs font-mono font-bold px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/30'
+          : 'text-xs font-mono font-bold px-2 py-0.5 rounded bg-red-950 text-red-400 border border-red-500/30';
+        display.textContent = JSON.stringify(res.data, null, 2);
+        addXP(5, 'أرسلت طلب API واستلمت JSON');
+      }, 400);
+    }
+
+    // Live Web Playground Templates
+    const pgTemplates = {
+      html: `<!DOCTYPE html>
+<html dir="rtl">
+<body style="font-family:sans-serif;padding:16px;">
+  <h1>مرحباً بك في عالم الويب! 🌐</h1>
+  <p>هذا هيكل <strong>HTML</strong> دلالي خام بدون أي تنسيق.</p>
+  <ul>
+    <li>الصف الأول: الذكاء الاصطناعي</li>
+    <li>الصف الثاني: الأمن السيبراني</li>
+  </ul>
+</body>
+</html>`,
+      css: `<!DOCTYPE html>
+<html dir="rtl">
+<head>
+<style>
+  body { font-family: sans-serif; background: #0f172a; color: white; padding: 20px; }
+  .card { background: #1e293b; border-radius: 12px; padding: 20px; border: 1px solid #00D4FF; box-shadow: 0 0 15px rgba(0,212,255,0.3); }
+  h1 { color: #00D4FF; margin-top: 0; }
+  .btn { background: #10B981; color: black; font-weight: bold; padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>أناقة التصميم مع CSS 🎨</h1>
+    <p>تحولت الصفحة البسيطة إلى بطاقة نيون جذابة!</p>
+    <button class="btn">زر ملون</button>
+  </div>
+</body>
+</html>`,
+      js: `<!DOCTYPE html>
+<html dir="rtl">
+<head>
+<style>
+  body { font-family: sans-serif; background: #050814; color: #00D4FF; text-align: center; padding: 30px; }
+  .counter { font-size: 3.5rem; font-weight: 900; margin: 15px 0; }
+  button { background: #7C3AED; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+</style>
+</head>
+<body>
+  <h2>عداد تفاعلي بـ JavaScript ⚡</h2>
+  <div class="counter" id="num">0</div>
+  <button onclick="document.getElementById('num').innerText = parseInt(document.getElementById('num').innerText) + 1">
+    اضغط لزيادة العداد ➕
+  </button>
+</body>
+</html>`
+    };
+
+    function setPlaygroundTemplate(type) {
+      document.getElementById('playgroundCodeArea').value = pgTemplates[type];
+      ['html', 'css', 'js'].forEach(t => {
+        const btn = document.getElementById(`pgBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
+        if (t === type) {
+          btn.className = 'px-2.5 py-1 rounded bg-slate-800 text-[11px] font-bold text-cyan-300 border border-cyan-500/40';
+        } else {
+          btn.className = 'px-2.5 py-1 rounded bg-slate-800 text-[11px] font-bold text-gray-400 border border-slate-700';
+        }
+      });
+      runPlaygroundCode();
+    }
+
+    function runPlaygroundCode() {
+      const code = document.getElementById('playgroundCodeArea').value;
+      const iframe = document.getElementById('playgroundIframe');
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      doc.open();
+      doc.write(code);
+      doc.close();
+      playTone(550, 'sine', 0.1);
+    }
+
+    // Python Snippets & Execution
+    const pythonSnippets = {
+      grades: `# برنامج تحليل درجات مادة البرمجة والذكاء الاصطناعي
+students = [
+    {"name": "يوسف", "score": 95},
+    {"name": "مريم", "score": 88},
+    {"name": "أحمد", "score": 72},
+    {"name": "سارة", "score": 98},
+    {"name": "محمود", "score": 64}
+]
+
+scores = [s["score"] for s in students]
+average = sum(scores) / len(scores)
+top_student = max(students, key=lambda s: s["score"])
+
+print("--- نتائج التحليل الإحصائي ---")
+print(f"عدد الطلاب: {len(students)}")
+print(f"متوسط الدرجات: {average:.1f}")
+print(f"الأول على الدفعة: {top_student['name']} بـ {top_student['score']} درجة! 🏆")
+`,
+      api: `# برنامج تحليل استجابة API واستخراج طقس المحافظات
+import json
+
+api_response_json = '''{
+    "governorate": "القاهرة",
+    "temperature": 31,
+    "air_quality": "Good",
+    "forecast": ["مشمس", "معتدل ليلاً"]
+}'''
+
+data = json.loads(api_response_json)
+print(f"المحافظة: {data['governorate']}")
+print(f"درجة الحرارة: {data['temperature']} مئوية")
+print(f"جودة الهواء: {data['air_quality']}")
+if data['temperature'] > 30:
+    print("تنبيه الطقس: طقس حار، احرص على شرب المياه! ☀️")
+`,
+      ai: `# نموذج ذكاء اصطناعي مبسط (Decision Tree) لاقتراح المسار
+def recommend_track(math_grade, interest_coding):
+    if math_grade >= 85 and interest_coding:
+        return "علوم البيانات والذكاء الاصطناعي (AI & Data Science)"
+    elif interest_coding:
+        return "تطوير تطبيقات الويب (Full-Stack Web Dev)"
+    elif math_grade >= 85:
+        return "الأمن السيبراني وهندسة الشبكات (Cybersecurity)"
+    else:
+        return "تصميم تجربة المستخدم (UI/UX Design)"
+
+student_math = 92
+student_likes_code = True
+
+recommendation = recommend_track(student_math, student_likes_code)
+print("--- نموذج التوجيه الأكاديمي الذكي ---")
+print(f"درجة الرياضيات: {student_math} | الشغف بالبرمجة: {student_likes_code}")
+print(f"المسار الموصى به: {recommendation} 🚀")
+`
+    };
+
+    function loadPythonSnippet(type) {
+      document.getElementById('pythonCodeEditor').value = pythonSnippets[type];
+      ['grades', 'api', 'ai'].forEach(t => {
+        const btn = document.getElementById(`pyTab${t.charAt(0).toUpperCase() + t.slice(1)}`);
+        if (t === type) {
+          btn.className = 'px-3 py-1.5 rounded-lg bg-purple-900/60 text-purple-200 border border-purple-500/40 text-xs font-bold';
+        } else {
+          btn.className = 'px-3 py-1.5 rounded-lg bg-slate-800 text-gray-400 border border-slate-700 text-xs font-bold';
+        }
+      });
+      playTone(480, 'sine', 0.1);
+    }
+
+    function executePythonSimulation() {
+      const code = document.getElementById('pythonCodeEditor').value;
+      const out = document.getElementById('pythonConsoleOutput');
+      out.textContent = 'جاري تجميع وتشغيل الكود عبر مفسر Python...\n';
+      playTone(520, 'triangle', 0.15);
+
+      setTimeout(() => {
+        let simulatedOutput = "";
+        if (code.includes('top_student')) {
+          simulatedOutput = `--- نتائج التحليل الإحصائي ---
+عدد الطلاب: 5
+متوسط الدرجات: 83.4
+الأول على الدفعة: سارة بـ 98 درجة! 🏆
+------------------------------
+تمت المعالجة بنجاح في 0.003s.`;
+        } else if (code.includes('api_response_json')) {
+          simulatedOutput = `المحافظة: القاهرة
+درجة الحرارة: 31 مئوية
+جودة الهواء: Good
+تنبيه الطقس: طقس حار، احرص على شرب المياه! ☀️
+------------------------------
+تم تحليل استجابة الـ JSON بنجاح.`;
+        } else {
+          simulatedOutput = `--- نموذج التوجيه الأكاديمي الذكي ---
+درجة الرياضيات: 92 | الشغف بالبرمجة: True
+المسار الموصى به: علوم البيانات والذكاء الاصطناعي (AI & Data Science) 🚀
+------------------------------
+تم اتخاذ القرار عبر خوارزمية Decision Tree.`;
+        }
+        out.textContent = simulatedOutput;
+        addXP(10, 'شغلت كود بايثون وحللت البيانات');
+      }, 350);
+    }
+
+    // =========================================================================
+    // CHAPTER 4 LOGIC (WEB DESIGN & MEDIA)
+    // =========================================================================
+    const mediaDetails = {
+      tv: {
+        title: "التلفزيون (Television)",
+        direction: "أحادي الاتجاه (One-to-Many)",
+        strengths: ["وصول جماهيري عريض وفوري", "تأثير بصري وصوتي قوي جداً", "مصداقية عالية لدى فئات المجتمع"],
+        limits: ["انعدام التفاعل الفوري مع المشاهد", "تكلفة إنتاج وبث باهظة", "المشاهد مقيد بجدول بث صارم"]
+      },
+      radio: {
+        title: "الراديو (Radio)",
+        direction: "أحادي الاتجاه (One-to-Many)",
+        strengths: ["سهولة الاستماع أثناء القيادة أو العمل", "تكلفة إنتاج منخفضة مقارنة بالتلفزيون", "تغطية جغرافية واسعة"],
+        limits: ["يعتمد على الصوت فقط دون مرئيات", "انعدام التفاعل الثنائي اللحظي", "صعوبة قياس حجم الجمهور بدقة"]
+      },
+      newspaper: {
+        title: "الصحيفة الورقية (Newspaper)",
+        direction: "أحادي الاتجاه (One-to-Many)",
+        strengths: ["عمق تحليلي وتفاصيل ومقالات رأي", "إمكانية الأرشفة والرجوع إليها لاحقاً", "مصداقية رسمية"],
+        limits: ["بطء التحديث (يومي فقط)", "تراجع القراء في العصر الرقمي", "تكاليف الطباعة والتوزيع الورقي"]
+      },
+      website: {
+        title: "الموقع الإلكتروني (Website)",
+        direction: "ثنائي الاتجاه (Two-Way Interactive)",
+        strengths: ["تفاعل حي مع المستخدم (تصفح، شراء، استعلام)", "تحديث لحظي على مدار 24/7", "إمكانية تخصيص المحتوى وقياس التحليلات"],
+        limits: ["يتطلب اتصالاً بالإنترنت وجهازاً حاسوبياً", "منافسة شرسة على انتباه الزوار", "حاجة دائمة للصيانة والأمان"]
+      },
+      social: {
+        title: "وسائل التواصل الاجتماعي (Social Media)",
+        direction: "متعدد الاتجاهات (Many-to-Many)",
+        strengths: ["المستخدم صانع للمحتوى ومشارك فيه", "انتشار فيروسي سريع جداً للأخبار", "مجانية الاستخدام وسهولة بناء المجتمعات"],
+        limits: ["انتشار الشائعات والأخبار المضللة", "مخاطر الخصوصية وخوارزميات الإدمان الرقمي", "فقدان السيطرة على العلامة التجارية"]
+      }
+    };
+
+    function selectMediaComparison(type) {
+      ['tv', 'radio', 'newspaper', 'website', 'social'].forEach(t => {
+        const btn = document.getElementById(`mcard_${t}`);
+        if (t === type) {
+          btn.className = 'p-3 rounded-xl bg-slate-900 border border-cyan-400 text-center transition-colors';
+        } else {
+          btn.className = 'p-3 rounded-xl bg-slate-900 border border-slate-700 text-center transition-colors';
+        }
+      });
+
+      const d = mediaDetails[type];
+      const box = document.getElementById('mediaDetailDisplay');
+      box.innerHTML = `
+        <div class="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
+          <h4 class="font-bold text-base text-pink-300">${d.title}</h4>
+          <span class="text-xs text-cyan-300 bg-cyan-950 px-2 py-0.5 rounded border border-cyan-500/30">اتجاه الاتصال: ${d.direction}</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+          <div>
+            <strong class="text-emerald-400 block mb-1.5">✅ نقاط القوة والمزايا:</strong>
+            <ul class="text-gray-300 space-y-1 list-disc list-inside">
+              ${d.strengths.map(s => `<li>${s}</li>`).join('')}
+            </ul>
+          </div>
+          <div>
+            <strong class="text-red-400 block mb-1.5">❌ القيود والسلبيات:</strong>
+            <ul class="text-gray-300 space-y-1 list-disc list-inside">
+              ${d.limits.map(l => `<li>${l}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      `;
+      playTone(500, 'sine', 0.1);
+    }
+
+    // Wireframe to Hi-Fi toggle
+    let isHifiMode = false;
+    function toggleWireframeMode() {
+      isHifiMode = !isHifiMode;
+      const box = document.getElementById('wireframeDisplayBox');
+      const btn = document.getElementById('wireframeToggleBtn');
+
+      if (isHifiMode) {
+        btn.textContent = '🔄 تبديل إلى: هيكل أولي Wireframe';
+        box.className = 'p-4 rounded-xl hifi-box min-h-[190px] flex flex-col justify-between transition-all';
+        box.innerHTML = `
+          <div class="flex justify-between items-center border-b border-cyan-500/20 pb-2">
+            <span class="text-sm font-black text-cyan-400 flex items-center gap-1">⚡ تِكأكاديمي</span>
+            <span class="text-xs text-gray-300 flex gap-3">
+              <span class="text-cyan-300">الرئيسية</span>
+              <span class="hover:text-cyan-300">الفصول</span>
+              <span class="hover:text-cyan-300">القاموس</span>
+            </span>
+          </div>
+          <div class="my-4 text-center">
+            <div class="text-base font-black text-white">منصة التعلم التفاعلي الأولى بمصر</div>
+            <div class="text-xs text-gray-300 mt-1">اكتسب مهارات الذكاء الاصطناعي وهندسة الويب من خلال التطبيق العملي.</div>
+          </div>
+          <div class="flex justify-center gap-3">
+            <button class="btn-primary-gradient px-4 py-1.5 rounded-lg text-xs font-bold">ابدأ التعلم مجاناً 🚀</button>
+          </div>
+        `;
+        playTone(600, 'triangle', 0.2);
+        addXP(10, 'استكشفت الفرق بين Wireframe و Hi-Fi');
+      } else {
+        btn.textContent = '🔄 تبديل إلى: تصميم نهائي Hi-Fi';
+        box.className = 'p-4 rounded-xl wireframe-box min-h-[190px] flex flex-col justify-between transition-all';
+        box.innerHTML = `
+          <div class="flex justify-between items-center border-b border-gray-700 pb-2">
+            <span class="text-xs">[شعار الموقع]</span>
+            <span class="text-xs">[روابط التنقل 1 | 2 | 3]</span>
+          </div>
+          <div class="my-4 text-center">
+            <div class="text-sm font-bold">[العنوان الرئيسي للصفحة الهيكلية]</div>
+            <div class="text-xs mt-1">[صندوق الوصف النصي المختصر ومكان الفيديو التعليمي]</div>
+          </div>
+          <div class="flex justify-center gap-3">
+            <div class="px-4 py-1.5 border border-dashed border-gray-600 rounded text-xs">[زر الإجراء الأساسي CTA]</div>
+          </div>
+        `;
+        playTone(350, 'square', 0.1);
+      }
+    }
+
+    // CRAP Principles Interactive State
+    let crapState = { contrast: false, repetition: false, alignment: false, proximity: false };
+
+    function toggleCrapPrinciple(key) {
+      crapState[key] = !crapState[key];
+      const btn = document.getElementById(`crapBtn_${key}`);
+      if (crapState[key]) {
+        btn.classList.add('border-emerald-400', 'bg-emerald-950/50', 'text-emerald-300');
+      } else {
+        btn.classList.remove('border-emerald-400', 'bg-emerald-950/50', 'text-emerald-300');
+      }
+
+      // Update Preview Card Styles
+      const title = document.getElementById('crapTitle');
+      const desc = document.getElementById('crapDesc');
+      const btnEl = document.getElementById('crapBtn');
+      const preview = document.getElementById('crapPreviewCard');
+
+      // Contrast
+      if (crapState.contrast) {
+        title.style.color = '#00D4FF';
+        title.style.fontWeight = '900';
+        title.style.fontSize = '1.25rem';
+        btnEl.style.background = '#10B981';
+        btnEl.style.color = '#000';
+        btnEl.style.fontWeight = 'bold';
+        btnEl.style.border = 'none';
+      } else {
+        title.style.color = '#94a3b8';
+        title.style.fontWeight = 'normal';
+        title.style.fontSize = '0.875rem';
+        btnEl.style.background = 'transparent';
+        btnEl.style.color = '#94a3b8';
+        btnEl.style.fontWeight = 'normal';
+        btnEl.style.border = '1px solid #4b5563';
+      }
+
+      // Repetition
+      if (crapState.repetition) {
+        btnEl.style.borderRadius = '0.75rem';
+        btnEl.style.padding = '8px 20px';
+      } else {
+        btnEl.style.borderRadius = '0';
+        btnEl.style.padding = '4px 12px';
+      }
+
+      // Alignment
+      if (crapState.alignment) {
+        preview.style.textAlign = 'right';
+      } else {
+        preview.style.textAlign = 'center';
+      }
+
+      // Proximity
+      if (crapState.proximity) {
+        title.style.marginBottom = '6px';
+        desc.style.marginBottom = '18px';
+      } else {
+        title.style.marginBottom = '20px';
+        desc.style.marginBottom = '30px';
+      }
+
+      playTone(500, 'sine', 0.1);
+      if (Object.values(crapState).every(Boolean)) {
+        addXP(20, 'أتقنت جميع مبادئ CRAP الأربعة!');
+      }
+    }
+
+    function resetCrapPrinciples() {
+      crapState = { contrast: false, repetition: false, alignment: false, proximity: false };
+      ['contrast', 'repetition', 'alignment', 'proximity'].forEach(k => {
+        const btn = document.getElementById(`crapBtn_${k}`);
+        btn.classList.remove('border-emerald-400', 'bg-emerald-950/50', 'text-emerald-300');
+      });
+      toggleCrapPrinciple('none'); // trigger style reset
+    }
+
+    // A/B Testing Simulator
+    let abStats = { a: 0, b: 0 };
+    function clickAbButton(variant) {
+      abStats[variant]++;
+      const total = abStats.a + abStats.b;
+      const cvrA = Math.round((abStats.a / total) * 100);
+      const cvrB = Math.round((abStats.b / total) * 100);
+
+      document.getElementById('abCountA').textContent = `${abStats.a} نقرة (CVR: ${cvrA}%)`;
+      document.getElementById('abCountB').textContent = `${abStats.b} نقرة (CVR: ${cvrB}%)`;
+
+      const badge = document.getElementById('abWinnerBadge');
+      if (abStats.a > abStats.b) {
+        badge.innerHTML = `🏆 التصميم A متفوق حالياً بنسبة نقر أعلى (+${cvrA - cvrB}%)!`;
+        badge.className = 'p-2.5 rounded-lg bg-cyan-950/50 border border-cyan-500 text-xs text-center text-cyan-300 font-bold mb-3';
+      } else if (abStats.b > abStats.a) {
+        badge.innerHTML = `🏆 التصميم B متفوق حالياً بعبارة "ابدأ مجاناً" (+${cvrB - cvrA}%)!`;
+        badge.className = 'p-2.5 rounded-lg bg-emerald-950/50 border border-emerald-500 text-xs text-center text-emerald-300 font-bold mb-3';
+      } else {
+        badge.innerHTML = `النتائج متساوية حتى الآن (50% لكل تصميم)`;
+      }
+      playTone(550, 'sine', 0.08);
+      if (total === 5) addXP(10, 'أجريت تجربة اختبار A/B حقيقية');
+    }
+
+    // Think Like an Engineer answers
+    const engineerFeedback = {
+      1: {
+        edge: "✅ قرار هندسي صائب 100%! في بوابات المترو المزدحمة، أجزاء الثانية تصنع فارقاً لتفادي الزحام والتكدس. الحوسبة الطرفية تعالج بصمة الوجه محلياً دون انتظار اتصال الإنترنت.",
+        cloud: "❌ خيار غير مناسب في هذا السيناريو! الاعتماد على سحابة بعيدة قد يؤخر فتح البوابة لنصف ثانية فيتكدس آلاف الركاب في المحطة؛ فضلاً عن توقف البوابات تماماً في حال انقطاع النت!"
+      },
+      2: {
+        isolate: "✅ تصرف طوارئ مثالي! الخطوة الأولى في أي تسريب أو اختراق هي 'الاحتواء الفوري' (Containment) عبر عزل الحسابات المخترقة وتغيير المفاتيح ووقف الجلسات لمنع المخترق من التوغل.",
+        backup: "❌ خطأ! استعادة نسخة قديمة دون عزل حساب المخترق يعني أنه لا يزال يمتلك صلاحية الدخول وسيقوم بسرقة البيانات مجدداً فور استعادتها!"
+      },
+      3: {
+        get: "❌ خطأ أمني جسيم! طريقة GET تضع بيانات البطاقة في عنوان الـ URL فيراه أي شخص في سجل المتصفح (History) وسجلات الخوادم، مما يعرض العميل لسرقة أمواله!",
+        post: "✅ قرار هندسي وأمني صحيح! طريقة POST ترسل البيانات الحساسة داخل جسم الطلب المشفر بـ TLS (HTTPS Request Body)، فلا تظهر في الروابط وتحمي بطاقات العملاء."
+      },
+      4: {
+        redesign: "❌ تسرع هندسي مكلف! إعادة كتابة الموقع دون تحليل المشكلة قد تكرر نفس الخطأ وتهدر شهوراً من العمل دون فهم سبب خروج الزوار الفعلي.",
+        analyze: "✅ تطبيق ممتاز لـ (Plan) في دورة PDCA! أولاً نحلل البيانات: هل الموقع بطيء التحميل؟ هل زر الشراء غير واضح؟ وبناء على نتائج القياس نتخذ الإجراء التحسيني الدقيق."
+      }
+    };
+
+    function revealEngineerAnswer(chapter, option) {
+      const box = document.getElementById(`engineerAnswerBox${chapter}`);
+      box.classList.remove('hidden');
+      box.innerHTML = engineerFeedback[chapter][option];
+      playTone(option.includes('edge') || option.includes('isolate') || option.includes('post') || option.includes('analyze') ? 600 : 250, 'sine', 0.15);
+      addXP(10, 'فكرت كمهندس برمجيات حقيقي!');
+    }
+
+    // =========================================================================
+    // QUIZ ENGINE DATA & LOGIC (MCQs & TRUE/FALSE)
+    // =========================================================================
+    const chapterQuizzes = {
+      1: [
+        {
+          q: "ما الميزة الحاسمة للحوسبة الطرفية (Edge Computing) مقارنة بالحوسبة السحابية؟",
+          type: "mcq",
+          options: ["سعة تخزين لا محدودة", "انعدام زمن التأخير تقريباً (Near-Zero Latency) والمعالجة المحلية", "انخفاض تكلفة التخزين السحابي", "عدم حاجتها لأي معالجات"],
+          correct: 1,
+          exp: "الحوسبة الطرفية تعالج البيانات على الجهاز مباشرة (مثل السيارة أو حساس المصنع) دون إرسالها لسحابة بعيدة مما يمنح استجابة فورية."
+        },
+        {
+          q: "ينص قانون مور على تضاعف عدد الترانزستورات داخل الدوائر المدمجة كل 5 سنوات تقريباً.",
+          type: "tf",
+          options: ["صح", "خطأ"],
+          correct: 1,
+          exp: "خطأ؛ ينص قانون مور على تضاعف عدد الترانزستورات كل 18 إلى 24 شهراً (عامين تقريباً)."
+        },
+        {
+          q: "العلاقة الهرمية الصحيحة بين مفاهيم الذكاء الاصطناعي هي:",
+          type: "mcq",
+          options: ["الذكاء الاصطناعي جزء من التعلم العميق", "التعلم العميق ⊂ التعلم الآلي ⊂ الذكاء الاصطناعي", "التعلم الآلي والذكاء الاصطناعي هما نفس الشيء تماماً", "الذكاء التوليدي هو المظلة الشاملة"],
+          correct: 1,
+          exp: "الذكاء الاصطناعي هو المجال الأكبر، يليه التعلم الآلي كفرع منه، ثم التعلم العميق كفرع من التعلم الآلي."
+        },
+        {
+          q: "ظاهرة 'الهلوسة' في الذكاء الاصطناعي التوليدي تعني توليد إجابة خاطئة أو مخترعة ولكن بصياغة واثقة ومقنعة.",
+          type: "tf",
+          options: ["صح", "خطأ"],
+          correct: 0,
+          exp: "صح؛ الهلوسة تنتج عن توليد النموذج للنصوص بناءً على احتمالات الكلمات دون فهم حقيقي للحقائق الواقعية."
+        }
+      ],
+      2: [
+        {
+          q: "في مصافحة بروتوكول TLS، ما وظيفة الشهادة الرقمية التي يرسلها الخادم للمتصفح؟",
+          type: "mcq",
+          options: ["تسريع سرعة تحميل الصور", "إثبات الهوية الرقمية الحقيقية للموقع ومنع التزوير", "ضغط نصوص صفحات الويب", "حظر الإعلانات المزعجة"],
+          correct: 1,
+          exp: "الشهادة الرقمية موقعة من جهة موثوقة (CA) لتؤكد أنك تتصل بالخادم الحقيقي للبنك وليس بموقع مزيف منتحل."
+        },
+        {
+          q: "استخدام كلمة مرور ورقم PIN سري للدخول على الحساب يُعد مصادقة ثنائية حقيقية (2FA).",
+          type: "tf",
+          options: ["صح", "خطأ"],
+          correct: 1,
+          exp: "خطأ؛ كلاهما يقع ضمن فئة واحدة وهي 'المعرفة' (ما تعرفه). المصادقة الثنائية تتطلب فئتين مختلفتين (مثل كلمة مرور + بصمة أو OTP)."
+        },
+        {
+          q: "المبدأ الأساسي في استراتيجية 'انعدام الثقة' (Zero Trust) هو:",
+          type: "mcq",
+          options: ["الثقة الكاملة بأي جهاز داخل شبكة الشركة", "لا تثق بأي مستخدم أو جهاز أبداً، وتحقق دائماً وبشكل مستمر", "إلغاء جدران الحماية تماماً", "تغيير كلمات المرور يومياً"],
+          correct: 1,
+          exp: "Zero Trust تفترض أن الاختراق قد حدث بالفعل وتطلب تحققاً مشدداً وتفويضاً أدنى في كل طلب."
+        },
+        {
+          q: "عند وقوع هجوم برمجية الفدية (Ransomware)، يجب البدء فوراً باستعادة النسخ الاحتياطية قبل مسح البرمجية.",
+          type: "tf",
+          options: ["صح", "خطأ"],
+          correct: 1,
+          exp: "خطأ قاتل! البدء بالاستعادة قبل استئصال الفدية يؤدي إلى تشفير النسخ الاحتياطية المسترجعة فوراً."
+        }
+      ],
+      3: [
+        {
+          q: "في المعمارية ثلاثية الطبقات (3-Tier)، أين تقع قواعد الأعمال وحسابات التطبيق؟",
+          type: "mcq",
+          options: ["في متصفح العميل فقط (Frontend)", "في طبقة التطبيق والواجهة الخلفية (Backend / Application Layer)", "في جدول قاعدة البيانات", "في بطاقة الشبكة"],
+          correct: 1,
+          exp: "منطق الأعمال (Business Logic) ينفذه الـ Backend (باستخدام لغات مثل بايثون أو Node.js) لمعالجة الطلبات قبل الوصول لقاعدة البيانات."
+        },
+        {
+          q: "رمز حالة HTTP الذي يعني 'تم إنشاء مورد جديد بنجاح' هو 201 Created.",
+          type: "tf",
+          options: ["صح", "خطأ"],
+          correct: 0,
+          exp: "صح؛ 201 Created يُرجع عند نجاح طلب POST لإنشاء حساب أو طلب جديد، بينما 200 تعني نجاح عام، و 404 تعني غير موجود."
+        },
+        {
+          q: "ما الفائدة الأساسية من استخدام عناصر الـ Semantic HTML (مثل &lt;nav&gt; و &lt;article&gt;)؟",
+          type: "mcq",
+          options: ["جعل الموقع ثلاثي الأبعاد", "تحسين ترتيب محركات البحث (SEO) ودعم قارئات الشاشة لذوي الهمم", "تسريع تشغيل أكواد بايثون", "تشفير الموقع تلقائياً"],
+          correct: 1,
+          exp: "عناصر HTML الدلالية توضح معنى وهيكل كل جزء للمتصفحات ومحركات البحث ومساعدات الوصول الرقمي."
+        },
+        {
+          q: "تُفضل طريقة GET لنقل بيانات كلمات المرور وبطاقات الدفع لأنها تضع البيانات مباشرة في الرابط.",
+          type: "tf",
+          options: ["صح", "خطأ"],
+          correct: 1,
+          exp: "خطأ؛ طريقة POST هي المستخدمة لنقل البيانات الحساسة لأنها ترسلها مشفرة في جسم الطلب وليس في الرابط العلني."
+        }
+      ],
+      4: [
+        {
+          q: "أي من وسائل الإعلام التالية تتصف بأنها وسيلة اتصال 'ثنائية الاتجاه وتفاعلية'؟",
+          type: "mcq",
+          options: ["الراديو والتلفزيون", "الصحيفة الورقية", "الموقع الإلكتروني وشبكات الويب", "الإذاعة المدرسية"],
+          correct: 2,
+          exp: "الموقع الإلكتروني يتيح للزائر البحث والنقر وإرسال التعليقات والشراء، بخلاف وسائل الإعلام التقليدية أحادية الاتجاه."
+        },
+        {
+          q: "في مبادئ التصميم الأربعة (CRAP)، حرف P يرمز إلى التقارب (Proximity) ويعني جمع العناصر المترابطة معاً.",
+          type: "tf",
+          options: ["صح", "خطأ"],
+          correct: 0,
+          exp: "صح؛ التقارب (Proximity) يساعد في تنظيم الصفحة بصرياً حتى يفهم المستخدم أن العناصر القريبة تخص مهمة واحدة."
+        },
+        {
+          q: "ما المقصود بمعدل الارتداد (Bounce Rate) في تحليلات المواقع الإلكترونية؟",
+          type: "mcq",
+          options: ["عدد عمليات الشراء الناجحة", "نسبة الزوار الذين يدخلون صفحة واحدة ويغادرون فوراً دون أي تفاعل", "سرعة تحميل صور الموقع", "عدد النقرات على روابط التواصل"],
+          correct: 1,
+          exp: "معدل الارتداد المرتفع (مثل 80%) مؤشر خطر يعني أن غالبية الزوار يغادرون الصفحة الأولى سريعاً دون التفاعل مع الموقع."
+        },
+        {
+          q: "في دورة التحسين المستمر PDCA، مرحلة (Check) تعني كتابة أكواد التصميم الجديد وإطلاقه فوراً للمستخدمين.",
+          type: "tf",
+          options: ["صح", "خطأ"],
+          correct: 1,
+          exp: "خطأ؛ التنفيذ هو (Do)، أما (Check) فتعني قياس النتائج وتحليل أرقام معدل التحويل ومقارنتها بالأهداف السابقة."
+        }
+      ]
+    };
+
+    let chQuizTimeouts = {};
+
+    function clearQuizQuestionAnswer(ch, qIdx) {
+      if (chQuizTimeouts[ch]) {
+        clearTimeout(chQuizTimeouts[ch]);
+        chQuizTimeouts[ch] = null;
+      }
+      playTone(450, 'sine', 0.1);
+      const opts = document.querySelectorAll(`#quizOptsList_${ch} .quiz-opt`);
+      opts.forEach(o => {
+        o.classList.remove('disabled', 'correct', 'wrong');
+      });
+      const expBox = document.getElementById(`quizExpBox_${ch}`);
+      if (expBox) {
+        expBox.classList.add('hidden');
+        expBox.innerHTML = '';
+      }
+    }
+
+    function shuffleQuizQuestionOptions(ch, qIdx) {
+      clearQuizQuestionAnswer(ch, qIdx);
+      const q = chapterQuizzes[ch][qIdx];
+      const correctText = q.options[q.correct];
+      const shuffled = [...q.options];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      q.options = shuffled;
+      q.correct = shuffled.indexOf(correctText);
+      renderChapterQuiz(ch);
+    }
+
+    function nextQuizQuestion(ch) {
+      if (chQuizTimeouts[ch]) {
+        clearTimeout(chQuizTimeouts[ch]);
+        chQuizTimeouts[ch] = null;
+      }
+      playTone(550, 'sine', 0.08);
+      const questions = chapterQuizzes[ch];
+      const curIdx = appState.quizProgress[ch] || 0;
+      appState.quizProgress[ch] = curIdx + 1;
+      saveAppState();
+      renderChapterQuiz(ch);
+    }
+
+    function prevQuizQuestion(ch) {
+      if (chQuizTimeouts[ch]) {
+        clearTimeout(chQuizTimeouts[ch]);
+        chQuizTimeouts[ch] = null;
+      }
+      playTone(400, 'sine', 0.08);
+      const curIdx = appState.quizProgress[ch] || 0;
+      if (curIdx > 0) {
+        appState.quizProgress[ch] = curIdx - 1;
+        saveAppState();
+        renderChapterQuiz(ch);
+      }
+    }
+
+    function renderChapterQuiz(ch) {
+      const questions = chapterQuizzes[ch];
+      const curIdx = appState.quizProgress[ch] || 0;
+      const container = document.getElementById(`ch${ch}QuizContainer`);
+      const progEl = document.getElementById(`ch${ch}QuizProgress`);
+
+      if (curIdx >= questions.length) {
+        container.innerHTML = `
+          <div class="text-center py-6">
+            <div class="text-4xl mb-2">🎉</div>
+            <h4 class="font-bold text-base text-emerald-400 mb-1">تهانينا! أتممت جميع أسئلة هذا الفصل</h4>
+            <p class="text-xs text-gray-400 mb-4">لقد أثبتت تميزك واستيعابك العميق للمفاهيم الهندسية المقررة.</p>
+            <button onclick="resetChapterQuiz(${ch})" class="btn-cyber px-4 py-2 rounded-xl text-xs font-bold">
+              🔄 إعادة الاختبار للتدريب
+            </button>
+          </div>
+        `;
+        if (progEl) progEl.textContent = 'مكتمل ✅';
+        if (window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
+        return;
+      }
+
+      if (progEl) progEl.textContent = `السؤال ${curIdx + 1} من ${questions.length}`;
+      const q = questions[curIdx];
+
+      container.innerHTML = `
+        <div class="mb-4">
+          <!-- Question Header & Quick Action Buttons -->
+          <div class="flex items-center justify-between mb-3 flex-wrap gap-2 border-b border-slate-800 pb-2">
+            <div class="text-xs font-bold text-white leading-relaxed flex items-center gap-2 flex-1">
+              <span class="w-6 h-6 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/30 flex items-center justify-center text-xs font-mono font-bold">${curIdx + 1}</span>
+              <span>${q.q}</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <!-- زر مسح الإجابة وإلغاء التحديد -->
+              <button 
+                type="button" 
+                onclick="clearQuizQuestionAnswer(${ch}, ${curIdx})" 
+                class="btn-reset-ans text-[11px] py-1 px-2.5 rounded-lg flex items-center gap-1 cursor-pointer font-bold shadow-sm"
+                title="مسح الإجابة المختارة وإلغاء التحديد للمحاولة من جديد"
+              >
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                <span>مسح الإجابة 🔄</span>
+              </button>
+              <!-- زر خلط الخيارات -->
+              <button 
+                type="button" 
+                onclick="shuffleQuizQuestionOptions(${ch}, ${curIdx})" 
+                class="btn-secondary text-[11px] py-1 px-2 rounded-lg flex items-center gap-1 text-cyan-400 border border-cyan-500/30 hover:bg-cyan-500/10 cursor-pointer"
+                title="خلط ترتيب الخيارات"
+              >
+                <i data-lucide="shuffle" class="w-3.5 h-3.5"></i>
+                <span>خلط 🔀</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Options List -->
+          <div class="space-y-2" id="quizOptsList_${ch}">
+            ${q.options.map((opt, oIdx) => `
+              <div onclick="answerQuizQuestion(${ch}, ${curIdx}, ${oIdx})" id="qopt_${ch}_${oIdx}" class="quiz-opt text-xs text-gray-300">
+                ${opt}
+              </div>
+            `).join('')}
+          </div>
+
+          <!-- Feedback Explanation Box -->
+          <div id="quizExpBox_${ch}" class="hidden mt-3 p-3 rounded-xl text-xs leading-relaxed"></div>
+
+          <!-- Bottom Navigation (السؤال التالي / السابق) -->
+          <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-800/80 flex-wrap gap-2">
+            <div>
+              ${curIdx > 0 ? `
+                <button type="button" onclick="prevQuizQuestion(${ch})" class="btn-prev-q text-xs py-1.5 px-3 rounded-xl flex items-center gap-1 text-gray-300 border border-slate-700 hover:bg-slate-800 transition-all font-medium cursor-pointer">
+                  <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                  <span>السابق</span>
+                </button>
+              ` : ''}
+            </div>
+            <!-- زر الانتقال للسؤال التالي -->
+            <button type="button" onclick="nextQuizQuestion(${ch})" class="btn-next-q text-xs py-1.5 px-4 rounded-xl flex items-center gap-1.5 text-white bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 transition-all font-bold shadow-md shadow-cyan-500/20 cursor-pointer">
+              <span>السؤال التالي</span>
+              <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+      `;
+      if (window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
+    }
+
+    function answerQuizQuestion(ch, qIdx, selectedOptIdx) {
+      const q = chapterQuizzes[ch][qIdx];
+      const opts = document.querySelectorAll(`#quizOptsList_${ch} .quiz-opt`);
+      opts.forEach(o => o.classList.add('disabled'));
+
+      const isCorrect = selectedOptIdx === q.correct;
+      const selectedEl = document.getElementById(`qopt_${ch}_${selectedOptIdx}`);
+      const expBox = document.getElementById(`quizExpBox_${ch}`);
+
+      if (isCorrect) {
+        selectedEl.classList.add('correct');
+        expBox.className = 'mt-3 p-3 rounded-xl bg-emerald-950/40 border border-emerald-500/50 text-xs text-emerald-300';
+        expBox.innerHTML = `✅ <strong>إجابة صحيحة وممتازة!</strong> ${q.exp}`;
+        expBox.classList.remove('hidden');
+        addXP(15, 'إجابة اختبار صحيحة 🎯');
+      } else {
+        selectedEl.classList.add('wrong');
+        document.getElementById(`qopt_${ch}_${q.correct}`).classList.add('correct');
+        expBox.className = 'mt-3 p-3 rounded-xl bg-red-950/40 border border-red-500/50 text-xs text-red-300';
+        expBox.innerHTML = `❌ <strong>إجابة غير دقيقة:</strong> ${q.exp}`;
+        expBox.classList.remove('hidden');
+        playTone(220, 'sawtooth', 0.2);
+      }
+
+      if (chQuizTimeouts[ch]) clearTimeout(chQuizTimeouts[ch]);
+      chQuizTimeouts[ch] = setTimeout(() => {
+        appState.quizProgress[ch] = qIdx + 1;
+        saveAppState();
+        renderChapterQuiz(ch);
+      }, 3000);
+    }
+
+    function resetChapterQuiz(ch) {
+      if (chQuizTimeouts[ch]) {
+        clearTimeout(chQuizTimeouts[ch]);
+        chQuizTimeouts[ch] = null;
+      }
+      appState.quizProgress[ch] = 0;
+      saveAppState();
+      renderChapterQuiz(ch);
+    }
+
+    // =========================================================================
+    // GLOSSARY DATA & MODAL SEARCH
+    // =========================================================================
+    const fullGlossary = [
+      { term: "قانون مور (Moore's Law)", chapter: "1", def: "ملاحظة تاريخية لجوردون مور بأن عدد الترانزستورات في الشريحة يتضاعف كل 18-24 شهراً مع انخفاض التكلفة." },
+      { term: "الحوسبة الطرفية (Edge Computing)", chapter: "1", def: "معالجة البيانات محلياً على الجهاز ذاته أو قريباً منه لتقليل زمن التأخير وحماية الخصوصية." },
+      { term: "الكيوبت (Qubit)", chapter: "1", def: "وحدة قياس المعلومات في الحوسبة الكمومية، يمكنه أن يتواجد في حالة تراكب كمي (0 و 1 في آن واحد)." },
+      { term: "الهلوسة (Hallucination)", chapter: "1", def: "توليد نماذج الذكاء الاصطناعي التوليدي لمعلومات أو مراجع غير حقيقية بصياغة لغوية واثقة ومقنعة." },
+      { term: "الذكاء الاصطناعي القابل للتفسير (XAI)", chapter: "1", def: "تقنيات وخوارزميات تجعل أسباب اتخاذ القرار في نماذج الذكاء الاصطناعي واضحة ومفهومة للبشر." },
+      { term: "التحيز الخوارزمي (Algorithmic Bias)", chapter: "1", def: "أخطاء منهجية في مخرجات الذكاء الاصطناعي تنتج عن تدريبه على بيانات تاريخية غير متوازنة ومتحيزة." },
+      { term: "مصافحة TLS (TLS Handshake)", chapter: "2", def: "سلسلة من خطوات التفاوض الآمن والتحقق من الشهادة الرقمية لإنشاء اتصال مشفر بين المتصفح والخادم." },
+      { term: "المصادقة متعددة العوامل (MFA / 2FA)", chapter: "2", def: "التحقق من هوية المستخدم باستخدام عاملين مستقلين على الأقل من فئات مختلفة (معرفة، حيازة، سمات)." },
+      { term: "الدفاع في العمق (Defense in Depth)", chapter: "2", def: "استراتيجية أمنية تعتمد على طبقات حماية متسلسلة (جدار حماية، DMZ، VPN، تشفير داخلي)." },
+      { term: "المنطقة المعزولة (DMZ)", chapter: "2", def: "شبكة فرعية تفصل بين الإنترنت الخارجي والشبكة الداخلية الحساسة وتستضيف خوادم الويب العامة." },
+      { term: "انعدام الثقة (Zero Trust)", chapter: "2", def: "مبدأ أمني ينص على عدم الثقة بأي مستخدم أو جهاز افتراضياً والتحقق المشدد من كل طلب بشكل مستمر." },
+      { term: "برمجية الفدية (Ransomware)", chapter: "2", def: "برمجية خبيثة تقوم بتشفير ملفات النظام واحتجازها مع مطالبة الضحية بفدية مالية لفك التشفير." },
+      { term: "المعمارية ثلاثية الطبقات (3-Tier)", chapter: "3", def: "تصميم لتطبيقات الويب يقسم النظام إلى: طبقة العرض (Frontend)، طبقة المنطق (Backend)، وطبقة البيانات (Database)." },
+      { term: "واجهة برمجة التطبيقات (API)", chapter: "3", def: "مجموعة من البروتوكولات والتعريفات التي تتيح للبرامج والتطبيقات التواصل وتبادل البيانات بصيغ مثل JSON." },
+      { term: "Semantic HTML", chapter: "3", def: "استخدام عناصر HTML ذات دلالة واضحة لمعنى المحتوى (مثل header, nav, article) لتحسين SEO وإمكانية الوصول." },
+      { term: "رمز الحالة 200 OK", chapter: "3", def: "رمز استجابة HTTP قياسي يؤكد نجاح الطلب وإرجاع البيانات المطلوبة من الخادم." },
+      { term: "رمز الحالة 404 Not Found", chapter: "3", def: "رمز استجابة HTTP يعني أن المسار أو الصفحة المطلوبة غير موجودة على الخادم." },
+      { term: "مبادئ CRAP", chapter: "4", def: "المبادئ الأربعة للتصميم المرئي الجيد: التباين (Contrast)، التكرار (Repetition)، المحاذاة (Alignment)، والتقارب (Proximity)." },
+      { term: "الإطار الهيكلي (Wireframe)", chapter: "4", def: "رسم تخطيطي بسيط يحدد هيكل ومواقع العناصر في صفحة الويب قبل البدء بالتصميم اللوني النهائي." },
+      { term: "شخصية المستخدم (User Persona)", chapter: "4", def: "تمثيل تخيلي مبني على أبحاث يجسد صفات وأهداف وسلوكيات فئة معينة من مستخدمي الموقع." },
+      { term: "دورة PDCA", chapter: "4", def: "نموذج رباعي للتحسين المستمر لجودة المواقع: خطط (Plan)، نفّذ (Do)، تحقق (Check)، وتصرّف (Act)." },
+      { term: "اختبار A/B (A/B Testing)", chapter: "4", def: "تجربة علمية لمقارنة نسختين من الصفحة لمعرفة أيهما يحقق معدل تحويل وتفاعل أعلى للزوار." },
+      { term: "معدل الارتداد (Bounce Rate)", chapter: "4", def: "النسبة المئوية للزوار الذين يغادرون الموقع بعد مشاهدة صفحة واحدة فقط دون إجراء أي تفاعل." },
+      { term: "معدل التحويل (Conversion Rate - CVR)", chapter: "4", def: "نسبة الزوار الذين نفذوا الإجراء المطلوب (مثل التسجيل أو الشراء) من إجمالي الزوار." }
+    ];
+
+    let currentGlossaryChapter = 'all';
+
+    function openGlossaryModal() {
+      const modal = document.getElementById('glossaryModal');
+      modal.classList.add('open');
+      filterGlossaryItems();
+      if (window.lucide && typeof lucide.createIcons === 'function') {
+        lucide.createIcons();
+      }
+      playTone(600, 'sine', 0.1);
+    }
+
+    function closeGlossaryModal() {
+      const modal = document.getElementById('glossaryModal');
+      modal.classList.remove('open');
+    }
+
+    function filterGlossaryByChapter(ch) {
+      currentGlossaryChapter = ch;
+      ['all', '1', '2', '3', '4'].forEach(c => {
+        const btn = document.getElementById(`gfilter_${c}`);
+        if (btn) {
+          if (c === ch) {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
+        }
+      });
+      filterGlossaryItems();
+    }
+
+    function filterGlossaryItems() {
+      const query = document.getElementById('glossarySearchInput').value.trim().toLowerCase();
+      const container = document.getElementById('glossaryListContainer');
+
+      const filtered = fullGlossary.filter(item => {
+        const matchCh = (currentGlossaryChapter === 'all' || item.chapter === currentGlossaryChapter);
+        const matchText = item.term.toLowerCase().includes(query) || item.def.toLowerCase().includes(query);
+        return matchCh && matchText;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="glossary-empty-msg text-center py-8 text-xs font-medium">لا توجد مصطلحات مطابقة للبحث.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(item => `
+        <div class="glossary-card">
+          <div class="flex items-center justify-between mb-1.5">
+            <h4 class="glossary-term-title text-xs sm:text-sm font-bold">${item.term}</h4>
+            <span class="glossary-chapter-badge text-[10px] px-2 py-0.5 rounded font-bold">الفصل ${item.chapter}</span>
+          </div>
+          <p class="glossary-term-def text-xs leading-relaxed text-slate-300">${item.def}</p>
+        </div>
+      `).join('');
+    }
+
+    function resetAllProgressConfirm() {
+      resetUserXp();
+    }
+
+    // Theme (Dark / Light Mode) Functions
+    function toggleTheme() {
+      const cur = localStorage.getItem('theme') || 'dark';
+      const next = cur === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      playTone(520, 'sine', 0.1);
+      showToast(next === 'light' ? '☀️' : '🌙', `تم تفعيل ${next === 'light' ? 'الوضع النهاري (Light Mode)' : 'الوضع الليلي (Dark Mode)'}`, '');
+    }
+
+    function applyTheme(theme) {
+      localStorage.setItem('theme', theme);
+      const icon = document.getElementById('themeIcon');
+      if (theme === 'light') {
+        document.body.classList.add('light-theme');
+        if (icon) icon.textContent = '☀️';
+      } else {
+        document.body.classList.remove('light-theme');
+        if (icon) icon.textContent = '🌙';
+      }
+    }
+
+    // User Logout
+    function logoutUser() {
+      if (confirm('هل ترغب حقاً في تسجيل الخروج من منصة Adam Mohamed Platform؟')) {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('userEmail');
+        localStorage.removeItem('userName');
+        localStorage.removeItem('authVerifiedAt');
+        window.location.replace('login.html');
+      }
+    }
+
+    // Window Init
+    window.addEventListener('DOMContentLoaded', () => {
+      // Check & apply theme
+      applyTheme(localStorage.getItem('theme') || 'dark');
+
+      // Display logged in user
+      const userName = localStorage.getItem('userName') || localStorage.getItem('userEmail') || 'طالب متميز';
+      const userDisplay = document.getElementById('currentUserDisplay');
+      if (userDisplay) userDisplay.textContent = `مرحباً، ${userName}`;
+
+      lucide.createIcons();
+      showTimelineInfo(0);
+      renderMooresLawChart();
+      renderHallucinationCards();
+      renderRansomwarePool();
+      updateRiskScoreCalculation();
+      setPlaygroundTemplate('html');
+      loadPythonSnippet('grades');
+      selectMediaComparison('tv');
+
+      // Initialize all chapter quizzes
+      for (let ch = 1; ch <= 4; ch++) {
+        renderChapterQuiz(ch);
+      }
+
+      updateNavDisplay();
+      console.log('⚡ تم تحميل منصة Adam Mohamed Platform بنجاح!');
+    });
+  </script>
+</body>
+</html>

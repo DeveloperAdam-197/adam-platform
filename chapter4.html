@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="الفصل الرابع: تطوير وتصميم الويب والوسائط ومبادئ CRAP ومحاكي اختبار A/B - منصة Adam Mohamed Platform" />
+  <title>الفصل الرابع: تطوير وتصميم الويب والوسائط | Adam Mohamed Platform</title>
+
+  <!-- Login Protection Guard -->
+  <script>
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+      window.location.replace('login.html');
+    }
+  </script>
+
+  <!-- Google Fonts: Cairo, Tajawal & Fira Code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            cairo: ['Cairo', 'sans-serif'],
+            tajawal: ['Tajawal', 'sans-serif'],
+            mono: ['Fira Code', 'monospace']
+          },
+          colors: {
+            cyber: '#00D4FF',
+            neon: {
+              blue: '#00D4FF',
+              purple: '#7C3AED',
+              green: '#10B981',
+              pink: '#EC4899',
+              yellow: '#F59E0B',
+              red: '#EF4444'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      font-family: 'Cairo', 'Tajawal', sans-serif;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+    body {
+      background: #050814;
+      color: #f1f5f9;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    /* Light Theme */
+    body.light-theme {
+      background: #f8fafc !important;
+      color: #0f172a !important;
+    }
+    body.light-theme nav {
+      background: rgba(255, 255, 255, 0.95) !important;
+      border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+    }
+    body.light-theme .card-neon {
+      background: #ffffff !important;
+      border-color: rgba(0, 0, 0, 0.12) !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+    }
+    body.light-theme .text-white {
+      color: #0f172a !important;
+    }
+    body.light-theme .text-gray-300, body.light-theme .text-gray-400 {
+      color: #334155 !important;
+    }
+    body.light-theme .bg-slate-900, body.light-theme .bg-slate-950 {
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+    }
+
+    .card-neon {
+      background: rgba(12, 18, 34, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-radius: 1rem;
+      transition: all 0.3s ease;
+    }
+    .card-neon:hover {
+      border-color: rgba(0, 212, 255, 0.5);
+      box-shadow: 0 8px 30px rgba(0, 212, 255, 0.15);
+    }
+
+    .btn-action {
+      background: linear-gradient(135deg, #00D4FF 0%, #0284c7 100%);
+      color: #020617;
+      font-weight: 800;
+      border-radius: 0.75rem;
+      padding: 0.65rem 1.4rem;
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 4px 15px rgba(0, 212, 255, 0.25);
+    }
+    .btn-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(0, 212, 255, 0.45);
+    }
+    .btn-action:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: #00D4FF;
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      font-weight: 700;
+      border-radius: 0.75rem;
+      padding: 0.65rem 1.2rem;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+    .btn-secondary:hover {
+      background: rgba(0, 212, 255, 0.15);
+      border-color: #00D4FF;
+    }
+
+    .demo-box {
+      background: rgba(2, 6, 23, 0.7);
+      border: 1px solid rgba(0, 212, 255, 0.25);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+    }
+
+    .quiz-opt {
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .quiz-opt:hover {
+      background: rgba(0, 212, 255, 0.1);
+      border-color: rgba(0, 212, 255, 0.4);
+    }
+    .quiz-opt.correct {
+      background: rgba(16, 185, 129, 0.25) !important;
+      border-color: #10B981 !important;
+      color: #34D399 !important;
+      font-weight: bold;
+    }
+    .quiz-opt.wrong {
+      background: rgba(239, 68, 68, 0.25) !important;
+      border-color: #EF4444 !important;
+      color: #F87171 !important;
+    }
+
+    /* Reset XP & Quiz Interactive Controls */
+    .btn-reset-xp {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: #fbbf24;
+      transition: all 0.25s ease;
+    }
+    .btn-reset-xp:hover {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fde68a;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+    }
+    body.light-theme .btn-reset-xp {
+      background: #fef3c7 !important;
+      border-color: #f59e0b !important;
+      color: #b45309 !important;
+    }
+    body.light-theme .btn-reset-xp:hover {
+      background: #fde68a !important;
+      color: #92400e !important;
+    }
+
+    .btn-reset-ans {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: #fbbf24;
+      transition: all 0.25s ease;
+    }
+    .btn-reset-ans:hover {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fde68a;
+    }
+    body.light-theme .btn-reset-ans {
+      background: #fef3c7 !important;
+      border-color: #f59e0b !important;
+      color: #b45309 !important;
+    }
+    body.light-theme .btn-reset-ans:hover {
+      background: #fde68a !important;
+    }
+
+    body.light-theme .btn-next-q {
+      background: linear-gradient(135deg, #a855f7, #0284c7) !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 12px rgba(168, 85, 247, 0.25) !important;
+    }
+    body.light-theme .btn-prev-q {
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      color: #334155 !important;
+    }
+
+    /* Heatmap spot */
+    .heat-spot {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(239, 68, 68, 0.8) 0%, rgba(245, 158, 11, 0.5) 40%, rgba(16, 185, 129, 0) 70%);
+      transition: opacity 1.5s ease;
+    }
+  </style>
+</head>
+<body class="selection:bg-cyan-500 selection:text-black">
+
+  <!-- NAVBAR -->
+  <nav class="sticky top-0 z-50 bg-[#050814]/90 backdrop-blur-md border-b border-cyan-500/20 py-3 px-4 sm:px-8 transition-colors">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="flex items-center gap-2 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-purple-600 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-cyan-500/30 group-hover:scale-105 transition-transform">
+            AM
+          </div>
+          <div>
+            <div class="font-extrabold text-base tracking-wide text-white group-hover:text-cyan-400 transition-colors">
+              Adam Mohamed Platform
+            </div>
+            <div class="text-[11px] text-cyan-400/80 font-medium">المنهج التفاعلي للثانوية العامة المصرية</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Quick Navigation & Actions -->
+      <div class="flex items-center gap-2 sm:gap-4">
+        <!-- XP Counter -->
+        <div class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-xs font-bold text-cyan-400">
+          <i data-lucide="award" class="w-3.5 h-3.5 text-yellow-400"></i>
+          <span>النقاط: <span id="userXpDisplay">0</span> XP</span>
+        </div>
+
+        <!-- Reset XP Button -->
+        <button onclick="resetUserXp()" class="btn-reset-xp text-xs px-2.5 py-1.5 rounded-xl flex items-center gap-1 font-bold cursor-pointer" title="تصفير نقاط الـ XP لحسابك الحالي إلى 0">
+          <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+          <span class="hidden sm:inline">تصفير XP</span>
+          <span class="sm:hidden">0 XP</span>
+        </button>
+
+        <!-- Theme Toggle -->
+        <button onclick="toggleTheme()" class="p-2 rounded-xl bg-slate-800/60 hover:bg-slate-700/60 border border-slate-700 text-cyan-400 transition-colors" title="تبديل الوضع">
+          <i data-lucide="sun-moon" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Back to Hub -->
+        <a href="index.html" class="flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 transition-colors">
+          <i data-lucide="home" class="w-4 h-4"></i>
+          <span class="hidden md:inline">الرئيسية</span>
+        </a>
+
+        <!-- Logout -->
+        <button onclick="logoutUser()" class="p-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 transition-colors" title="تسجيل الخروج">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- CHAPTER HERO -->
+  <header class="py-10 px-4 sm:px-8 max-w-7xl mx-auto">
+    <div class="card-neon p-6 sm:p-10 relative overflow-hidden">
+      <div class="absolute -left-16 -bottom-16 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -right-16 -top-16 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      
+      <div class="flex flex-col lg:flex-row items-center justify-between gap-6 relative z-10">
+        <div class="space-y-4 max-w-2xl text-center lg:text-right">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-xs font-bold text-purple-400">
+            <i data-lucide="palette" class="w-3.5 h-3.5"></i>
+            الوحدة التعليمية الرابعة • 4 Lessons
+          </div>
+          <h1 class="text-2xl sm:text-4xl font-extrabold text-white leading-tight">
+            الفصل الرابع: <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">تطوير وتصميم الويب والوسائط الرقمية</span>
+          </h1>
+          <p class="text-gray-300 text-xs sm:text-sm leading-relaxed">
+            تعلم كيف تصنع تجارب رقمية تأسر المستخدمين وتلبي احتياجاتهم من خلال مبادئ التصميم الأربعة (CRAP)، ومقارنة الوسائط التقليدية بالرقمية، ومحاكاة بناء نماذج الواجهات (Wireframes)، وتطبيق منهجية القياس عبر اختبار A/B ودورة ديمنج (PDCA) بالأدلة الإحصائية الحية!
+          </p>
+
+          <div class="flex flex-wrap gap-2 pt-2 justify-center lg:justify-start">
+            <a href="#lesson41" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-purple-950/60 border border-slate-700 hover:border-purple-500/50 text-purple-300 transition-colors">
+              4-1 مصفوفة الوسائط الرقمية
+            </a>
+            <a href="#lesson42" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-purple-950/60 border border-slate-700 hover:border-purple-500/50 text-purple-300 transition-colors">
+              4-2 هندسة الـ UX ومبادئ CRAP
+            </a>
+            <a href="#lesson43" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-purple-950/60 border border-slate-700 hover:border-purple-500/50 text-purple-300 transition-colors">
+              4-3 التحليلات واختبار A/B ودورة PDCA
+            </a>
+            <a href="#ch4Quiz" class="text-xs px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 transition-colors">
+              اختبار الفصل (Quiz) 🏆
+            </a>
+          </div>
+        </div>
+
+        <!-- Quick Summary Badge Card -->
+        <div class="w-full lg:w-80 bg-slate-900/90 border border-purple-500/30 rounded-2xl p-5 space-y-4">
+          <div class="text-xs font-bold text-gray-300 flex items-center justify-between border-b border-slate-800 pb-2">
+            <span>مخرجات التعلم الوزارية</span>
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-purple-400"></i>
+          </div>
+          <ul class="text-[11px] space-y-2 text-gray-300">
+            <li class="flex items-start gap-2">
+              <span class="text-purple-400 font-bold">1.</span>
+              <span>المقارنة العلمية بين خصائص الوسائط التقليدية والرقمية.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-purple-400 font-bold">2.</span>
+              <span>بناء شخصية المستخدم (Persona) وتحويل الـ Wireframe إلى Hi-Fi.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-purple-400 font-bold">3.</span>
+              <span>تطبيق مبادئ CRAP الأربعة (التباين، التكرار، المحاذاة، التقارب).</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-purple-400 font-bold">4.</span>
+              <span>إجراء اختبار A/B حقيقي وحساب معدل التحويل (CVR) ودورة PDCA.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-8 space-y-12 pb-20">
+
+    <!-- Dynamic Lesson Selector & Showcase Area Bar (منطقة العرض الديناميكية التفاعلية) -->
+    <div class="card-neon p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 border-purple-500/40 bg-slate-900/90 shadow-xl shadow-purple-500/10">
+      <div class="flex items-center gap-2">
+        <div class="w-9 h-9 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400">
+          <i data-lucide="compass" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <div class="text-xs font-black text-white">منطقة العرض التفاعلية وأزرار الأكشن:</div>
+          <div class="text-[11px] text-purple-300">اختر الدرس لعرض الشرح والأمثلة ومحاكي الـ UX/UI و A/B Testing فوراً</div>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-2 w-full md:w-auto justify-center" id="lessonTabsBar">
+        <button onclick="switchActiveLesson('lesson41')" id="tab_lesson41" class="btn-action text-xs flex items-center gap-1.5 py-2 px-3.5 !bg-purple-600 hover:!bg-purple-500 text-white">
+          <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+          <span>4-1: مصفوفة الوسائط</span>
+        </button>
+        <button onclick="switchActiveLesson('lesson42')" id="tab_lesson42" class="btn-secondary text-xs flex items-center gap-1.5 py-2 px-3.5">
+          <i data-lucide="palette" class="w-3.5 h-3.5"></i>
+          <span>4-2: الـ UX ومبادئ CRAP</span>
+        </button>
+        <button onclick="switchActiveLesson('lesson43')" id="tab_lesson43" class="btn-secondary text-xs flex items-center gap-1.5 py-2 px-3.5">
+          <i data-lucide="split" class="w-3.5 h-3.5"></i>
+          <span>4-3: اختبار A/B ودورة PDCA</span>
+        </button>
+        <button onclick="switchActiveLesson('all')" id="tab_all" class="btn-secondary text-xs flex items-center gap-1.5 py-2 px-3">
+          <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+          <span>عرض الكل</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- LESSON 4-1: DIGITAL MEDIA MATRIX -->
+    <!-- ========================================== -->
+    <section id="lesson41" class="card-neon p-6 sm:p-8 space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-cyan-500/20 pb-4">
+        <div>
+          <div class="text-xs font-extrabold text-cyan-400">الدرس 4-1</div>
+          <h2 class="text-lg sm:text-2xl font-black text-white">مصفوفة الوسائط الرقمية (Digital Media Matrix)</h2>
+        </div>
+        <span class="text-xs px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 w-fit">
+          مقارنة الوسائط التقليدية بالرقمية
+        </span>
+      </div>
+
+      <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">
+        أحدثت الثورة الرقمية تحولاً جذرياً في مفهوم الإعلام؛ حيث انتقلنا من الوسائط التقليدية (الصحف المطبوعة، الراديو، التلفزيون) ذات الاتصال أحادي الاتجاه إلى الوسائط الرقمية التفاعلية ثنائية الاتجاه (مواقع الويب ومنصات التواصل والتعليم الإلكتروني).
+      </p>
+
+      <!-- MEDIA MATRIX COMPARATOR & LIVE EXPERIMENT -->
+      <div class="demo-box space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h3 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+              <i data-lucide="layers" class="w-4 h-4 text-cyan-400"></i>
+              مصفوفة المقارنة التفاعلية بين وسائط الاتصال
+            </h3>
+            <p class="text-[11px] text-gray-400 mt-1">
+              اختر وسيلة إعلامية لفحص مؤشرات أدائها (اتجاه الاتصال، سرعة التعديل، التكلفة، ودقة قياس الجمهور):
+            </p>
+          </div>
+
+          <!-- Action Buttons to Select Medium -->
+          <div class="flex flex-wrap gap-1.5">
+            <button onclick="selectMediaMedium('newspaper')" id="btnMed_newspaper" class="btn-secondary text-xs">
+              صحف ورقية 📰
+            </button>
+            <button onclick="selectMediaMedium('tv')" id="btnMed_tv" class="btn-secondary text-xs">
+              تلفزيون تقليدي 📺
+            </button>
+            <button onclick="selectMediaMedium('website')" id="btnMed_website" class="btn-action text-xs">
+              موقع ويب تفاعلي 🌐
+            </button>
+            <button onclick="selectMediaMedium('social')" id="btnMed_social" class="btn-secondary text-xs">
+              شبكات التواصل 📱
+            </button>
+          </div>
+        </div>
+
+        <!-- Comparative Metrics Display -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+          <!-- Metric 1: Direction -->
+          <div class="p-3.5 bg-slate-900/80 border border-slate-700 rounded-xl space-y-2">
+            <div class="text-gray-400 text-[10px] flex items-center justify-between">
+              <span>اتجاه الاتصال (Direction)</span>
+              <i data-lucide="repeat" class="w-3.5 h-3.5 text-cyan-400"></i>
+            </div>
+            <div id="medDirectionVal" class="text-sm font-bold text-cyan-300">تفاعلي ثنائي الاتجاه (Two-way)</div>
+            <p id="medDirectionDesc" class="text-[10px] text-gray-400">
+              المستخدم يتفاعل ويعلق ويرسل استفسارات لحظياً.
+            </p>
+          </div>
+
+          <!-- Metric 2: Speed of Correction -->
+          <div class="p-3.5 bg-slate-900/80 border border-slate-700 rounded-xl space-y-2">
+            <div class="text-gray-400 text-[10px] flex items-center justify-between">
+              <span>سرعة التحديث والتصحيح</span>
+              <i data-lucide="zap" class="w-3.5 h-3.5 text-yellow-400"></i>
+            </div>
+            <div id="medSpeedVal" class="text-sm font-bold text-yellow-400">فوري (0.5 ثانية)</div>
+            <p id="medSpeedDesc" class="text-[10px] text-gray-400">
+              تعديل الخبر أو المقال بضغطة زر دون تكلفة إضافية.
+            </p>
+          </div>
+
+          <!-- Metric 3: Cost -->
+          <div class="p-3.5 bg-slate-900/80 border border-slate-700 rounded-xl space-y-2">
+            <div class="text-gray-400 text-[10px] flex items-center justify-between">
+              <span>التكلفة النسبية</span>
+              <i data-lucide="coins" class="w-3.5 h-3.5 text-emerald-400"></i>
+            </div>
+            <div id="medCostVal" class="text-sm font-bold text-emerald-400">منخفضة ومرنة</div>
+            <p id="medCostDesc" class="text-[10px] text-gray-400">
+              استضافة سحابية باشتراك رمزي لخدمة ملايين الزوار.
+            </p>
+          </div>
+
+          <!-- Metric 4: Measurement / Analytics -->
+          <div class="p-3.5 bg-slate-900/80 border border-slate-700 rounded-xl space-y-2">
+            <div class="text-gray-400 text-[10px] flex items-center justify-between">
+              <span>دقة قياس التفاعل (Analytics)</span>
+              <i data-lucide="bar-chart-2" class="w-3.5 h-3.5 text-purple-400"></i>
+            </div>
+            <div id="medMeasureVal" class="text-sm font-bold text-purple-400">دقة 100% (تتبع النقرات)</div>
+            <p id="medMeasureDesc" class="text-[10px] text-gray-400">
+              معرفة هوية الزائر وزمن بقائه في كل ثانية.
+            </p>
+          </div>
+        </div>
+
+        <!-- Real-World Breaking News Experiment -->
+        <div class="p-4 rounded-xl bg-gradient-to-r from-cyan-950/40 via-slate-900/60 to-slate-900 border border-cyan-500/30 space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping"></span>
+              <span class="text-xs font-bold text-white">تجربة محاكاة واقعية: خبر عاجل يحتاج لتحديث وتصحيح طارئ</span>
+            </div>
+            <button onclick="testBreakingNewsUpdate()" class="btn-action text-xs py-1.5 px-3">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+              أرسل تصحيح الخبر الآن (Live Action Test)
+            </button>
+          </div>
+
+          <div id="breakingNewsResult" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[11px] pt-1">
+            <div class="p-3 rounded-lg bg-black/40 border border-slate-800 text-gray-300">
+              <div class="font-bold text-rose-400 mb-1">في الصحافة الورقية المطبوعة:</div>
+              <p>يستحيل سحب الجرائد بعد طباعتها وتوزيعها بالمحافظات، ويتطلب التصحيح الانتظار لطبعة الغد (بعد 24 ساعة على الأقل مع خسائر مالية!).</p>
+            </div>
+            <div class="p-3 rounded-lg bg-black/40 border border-slate-800 text-gray-300">
+              <div class="font-bold text-cyan-400 mb-1">في موقع الويب الرقمي:</div>
+              <p>يقوم المحرر بتعديل النص في لوحة التحكم ويضغط زر النشر، فتتحدث الصفحة لجميع القراء في مصر والعالم في أقل من ثانية واحدة مجاناً!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- LESSON 4-2: UX/UI DESIGN & CRAP PRINCIPLES -->
+    <!-- ========================================== -->
+    <section id="lesson42" class="card-neon p-6 sm:p-8 space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-cyan-500/20 pb-4">
+        <div>
+          <div class="text-xs font-extrabold text-cyan-400">الدرس 4-2</div>
+          <h2 class="text-lg sm:text-2xl font-black text-white">هندسة تجربة وواجهة المستخدم (UX/UI) ومبادئ CRAP</h2>
+        </div>
+        <span class="text-xs px-3 py-1 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-300 w-fit">
+          Persona + Wireframe + CRAP
+        </span>
+      </div>
+
+      <!-- DEMO 1: EGYPTIAN USER PERSONA BUILDER -->
+      <div class="demo-box space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+              <i data-lucide="user-check" class="w-4 h-4 text-pink-400"></i>
+              منشئ شخصية المستخدم التفاعلي (Egyptian Student Persona Builder)
+            </h3>
+            <p class="text-[11px] text-gray-400">
+              حدد خصائص الطالب المصري واضغط "توليد الشخصية وتحليل الـ UX" لفهم متطلبات التصميم الرقمي:
+            </p>
+          </div>
+
+          <button onclick="generatePersona()" class="btn-action text-xs !bg-pink-500 hover:!bg-pink-400 text-slate-950 font-bold">
+            <i data-lucide="sparkles" class="w-4 h-4 text-slate-950"></i>
+            توليد الشخصية وتحليل الـ UX
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <!-- Inputs Form -->
+          <div class="p-4 bg-slate-900/80 border border-slate-800 rounded-xl space-y-3 text-xs">
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="text-[11px] text-gray-400 block mb-1">اسم الطالب الافتراضي:</label>
+                <input type="text" id="personaName" value="زياد أيمن" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-pink-400" />
+              </div>
+              <div>
+                <label class="text-[11px] text-gray-400 block mb-1">المحافظة:</label>
+                <select id="personaGov" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-pink-400">
+                  <option value="القاهرة">القاهرة</option>
+                  <option value="الإسكندرية">الإسكندرية</option>
+                  <option value="أسيوط">أسيوط (صعيد مصر)</option>
+                  <option value="شمال سيناء">شمال سيناء</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="text-[11px] text-gray-400 block mb-1">الجهاز المستخدم في المذاكرة:</label>
+                <select id="personaDevice" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-pink-400">
+                  <option value="هاتف ذكي (شاشة صغيرة 6 بوصة)">هاتف ذكي (Mobile)</option>
+                  <option value="تابلت الثانوية العامة المدرسي">تابلت الثانوية (Tablet)</option>
+                  <option value="لابتوب / حاسوب شخصي">لابتوب مكتبي (Desktop)</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-[11px] text-gray-400 block mb-1">حالة اتصال الإنترنت:</label>
+                <select id="personaNet" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-pink-400">
+                  <option value="باقة محمول 4G محدودة">باقة محمول محدودة</option>
+                  <option value="إنترنت منزلي فايبر فائق السرعة">إنترنت منزلي سريع</option>
+                  <option value="إنترنت متقطع غير مستقر">إنترنت متقطع</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Persona Output Card -->
+          <div id="personaCardOutput" class="p-4 bg-gradient-to-tr from-pink-950/20 to-slate-900 border border-pink-500/30 rounded-xl space-y-3 text-xs">
+            <div class="flex items-center gap-3 border-b border-pink-500/20 pb-2">
+              <div class="w-10 h-10 rounded-full bg-pink-500/20 border border-pink-500/40 flex items-center justify-center text-pink-400 font-bold text-sm">
+                UX
+              </div>
+              <div>
+                <div id="outPersonaTitle" class="font-bold text-white text-sm">زياد أيمن (17 سنة)</div>
+                <div id="outPersonaMeta" class="text-[11px] text-pink-300">القاهرة • تابلت الثانوية • باقة محمول</div>
+              </div>
+            </div>
+
+            <div class="space-y-2 text-[11px]">
+              <div class="text-white font-bold">التوصيات التصميمية لمهندس تجربة المستخدم (UX Insights):</div>
+              <ul id="outPersonaList" class="space-y-1 text-gray-300 list-disc list-inside">
+                <li>تصميم أزرار بحجم لا يقل عن 48x48 بكسل لسهولة النقر بإصبع اليد على التابلت.</li>
+                <li>ضغط الصور وتقليل حزم الجافاسكريبت لضمان فتح الموقع في أقل من ثانيتين على باقة المحمول.</li>
+                <li>حفظ تقدم الطالب محلياً (Offline LocalStorage) ليتمكن من استئناف الحل إذا انقطع الإنترنت فجأة.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEMO 2: WIREFRAME TO HI-FI MORPHING TOGGLE -->
+      <div class="demo-box space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+              <i data-lucide="toggle-left" class="w-4 h-4 text-cyan-400"></i>
+              محاكي التحويل من المخطط السلكي (Wireframe) إلى النموذج الأولي عالي الدقة (Hi-Fi Prototype)
+            </h3>
+            <p class="text-[11px] text-gray-400">
+              اضغط على زر التبديل لمشاهدة كيف يتحول المخطط الهيكلي الأولي الرمادي إلى واجهة مستخدم حقيقية جذابة:
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="setDesignMode('wireframe')" id="btnModeWireframe" class="btn-secondary text-xs">
+              مخطط سلكي (Wireframe)
+            </button>
+            <button onclick="setDesignMode('hifi')" id="btnModeHifi" class="btn-action text-xs">
+              واجهة حقيقية (Hi-Fi Prototype ✨)
+            </button>
+          </div>
+        </div>
+
+        <!-- The Morphing Canvas -->
+        <div id="morphingCanvas" class="p-6 rounded-xl border border-cyan-500/30 bg-slate-950 transition-all duration-500 space-y-4">
+          <!-- Navigation bar of prototype -->
+          <div id="protoNav" class="flex justify-between items-center p-3 rounded-lg bg-slate-900 border border-cyan-500/20">
+            <div id="protoLogo" class="font-bold text-cyan-400 text-xs">منصة الثانوية العامة 2026</div>
+            <div id="protoMenu" class="flex gap-2 text-[10px] text-gray-300">
+              <span class="hover:text-cyan-400 cursor-pointer">الدروس</span>
+              <span class="hover:text-cyan-400 cursor-pointer">الاختبارات</span>
+              <span class="hover:text-cyan-400 cursor-pointer">الملف الشخصي</span>
+            </div>
+          </div>
+
+          <!-- Hero of prototype -->
+          <div id="protoHero" class="p-6 rounded-xl bg-gradient-to-r from-cyan-950/40 to-slate-900 border border-cyan-500/30 text-center space-y-2">
+            <h4 id="protoHeading" class="text-base font-extrabold text-white">ابدأ رحلتك في تعلم الذكاء الاصطناعي اليوم</h4>
+            <p id="protoDesc" class="text-xs text-gray-300 max-w-md mx-auto">تعلم بالتجربة الحية والمحاكاة التفاعلية المبنية لطلاب مصر.</p>
+            <button id="protoCta" class="btn-action text-xs mx-auto mt-2">
+              ابدأ الاختبار التفاعلي مجاناً 🚀
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEMO 3: LIVE CRAP PRINCIPLES INSPECTOR -->
+      <div class="demo-box space-y-5">
+        <div>
+          <h3 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+            <i data-lucide="check-square" class="w-4 h-4 text-yellow-400"></i>
+            فاحص مبادئ التصميم الأربعة (CRAP Principles Live Inspector)
+          </h3>
+          <p class="text-[11px] text-gray-400 mt-1">
+            جرب تشغيل كل مبدأ بشكل خاطئ مقابل شكله السليم لفهم التأثير النفسي والبصري على الطالب:
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <!-- C: Contrast -->
+          <div class="p-3 bg-slate-900/90 border border-slate-800 rounded-xl space-y-2 text-xs">
+            <div class="font-bold text-cyan-400 flex items-center justify-between">
+              <span>C: التباين (Contrast)</span>
+              <button onclick="toggleCrap('contrast')" id="btnCrapC" class="text-[10px] px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300">سليم ✅</button>
+            </div>
+            <div id="boxCrapC" class="p-3 rounded-lg bg-slate-950 border border-cyan-500/50 text-white font-bold text-center text-xs">
+              زر الشراء واضح وبارز
+            </div>
+            <p class="text-[10px] text-gray-400">التباين يمنع إجهاد العين ويوجه الانتباه للأزرار الرئيسية.</p>
+          </div>
+
+          <!-- R: Repetition -->
+          <div class="p-3 bg-slate-900/90 border border-slate-800 rounded-xl space-y-2 text-xs">
+            <div class="font-bold text-purple-400 flex items-center justify-between">
+              <span>R: التكرار (Repetition)</span>
+              <button onclick="toggleCrap('repetition')" id="btnCrapR" class="text-[10px] px-2 py-0.5 rounded bg-purple-500/20 text-purple-300">سليم ✅</button>
+            </div>
+            <div id="boxCrapR" class="flex justify-center gap-1.5 p-2 rounded-lg bg-slate-950 border border-slate-800">
+              <span class="px-2 py-1 rounded bg-purple-600 text-[10px] text-white">الدرس 1</span>
+              <span class="px-2 py-1 rounded bg-purple-600 text-[10px] text-white">الدرس 2</span>
+              <span class="px-2 py-1 rounded bg-purple-600 text-[10px] text-white">الدرس 3</span>
+            </div>
+            <p class="text-[10px] text-gray-400">تكرار الخطوط والألوان يرسخ هوية المنصة ويقلل التشتت.</p>
+          </div>
+
+          <!-- A: Alignment -->
+          <div class="p-3 bg-slate-900/90 border border-slate-800 rounded-xl space-y-2 text-xs">
+            <div class="font-bold text-emerald-400 flex items-center justify-between">
+              <span>A: المحاذاة (Alignment)</span>
+              <button onclick="toggleCrap('alignment')" id="btnCrapA" class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">سليم ✅</button>
+            </div>
+            <div id="boxCrapA" class="p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-right space-y-1 text-[10px]">
+              <div class="text-white font-bold">• العنوان محاذي لليمين</div>
+              <div class="text-gray-400">• النص محاذي لليمين</div>
+            </div>
+            <p class="text-[10px] text-gray-400">المحاذاة الشبكية المنتظمة تعطي انطباعاً بالنظام والرقي.</p>
+          </div>
+
+          <!-- P: Proximity -->
+          <div class="p-3 bg-slate-900/90 border border-slate-800 rounded-xl space-y-2 text-xs">
+            <div class="font-bold text-yellow-400 flex items-center justify-between">
+              <span>P: التقارب (Proximity)</span>
+              <button onclick="toggleCrap('proximity')" id="btnCrapP" class="text-[10px] px-2 py-0.5 rounded bg-yellow-500/20 text-yellow-300">سليم ✅</button>
+            </div>
+            <div id="boxCrapP" class="p-2.5 rounded-lg bg-slate-950 border border-slate-800 space-y-1 text-[10px]">
+              <div class="text-gray-300">رقم الهاتف:</div>
+              <div class="p-1 rounded bg-slate-800 text-white font-mono">01012345678</div>
+            </div>
+            <p class="text-[10px] text-gray-400">تجميع العناصر المترابطة معاً يسهل إدراك العلاقة بينها.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- LESSON 4-3 & 4-4: ANALYTICS, PDCA & A/B TEST -->
+    <!-- ========================================== -->
+    <section id="lesson43" class="card-neon p-6 sm:p-8 space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-cyan-500/20 pb-4">
+        <div>
+          <div class="text-xs font-extrabold text-cyan-400">الدرس 4-3 و 4-4</div>
+          <h2 class="text-lg sm:text-2xl font-black text-white">التحليلات، دورة ديمنج (PDCA)، ومحاكي اختبار A/B</h2>
+        </div>
+        <span class="text-xs px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 w-fit">
+          قياس كمي ونوعي + قرارات مدفوعة بالبيانات
+        </span>
+      </div>
+
+      <!-- DEMO 1: LIVE A/B TESTING SIMULATOR -->
+      <div class="demo-box space-y-5">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-400 mb-1">
+              <i data-lucide="split" class="w-3.5 h-3.5"></i>
+              تجربة حية تفاعلية للطلاب
+            </div>
+            <h3 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+              محاكي اختبار A/B الحي لمعدل التحويل (Interactive A/B Testing Simulator)
+            </h3>
+            <p class="text-[11px] text-gray-400 mt-1">
+              جرب النقر كطالب على النسخة A أو النسخة B، ولاحظ كيف يتم حساب معدل التحويل (CVR %) تلقائياً وتحديد النسخة الرابحة!
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="resetAbTest()" class="btn-secondary text-xs">
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+              إعادة ضبط العدادات
+            </button>
+          </div>
+        </div>
+
+        <!-- A/B Comparison Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Variant A (Control) -->
+          <div class="p-5 bg-slate-900/90 border border-slate-700 rounded-xl space-y-4 relative overflow-hidden">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <span class="text-xs font-bold text-gray-300">النسخة (A) - التصميم التقليدي (Control)</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-gray-400">النسخة الأساسية</span>
+            </div>
+
+            <div class="p-4 rounded-lg bg-black/40 text-center space-y-2">
+              <div class="text-xs font-semibold text-gray-300">حضور مراجعة الثانوية العامة 2026</div>
+              <p class="text-[11px] text-gray-400">المراجعة تشمل حل 100 تدريب برمجي للذكاء الاصطناعي.</p>
+              
+              <!-- Target Button A -->
+              <button onclick="clickVariant('A')" class="mt-2 px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-bold text-xs transition-colors">
+                تسجيل في المراجعة
+              </button>
+            </div>
+
+            <!-- Stats for A -->
+            <div class="grid grid-cols-3 gap-2 pt-1 text-center text-xs">
+              <div class="p-2 rounded bg-black/50 border border-slate-800">
+                <div class="text-[10px] text-gray-400">الزوار</div>
+                <div id="visitorsA" class="font-bold text-white text-sm">120</div>
+              </div>
+              <div class="p-2 rounded bg-black/50 border border-slate-800">
+                <div class="text-[10px] text-gray-400">النقرات</div>
+                <div id="clicksA" class="font-bold text-cyan-400 text-sm">15</div>
+              </div>
+              <div class="p-2 rounded bg-black/50 border border-slate-800">
+                <div class="text-[10px] text-gray-400">التحويل (CVR)</div>
+                <div id="cvrA" class="font-bold text-yellow-400 text-sm">12.5%</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Variant B (Variant) -->
+          <div class="p-5 bg-slate-900/90 border border-emerald-500/40 rounded-xl space-y-4 relative overflow-hidden">
+            <div class="flex items-center justify-between border-b border-emerald-500/20 pb-2">
+              <span class="text-xs font-bold text-emerald-400">النسخة (B) - التصميم المحفز (Variant)</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">المعدلة نفسياً</span>
+            </div>
+
+            <div class="p-4 rounded-lg bg-black/40 text-center space-y-2 border border-emerald-500/20">
+              <div class="text-xs font-extrabold text-white">حضور مراجعة ليلة الامتحان التفاعلية ⚡</div>
+              <p class="text-[11px] text-emerald-300">متبقي 12 مقعد فقط في الفصل الافتراضي!</p>
+              
+              <!-- Target Button B -->
+              <button onclick="clickVariant('B')" class="mt-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/30 animate-pulse transition-all">
+                احجز مقعدك المجاني الآن 🚀
+              </button>
+            </div>
+
+            <!-- Stats for B -->
+            <div class="grid grid-cols-3 gap-2 pt-1 text-center text-xs">
+              <div class="p-2 rounded bg-black/50 border border-slate-800">
+                <div class="text-[10px] text-gray-400">الزوار</div>
+                <div id="visitorsB" class="font-bold text-white text-sm">120</div>
+              </div>
+              <div class="p-2 rounded bg-black/50 border border-slate-800">
+                <div class="text-[10px] text-gray-400">النقرات</div>
+                <div id="clicksB" class="font-bold text-emerald-400 text-sm">48</div>
+              </div>
+              <div class="p-2 rounded bg-black/50 border border-slate-800">
+                <div class="text-[10px] text-gray-400">التحويل (CVR)</div>
+                <div id="cvrB" class="font-bold text-emerald-300 text-sm">40.0%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Statistical Conclusion Box -->
+        <div class="p-4 rounded-xl bg-emerald-950/30 border border-emerald-500/30 text-xs space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-emerald-300 flex items-center gap-1.5">
+              <i data-lucide="trophy" class="w-4 h-4 text-yellow-400"></i>
+              النتيجة الإحصائية المحسومة للاختبار:
+            </span>
+            <span id="abWinnerBadge" class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-[11px]">
+              النسخة (B) متفوقة بنسبة +220% 🏆
+            </span>
+          </div>
+          <p id="abExplanation" class="text-[11px] text-gray-300 leading-relaxed">
+            النسخة (B) تفوقت لأنها وظفت مبادئ علم النفس الرقمي (حس الإلحاح والندرة: "متبقي 12 مقعد"، زر نيون بارز وتباين قوي، ونص دعوة لإجراء أكثر جاذبية 🚀).
+          </p>
+        </div>
+      </div>
+
+      <!-- DEMO 2: PDCA DEMING CYCLE STEPPER -->
+      <div class="demo-box space-y-4">
+        <div>
+          <h3 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+            <i data-lucide="refresh-ccw" class="w-4 h-4 text-cyan-400"></i>
+            عجلة دورة ديمنج للتحسين المستمر (PDCA Cycle Stepper)
+          </h3>
+          <p class="text-[11px] text-gray-400 mt-1">
+            اضغط على مراحل الدورة الأربع لتتبع كيفية تطوير منصة تعليمية مصرية بناءً على البيانات:
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <button onclick="setPdcaStep(1)" id="btnPdca1" class="btn-action text-xs justify-center">
+            1. خطط (Plan)
+          </button>
+          <button onclick="setPdcaStep(2)" id="btnPdca2" class="btn-secondary text-xs justify-center">
+            2. نفّذ (Do)
+          </button>
+          <button onclick="setPdcaStep(3)" id="btnPdca3" class="btn-secondary text-xs justify-center">
+            3. تحقق (Check)
+          </button>
+          <button onclick="setPdcaStep(4)" id="btnPdca4" class="btn-secondary text-xs justify-center">
+            4. حسّن وطوّر (Act)
+          </button>
+        </div>
+
+        <div id="pdcaDetailsBox" class="p-4 rounded-xl bg-slate-900/90 border border-slate-700 text-xs space-y-2">
+          <div id="pdcaTitle" class="font-bold text-cyan-400 text-sm">المرحلة 1: التخطيط (Plan)</div>
+          <p id="pdcaDesc" class="text-gray-300 text-[11px] leading-relaxed">
+            رصدت المنصة أن 45% من الطلاب يتركون درس التشفير السيبراني دون إكماله لصعوبة المفاهيم الرياضية المجردة. نخطط لتطوير محاكي مصافحة TLS تفاعلي خطوة بخطوة بالرسوم الحية.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- INTERACTIVE QUIZ: CHAPTER 4 -->
+    <!-- ========================================== -->
+    <section id="ch4Quiz" class="card-neon p-6 sm:p-8 space-y-6">
+      <div class="flex items-center justify-between border-b border-cyan-500/20 pb-4">
+        <div>
+          <div class="text-xs font-extrabold text-cyan-400">التقييم التفاعلي السريع</div>
+          <h2 class="text-lg sm:text-2xl font-black text-white">اختبار الفصل الرابع: تصميم الويب والوسائط</h2>
+        </div>
+        <span id="quizProgLabel" class="text-xs font-bold px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300">
+          السؤال 1 من 4
+        </span>
+      </div>
+
+      <div id="quizContainer" class="space-y-4">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- THINK LIKE A PRODUCT DESIGNER -->
+    <!-- ========================================== -->
+    <section class="card-neon p-6 sm:p-8 border-pink-500/30 bg-gradient-to-r from-pink-950/20 via-slate-900/60 to-slate-900/90 space-y-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-pink-500/20 border border-pink-500/40 flex items-center justify-center text-pink-400">
+          <i data-lucide="palette" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="text-base sm:text-lg font-bold text-white">تحدي مصمم المنتجات: إنقاذ منصة تعليمية من الانهيار</h3>
+          <p class="text-[11px] text-pink-400/90 font-medium">سيناريو واقعي لتحسين معدل الارتداد (Bounce Rate)</p>
+        </div>
+      </div>
+
+      <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">
+        أطلقت إحدى المدارس منصة مذاكرة جديدة، لكن لوحة التحليلات أظهرت أن <strong>72% من الطلاب يغادرون الصفحة في أول 4 ثوانٍ (Bounce Rate مرتفع جداً)</strong>. بعد فحص الواجهة اتضح أن الصفحة مكتظة بعشرات النصوص المكتوبة باللون الرمادي الفاتح على خلفية بيضاء بدون تباين، وأزرار التنقل مبعثرة عشوائياً. كيف تحل المشكلة؟
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 text-xs">
+        <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-700 space-y-1">
+          <div class="font-bold text-pink-400">1. تفعيل مبدأ التباين (Contrast)</div>
+          <p class="text-[11px] text-gray-300">زيادة تباين النصوص وتلوين الأزرار الحيوية بألوان واضحة للقراءة المريحة على كل الشاشات.</p>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-700 space-y-1">
+          <div class="font-bold text-cyan-400">2. إعادة المحاذاة والتقارب (A & P)</div>
+          <p class="text-[11px] text-gray-300">ترتيب الدروس في شبكة محاذاة منتظمة وتجميع شريط الأدوات مع زر التشغيل في مكان واحد.</p>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-700 space-y-1">
+          <div class="font-bold text-emerald-400">3. اختبار A/B للواجهة الجديدة</div>
+          <p class="text-[11px] text-gray-300">عرض الواجهة المحسنة على 50% من الطلاب للتأكد علمياً من انخفاض معدل الارتداد إلى أقل من 20%.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHAPTER NAVIGATION BOTTOM BAR -->
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-slate-800">
+      <a href="chapter3.html" class="btn-secondary text-xs w-full sm:w-auto justify-center">
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        العودة إلى الفصل الثالث: تطبيقات الويب
+      </a>
+      
+      <a href="index.html" class="text-xs text-gray-400 hover:text-cyan-400 flex items-center gap-1 transition-colors">
+        <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+        فهرس الفصول الرئيسية
+      </a>
+
+      <a href="index.html" class="btn-action text-xs w-full sm:w-auto justify-center">
+        تهانينا! العودة للوحة الإنجازات والأوسمة
+        <i data-lucide="award" class="w-4 h-4"></i>
+      </a>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-[#030611] border-t border-cyan-500/20 py-8 px-4 text-center text-xs text-gray-400 transition-colors">
+    <div class="max-w-7xl mx-auto space-y-2">
+      <div class="text-white font-extrabold text-sm">منصة آدم محمد التعليمية • Adam Mohamed Platform</div>
+      <p>مخصص لطلاب الصف الثاني بكالوريا (الثانوية العامة المصرية) - مادة البرمجة والذكاء الاصطناعي</p>
+      <p class="text-[11px] text-gray-400">جميع الحقوق محفوظة © 2026 | تطوير وإشراف: <span class="text-cyan-400 font-bold">Adam Mohamed</span></p>
+    </div>
+  </footer>
+
+  <!-- ========================================================== -->
+  <!-- JAVASCRIPT LOGIC & SIMULATION CONTROLLERS -->
+  <!-- ========================================================== -->
+  <script>
+    // Audio FX Generator
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playBeep(freq = 520, type = 'sine', duration = 0.1) {
+      try {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    // Theme Toggle Functionality
+    function toggleTheme() {
+      const isLight = document.body.classList.toggle('light-theme');
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      playBeep(isLight ? 700 : 350, 'triangle', 0.12);
+    }
+    if (localStorage.getItem('theme') === 'light') {
+      document.body.classList.add('light-theme');
+    }
+
+    // User Logout
+    function logoutUser() {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userName');
+      localStorage.removeItem('authVerifiedAt');
+      window.location.replace('login.html');
+    }
+
+    // User-Specific XP Management Functions
+    function getCurrentUserEmail() {
+      return (localStorage.getItem('userEmail') || 'adam@gmail.com').trim().toLowerCase();
+    }
+
+    function getUserXp() {
+      const email = getCurrentUserEmail();
+      const xpKey = 'xp_' + email;
+      const stored = localStorage.getItem(xpKey);
+      if (stored !== null) return parseInt(stored, 10) || 0;
+      if (email === 'adam@gmail.com' || email === 'adam.mohamed@gmail.com') {
+        localStorage.setItem(xpKey, '710');
+        return 710;
+      }
+      localStorage.setItem(xpKey, '0');
+      return 0;
+    }
+
+    function saveUserXp(xp) {
+      const email = getCurrentUserEmail();
+      localStorage.setItem('xp_' + email, xp.toString());
+    }
+
+    function resetUserXp() {
+      const email = getCurrentUserEmail();
+      if (confirm(`هل أنت متأكد من رغبتك في إعادة ضبط الحساب (${email}) وتصفير نقاط الـ XP إلى 0 وإقفال كافة الأوسمة والإنجازات؟`)) {
+        // 1. تصفير الـ XP
+        saveUserXp(0);
+        
+        // 2. إقفال وحذف الأوسمة وإعادة التقدم لحالته الابتدائية
+        const resetState = {
+          xp: 0,
+          completedChapters: { 1: false, 2: false, 3: false, 4: false },
+          badgesUnlocked: { 1: false, 2: false, 3: false, 4: false },
+          quizProgress: { 1: 0, 2: 0, 3: 0, 4: 0 }
+        };
+        localStorage.setItem('state_' + email, JSON.stringify(resetState));
+        localStorage.setItem('ai_edu_grade11_state', JSON.stringify(resetState));
+
+        // 3. تحديث واجهة المستخدم فوراً
+        const disp = document.getElementById('userXpDisplay');
+        if (disp) disp.textContent = '0';
+
+        if (typeof quizIdx !== 'undefined') {
+          quizIdx = 0;
+          if (typeof renderQuiz === 'function') renderQuiz();
+        }
+
+        playBeep(330, 'triangle', 0.2);
+        alert('تمت إعادة ضبط الحساب بنجاح: تم تصفير نقاط الـ XP إلى 0 وقفل كافة الأوسمة والإنجازات!');
+      }
+    }
+
+    function addXp(amount) {
+      let current = getUserXp() + amount;
+      saveUserXp(current);
+      const disp = document.getElementById('userXpDisplay');
+      if (disp) disp.textContent = current;
+      playBeep(880, 'sine', 0.2);
+      return current;
+    }
+
+    // ==========================================
+    // 1. DIGITAL MEDIA MATRIX COMPARATOR
+    // ==========================================
+    const mediaProfiles = {
+      newspaper: {
+        direction: 'أحادي الاتجاه تماماً (One-Way)',
+        directionDesc: 'القارئ يتلقى الأخبار دون قدرة على التفاعل أو التعليق المباشر.',
+        speed: 'بطيء جداً (24 إلى 48 ساعة)',
+        speedDesc: 'يتطلب كتابة ثم طباعة وتوزيع عبر شاحنات لكافة المحافظات.',
+        cost: 'مرتفعة ومكلفة بيئياً ومادياً',
+        costDesc: 'أحبار، أوراق، مطابع ضخمة، أساطيل نقل وبنزين.',
+        measure: 'تقديري وغامض (أرقام توزيع تقريبية)',
+        measureDesc: 'لا يمكن معرفة أي المقالات قرأها العميل بدقة.'
+      },
+      tv: {
+        direction: 'أحادي الاتجاه في الغالب (One-Way)',
+        directionDesc: 'البث التلفزيوني يصل للمشاهد دون حوار مباشر (إلا في اتصالات نادرة).',
+        speed: 'متوسط (ساعات للنشرات المجدولة)',
+        speedDesc: 'التصحيح يتطلب قطع البث أو الانتظار لموعد نشرة الأخبار التالية.',
+        cost: 'باهظة للغاية (ملايين الجنيهات)',
+        costDesc: 'أقمار صناعية واستوديوهات ومعدات إضاءة وكاميرات تصوير سينمائي.',
+        measure: 'نسب مشاهدة إحصائية تقريبية (Ratings)',
+        measureDesc: 'تعتمد على عينات عشوائية ولا تقدم بيانات دقيقة لكل فرد.'
+      },
+      website: {
+        direction: 'تفاعلي ثنائي الاتجاه (Two-way)',
+        directionDesc: 'المستخدم يتفاعل ويعلق ويرسل استفسارات لحظياً مع الخادم.',
+        speed: 'فوري (0.5 ثانية)',
+        speedDesc: 'تعديل الخبر أو المقال بضغطة زر دون تكلفة إضافية.',
+        cost: 'منخفضة ومرنة',
+        costDesc: 'استضافة سحابية باشتراك رمزي لخدمة ملايين الزوار.',
+        measure: 'دقة 100% (تتبع النقرات)',
+        measureDesc: 'معرفة هوية الزائر وزمن بقائه في كل ثانية بدقة متناهية.'
+      },
+      social: {
+        direction: 'تفاعلي فائق متعدد الاتجاهات (Multi-directional)',
+        directionDesc: 'المستخدم صانع للمحتوى ومشارك ومعلق في نفس اللحظة.',
+        speed: 'أسرع من البرق (أجزاء من الثانية)',
+        speedDesc: 'نشر البث المباشر والتغريدات بضغطة زر عبر الهواتف الذكية.',
+        cost: 'شبه مجانية للمستخدم',
+        costDesc: 'النموذج يعتمد على إعلانات مستهدفة دقيقة للجمهور.',
+        measure: 'تتبع شامل وعميق لكل نقرة وحركة عين',
+        measureDesc: 'تحليل دقيق لسلوك المستخدم والاهتمامات ومعدلات المشاركة.'
+      }
+    };
+
+    function selectMediaMedium(key) {
+      playBeep(520, 'sine', 0.08);
+      ['newspaper', 'tv', 'website', 'social'].forEach(k => {
+        const btn = document.getElementById(`btnMed_${k}`);
+        if (k === key) {
+          btn.className = 'btn-action text-xs';
+        } else {
+          btn.className = 'btn-secondary text-xs';
+        }
+      });
+
+      const prof = mediaProfiles[key];
+      document.getElementById('medDirectionVal').textContent = prof.direction;
+      document.getElementById('medDirectionDesc').textContent = prof.directionDesc;
+
+      document.getElementById('medSpeedVal').textContent = prof.speed;
+      document.getElementById('medSpeedDesc').textContent = prof.speedDesc;
+
+      document.getElementById('medCostVal').textContent = prof.cost;
+      document.getElementById('medCostDesc').textContent = prof.costDesc;
+
+      document.getElementById('medMeasureVal').textContent = prof.measure;
+      document.getElementById('medMeasureDesc').textContent = prof.measureDesc;
+
+      addXp(10);
+    }
+
+    function testBreakingNewsUpdate() {
+      playBeep(750, 'triangle', 0.15);
+      const res = document.getElementById('breakingNewsResult');
+      res.innerHTML = `
+        <div class="p-3 rounded-lg bg-black/60 border border-rose-500/50 text-gray-300 animate-pulse">
+          <div class="font-bold text-rose-400 mb-1">⏱️ في الصحف الورقية (أزمة تأخير):</div>
+          <p>أرسل المحرر التصحيح... لكن الجريدة طُبعت بالفعل ونُقلت لجميع المحافظات! <strong class="text-rose-300">التصحيح سيُنشر غداً في صفحة الاعتذارات بعد 24 ساعة!</strong></p>
+        </div>
+        <div class="p-3 rounded-lg bg-black/60 border border-emerald-500/50 text-gray-300 animate-pulse">
+          <div class="font-bold text-emerald-400 mb-1">⚡ في موقع الويب الرقمي (تحديث فوري):</div>
+          <p>قام المحرر بتصحيح الخبر في لوحة التحكم؛ <strong class="text-emerald-300">تم التحديث لـ 350,000 قارئ في 0.2 ثانية فقط وبدون مليم واحد تكلفة!</strong></p>
+        </div>
+      `;
+      addXp(15);
+    }
+
+    // ==========================================
+    // 2. EGYPTIAN USER PERSONA BUILDER
+    // ==========================================
+    function generatePersona() {
+      playBeep(650, 'sine', 0.1);
+      const name = document.getElementById('personaName').value || 'طالب مصري';
+      const gov = document.getElementById('personaGov').value;
+      const device = document.getElementById('personaDevice').value;
+      const net = document.getElementById('personaNet').value;
+
+      document.getElementById('outPersonaTitle').textContent = `${name} (17 سنة - الصف الثاني بكالوريا)`;
+      document.getElementById('outPersonaMeta').textContent = `${gov} • ${device} • ${net}`;
+
+      const list = document.getElementById('outPersonaList');
+      list.innerHTML = '';
+
+      if (device.includes('هاتف')) {
+        list.innerHTML += `<li>تصميم واجهات رأسية بنهج Mobile-First وتسهيل التصفح بيد واحدة (One-thumb navigation).</li>`;
+        list.innerHTML += `<li>تكبير أحجام الخطوط (Font size لا يقل عن 16px) لسهولة القراءة دون زووم.</li>`;
+      } else if (device.includes('تابلت')) {
+        list.innerHTML += `<li>أزرار لمس مريحة (حجم أدنى 48x48px) تناسب شاشة تابلت الثانوية العامة والعمل بالوضعين الأفقي والرأسي.</li>`;
+        list.innerHTML += `<li>دعم قلم اللمس ومحاكاة التمارين التفاعلية.</li>`;
+      } else {
+        list.innerHTML += `<li>استغلال المساحة الأفقية الكبيرة للشاشات لعرض الشرح بجانب الأكواد في وقت واحد.</li>`;
+      }
+
+      if (net.includes('محدودة') || net.includes('متقطع')) {
+        list.innerHTML += `<li>ضغط الصور وتقليل استهلاك البيانات وحفظ النتائج في الـ LocalStorage للاستمرار دون انقطاع.</li>`;
+        list.innerHTML += `<li>تجنب تشغيل الفيديوهات الثقيلة تلقائياً لعدم استنزاف باقة الطالب.</li>`;
+      } else {
+        list.innerHTML += `<li>تحميل المحاكاة التفاعلية عالية الجودة والأصوات التعليمية بسلاسة فورية.</li>`;
+      }
+
+      addXp(20);
+    }
+
+    // ==========================================
+    // 3. WIREFRAME TO HI-FI MORPHING
+    // ==========================================
+    function setDesignMode(mode) {
+      playBeep(mode === 'hifi' ? 800 : 400, 'sine', 0.1);
+      const canvas = document.getElementById('morphingCanvas');
+      const nav = document.getElementById('protoNav');
+      const hero = document.getElementById('protoHero');
+      const cta = document.getElementById('protoCta');
+      const btnWireframe = document.getElementById('btnModeWireframe');
+      const btnHifi = document.getElementById('btnModeHifi');
+
+      if (mode === 'wireframe') {
+        btnWireframe.className = 'btn-action text-xs !bg-slate-700 text-white';
+        btnHifi.className = 'btn-secondary text-xs';
+
+        canvas.className = 'p-6 rounded-xl border border-dashed border-gray-600 bg-gray-900 transition-all duration-500 space-y-4';
+        nav.className = 'flex justify-between items-center p-3 rounded-lg bg-gray-800 border border-gray-700';
+        hero.className = 'p-6 rounded-xl bg-gray-800 border border-gray-700 text-center space-y-2';
+        cta.className = 'mt-2 px-4 py-2 bg-gray-600 text-gray-200 text-xs rounded border border-gray-500 mx-auto';
+        cta.textContent = '[Button: Call to Action Placeholder]';
+      } else {
+        btnHifi.className = 'btn-action text-xs';
+        btnWireframe.className = 'btn-secondary text-xs';
+
+        canvas.className = 'p-6 rounded-xl border border-cyan-500/30 bg-slate-950 transition-all duration-500 space-y-4';
+        nav.className = 'flex justify-between items-center p-3 rounded-lg bg-slate-900 border border-cyan-500/20';
+        hero.className = 'p-6 rounded-xl bg-gradient-to-r from-cyan-950/40 to-slate-900 border border-cyan-500/30 text-center space-y-2';
+        cta.className = 'btn-action text-xs mx-auto mt-2';
+        cta.textContent = 'ابدأ الاختبار التفاعلي مجاناً 🚀';
+      }
+      addXp(15);
+    }
+
+    // ==========================================
+    // 4. CRAP PRINCIPLES TOGGLES
+    // ==========================================
+    const crapStates = { contrast: true, repetition: true, alignment: true, proximity: true };
+
+    function toggleCrap(principle) {
+      crapStates[principle] = !crapStates[principle];
+      const isGood = crapStates[principle];
+      playBeep(isGood ? 700 : 300, 'sine', 0.08);
+
+      if (principle === 'contrast') {
+        const btn = document.getElementById('btnCrapC');
+        const box = document.getElementById('boxCrapC');
+        if (isGood) {
+          btn.textContent = 'سليم ✅';
+          btn.className = 'text-[10px] px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300';
+          box.className = 'p-3 rounded-lg bg-slate-950 border border-cyan-500/50 text-white font-bold text-center text-xs';
+          box.textContent = 'زر الشراء واضح وبارز';
+        } else {
+          btn.textContent = 'سيء ❌';
+          btn.className = 'text-[10px] px-2 py-0.5 rounded bg-red-500/20 text-red-300';
+          box.className = 'p-3 rounded-lg bg-gray-200 border border-gray-300 text-gray-400 font-normal text-center text-xs';
+          box.textContent = 'زر الشراء غير مقروء ومجهد للعين';
+        }
+      } else if (principle === 'repetition') {
+        const btn = document.getElementById('btnCrapR');
+        const box = document.getElementById('boxCrapR');
+        if (isGood) {
+          btn.textContent = 'سليم ✅';
+          btn.className = 'text-[10px] px-2 py-0.5 rounded bg-purple-500/20 text-purple-300';
+          box.innerHTML = `
+            <span class="px-2 py-1 rounded bg-purple-600 text-[10px] text-white">الدرس 1</span>
+            <span class="px-2 py-1 rounded bg-purple-600 text-[10px] text-white">الدرس 2</span>
+            <span class="px-2 py-1 rounded bg-purple-600 text-[10px] text-white">الدرس 3</span>
+          `;
+        } else {
+          btn.textContent = 'عشوائي ❌';
+          btn.className = 'text-[10px] px-2 py-0.5 rounded bg-red-500/20 text-red-300';
+          box.innerHTML = `
+            <span class="px-1 py-0.5 rounded-full bg-yellow-500 text-[9px] text-black font-mono">درس 1</span>
+            <span class="px-3 py-2 rounded-none bg-green-700 text-[12px] text-white font-serif">الدرس الثاني</span>
+            <span class="p-1 rounded-lg bg-red-800 text-[8px] text-yellow-300 underline">Lesson 3</span>
+          `;
+        }
+      } else if (principle === 'alignment') {
+        const btn = document.getElementById('btnCrapA');
+        const box = document.getElementById('boxCrapA');
+        if (isGood) {
+          btn.textContent = 'سليم ✅';
+          btn.className = 'text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300';
+          box.className = 'p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-right space-y-1 text-[10px]';
+        } else {
+          btn.textContent = 'مبعثر ❌';
+          btn.className = 'text-[10px] px-2 py-0.5 rounded bg-red-500/20 text-red-300';
+          box.className = 'p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-center space-y-3 text-[10px] pl-8';
+        }
+      } else if (principle === 'proximity') {
+        const btn = document.getElementById('btnCrapP');
+        const box = document.getElementById('boxCrapP');
+        if (isGood) {
+          btn.textContent = 'سليم ✅';
+          btn.className = 'text-[10px] px-2 py-0.5 rounded bg-yellow-500/20 text-yellow-300';
+          box.className = 'p-2.5 rounded-lg bg-slate-950 border border-slate-800 space-y-1 text-[10px]';
+        } else {
+          btn.textContent = 'متباعد ومشتت ❌';
+          btn.className = 'text-[10px] px-2 py-0.5 rounded bg-red-500/20 text-red-300';
+          box.className = 'p-2.5 rounded-lg bg-slate-950 border border-slate-800 space-y-8 text-[10px] pb-4';
+        }
+      }
+      addXp(10);
+    }
+
+    // ==========================================
+    // 5. LIVE A/B TESTING SIMULATOR
+    // ==========================================
+    let abStats = {
+      visitorsA: 120, clicksA: 15,
+      visitorsB: 120, clicksB: 48
+    };
+
+    function clickVariant(variant) {
+      playBeep(variant === 'B' ? 880 : 500, 'sine', 0.1);
+      if (variant === 'A') {
+        abStats.visitorsA += 1;
+        abStats.clicksA += 1;
+      } else {
+        abStats.visitorsB += 1;
+        abStats.clicksB += 1;
+      }
+      updateAbDisplay();
+      addXp(5);
+    }
+
+    function resetAbTest() {
+      playBeep(400, 'triangle', 0.1);
+      abStats = { visitorsA: 100, clicksA: 12, visitorsB: 100, clicksB: 40 };
+      updateAbDisplay();
+    }
+
+    function updateAbDisplay() {
+      const cvrA = ((abStats.clicksA / abStats.visitorsA) * 100).toFixed(1);
+      const cvrB = ((abStats.clicksB / abStats.visitorsB) * 100).toFixed(1);
+
+      document.getElementById('visitorsA').textContent = abStats.visitorsA;
+      document.getElementById('clicksA').textContent = abStats.clicksA;
+      document.getElementById('cvrA').textContent = `${cvrA}%`;
+
+      document.getElementById('visitorsB').textContent = abStats.visitorsB;
+      document.getElementById('clicksB').textContent = abStats.clicksB;
+      document.getElementById('cvrB').textContent = `${cvrB}%`;
+
+      const winnerBadge = document.getElementById('abWinnerBadge');
+      const diff = (cvrB - cvrA).toFixed(1);
+      if (parseFloat(cvrB) > parseFloat(cvrA)) {
+        winnerBadge.textContent = `النسخة (B) متفوقة بفارق +${diff}% 🏆`;
+        winnerBadge.className = 'px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-[11px]';
+      } else {
+        winnerBadge.textContent = `النسخة (A) متقاربة مع (B)`;
+        winnerBadge.className = 'px-2.5 py-0.5 rounded-full bg-yellow-500/20 text-yellow-300 font-bold text-[11px]';
+      }
+    }
+
+    // ==========================================
+    // 6. PDCA CYCLE STEPPER
+    // ==========================================
+    const pdcaSteps = {
+      1: {
+        title: 'المرحلة 1: التخطيط (Plan)',
+        desc: 'رصدت لوحة التحليلات أن 45% من الطلاب يتركون درس التشفير السيبراني لصعوبة المفاهيم الرياضية المجردة. نخطط لتطوير محاكي مصافحة TLS تفاعلي خطوة بخطوة بالرسوم الحية لتبسيط الفهم.'
+      },
+      2: {
+        title: 'المرحلة 2: التنفيذ التجريبي (Do)',
+        desc: 'تم بناء محاكي مصافحة TLS واختباره على مجموعة تجريبية من 100 طالب في محافظة الإسكندرية وقياس تفاعلهم وأدائهم العملي.'
+      },
+      3: {
+        title: 'المرحلة 3: التحقق والقياس (Check)',
+        desc: 'أظهرت نتائج الاختبار التجريبي ارتفاع نسبة إكمال الدرس إلى 92%، وزيادة متوسط الدرجات في اختبار الأمن السيبراني بنسبة 35% مقارنة بالشرح النظري القديم!'
+      },
+      4: {
+        title: 'المرحلة 4: التعميم والتحسين المستمر (Act)',
+        desc: 'اعتماد نهج المحاكاة التفاعلية كمعيار ثابت لكافة فصول منهج البرمجة والذكاء الاصطناعي، والبدء في دورة PDCA جديدة لتحسين فصل قواعد البيانات.'
+      }
+    };
+
+    function setPdcaStep(step) {
+      playBeep(450 + (step * 80), 'sine', 0.08);
+      for (let i = 1; i <= 4; i++) {
+        const btn = document.getElementById(`btnPdca${i}`);
+        if (i === step) {
+          btn.className = 'btn-action text-xs justify-center';
+        } else {
+          btn.className = 'btn-secondary text-xs justify-center';
+        }
+      }
+      const data = pdcaSteps[step];
+      document.getElementById('pdcaTitle').textContent = data.title;
+      document.getElementById('pdcaDesc').textContent = data.desc;
+      addXp(10);
+    }
+
+    // ==========================================
+    // 7. INTERACTIVE CHAPTER 4 QUIZ
+    // ==========================================
+    const ch4Questions = [
+      {
+        q: "ما الفارق الرئيسي بين الوسائط التقليدية (كالصحف والتلفزيون) والوسائط الرقمية التفاعلية؟",
+        options: [
+          "الوسائط التقليدية ملونة والرقمية بالأبيض والأسود",
+          "الوسائط الرقمية تتيح الاتصال التفاعلي ثنائي الاتجاه والقياس اللحظي الدقيق لكل نقرة",
+          "الوسائط التقليدية لا تحتاج لأي تكلفة تشغيل",
+          "الوسائط الرقمية تعمل بدون إنترنت فقط"
+        ],
+        correct: 1,
+        exp: "الوسائط الرقمية تتميز بالتفاعلية ثنائية الاتجاه (Two-Way) وإمكانية التحديث اللحظي وقياس سلوك المستخدم بدقة تامة."
+      },
+      {
+        q: "ما هو الهدف الأساسي من مبدأ التباين (Contrast) في مبادئ تصميم الـ CRAP؟",
+        options: [
+          "جعل كل نصوص الصفحة بنفس الدرجة الرمادية الباهتة",
+          "إبراز العناصر المهمة وأزرار الدعوة للإجراء (CTA) لمنع إجهاد العين وتوجيه انتباه المستخدم",
+          "زيادة استهلاك بطارية الهاتف",
+          "إلغاء لغة الجافاسكريبت"
+        ],
+        correct: 1,
+        exp: "التباين يصنع فارقاً بصرياً واضحاً بين العنصر وخلفيته، مما يسهل القراءة السريعة ويوجه العين للأولويات."
+      },
+      {
+        q: "في اختبار A/B Testing، لماذا نُغير عنصراً واحداً فقط بين النسختين (A و B)؟",
+        options: [
+          "لتوفير المال فقط",
+          "لعزل المتغير بدقة والتأكد إحصائياً من أن هذا العنصر هو السبب الحقيقي في زيادة معدل التحويل (CVR)",
+          "لأن متصفحات الإنترنت تمنع تعديل عنصرين",
+          "لكي لا يغضب مصمم الجرافيك"
+        ],
+        correct: 1,
+        exp: "تثبيت كافة العناصر وتغيير عنصر واحد فقط (كاللون أو نص الزر) يضمن علمياً وإحصائياً معرفة سبب تحسن الأداء."
+      },
+      {
+        q: "ما هو الترتيب الصحيح لمراحل دورة ديمنج للتحسين المستمر (PDCA)؟",
+        options: [
+          "نفّذ -> خطط -> طوّر -> تحقق",
+          "خطط (Plan) -> نفّذ (Do) -> تحقق (Check) -> حسّن وطوّر (Act)",
+          "تحقق -> نفّذ -> خطط -> احذف",
+          "طوّر -> خطط -> نفّذ -> نام"
+        ],
+        correct: 1,
+        exp: "دورة PDCA تبدأ بالتخطيط (Plan)، ثم التطبيق التجريبي (Do)، ثم قياس النتائج (Check)، ثم تعميم التطوير (Act)."
+      }
+    ];
+
+    // Dynamic Content Area Switcher
+    function switchActiveLesson(lessonId) {
+      playBeep(580, 'sine', 0.1);
+      const lessons = ['lesson41', 'lesson42', 'lesson43'];
+      const tabs = ['tab_lesson41', 'tab_lesson42', 'tab_lesson43', 'tab_all'];
+
+      tabs.forEach(t => {
+        const btn = document.getElementById(t);
+        if (btn) btn.className = 'btn-secondary text-xs flex items-center gap-1.5 py-2 px-3.5';
+      });
+
+      if (lessonId === 'all') {
+        const tabAll = document.getElementById('tab_all');
+        if (tabAll) tabAll.className = 'btn-action text-xs flex items-center gap-1.5 py-2 px-3.5 !bg-purple-600 hover:!bg-purple-500 text-white';
+        lessons.forEach(id => {
+          const sec = document.getElementById(id);
+          if (sec) {
+            sec.classList.remove('hidden');
+            sec.classList.remove('border-purple-400');
+          }
+        });
+        return;
+      }
+
+      const activeTab = document.getElementById(`tab_${lessonId}`);
+      if (activeTab) activeTab.className = 'btn-action text-xs flex items-center gap-1.5 py-2 px-3.5 !bg-purple-600 hover:!bg-purple-500 text-white';
+
+      lessons.forEach(id => {
+        const sec = document.getElementById(id);
+        if (sec) {
+          if (id === lessonId) {
+            sec.classList.remove('hidden');
+            sec.classList.add('border-purple-400');
+            sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            sec.classList.add('shadow-2xl', 'shadow-purple-500/30');
+            setTimeout(() => sec.classList.remove('shadow-2xl', 'shadow-purple-500/30'), 1500);
+          } else {
+            sec.classList.remove('border-purple-400');
+          }
+        }
+      });
+      lucide.createIcons();
+    }
+
+    let quizIdx = 0;
+    let quizTimeout = null;
+
+    // Reset Answer (مسح الإجابة وإلغاء التحديد)
+    function resetQuizAnswer() {
+      if (quizTimeout) clearTimeout(quizTimeout);
+      playBeep(450, 'sine', 0.1);
+      const q = ch4Questions[quizIdx];
+      if (q && q.options) {
+        q.options.forEach((_, i) => {
+          const el = document.getElementById(`qopt_${i}`);
+          if (el) el.className = 'quiz-opt text-xs text-gray-300';
+        });
+      }
+      const exp = document.getElementById('quizExp');
+      if (exp) {
+        exp.classList.add('hidden');
+        exp.innerHTML = '';
+      }
+    }
+
+    // Next Question (السؤال التالي)
+    function nextQuizQuestion() {
+      if (quizTimeout) clearTimeout(quizTimeout);
+      playBeep(580, 'sine', 0.08);
+      quizIdx++;
+      renderQuiz();
+    }
+
+    // Prev Question (السؤال السابق)
+    function prevQuizQuestion() {
+      if (quizTimeout) clearTimeout(quizTimeout);
+      playBeep(420, 'sine', 0.08);
+      if (quizIdx > 0) {
+        quizIdx--;
+        renderQuiz();
+      }
+    }
+
+    // Shuffle & Clear Question Options
+    function shuffleAndResetQuizQuestion() {
+      resetQuizAnswer();
+      playBeep(700, 'triangle', 0.12);
+
+      const q = ch4Questions[quizIdx];
+      const correctOptionText = q.options[q.correct];
+
+      const shuffled = [...q.options];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+
+      q.options = shuffled;
+      q.correct = shuffled.indexOf(correctOptionText);
+
+      renderQuiz();
+    }
+
+    function renderQuiz() {
+      if (quizIdx >= ch4Questions.length) {
+        document.getElementById('quizContainer').innerHTML = `
+          <div class="text-center py-6">
+            <div class="text-4xl mb-2">🎓</div>
+            <h4 class="font-bold text-white text-base mb-1">مبارك يا بطل! أتممت بنجاح جميع اختبارات فصول المنهج</h4>
+            <p class="text-xs text-emerald-400 mb-4">لقد حصدت وسام "فنان تجربة المستخدم ومعماري الويب" بجدارة واقتدار.</p>
+            <div class="flex justify-center gap-2">
+              <button onclick="quizIdx=0;renderQuiz()" class="btn-secondary text-xs font-bold">إعادة الاختبار 🔄</button>
+              <a href="index.html" class="btn-action text-xs font-bold">الذهاب للوحة الإنجازات الرئيسية 🏆</a>
+            </div>
+          </div>
+        `;
+        document.getElementById('quizProgLabel').textContent = 'مكتمل ✅';
+        if (window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
+        return;
+      }
+
+      const q = ch4Questions[quizIdx];
+      document.getElementById('quizProgLabel').textContent = `السؤال ${quizIdx + 1} من ${ch4Questions.length}`;
+      document.getElementById('quizContainer').innerHTML = `
+        <div class="flex items-center justify-between mb-3 flex-wrap gap-2 border-b border-slate-800 pb-2">
+          <div class="text-xs sm:text-sm font-bold text-white flex-1">${q.q}</div>
+          <div class="flex items-center gap-1.5">
+            <!-- زر مسح الإجابة -->
+            <button 
+              type="button" 
+              onclick="resetQuizAnswer()" 
+              class="btn-reset-ans text-[11px] py-1 px-2.5 rounded-lg flex items-center gap-1 cursor-pointer font-bold shadow-sm"
+              title="مسح الإجابة المختارة وإلغاء التحديد للمحاولة من جديد"
+            >
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+              <span>مسح الإجابة 🔄</span>
+            </button>
+            <!-- زر خلط الخيارات -->
+            <button 
+              type="button" 
+              onclick="shuffleAndResetQuizQuestion()" 
+              class="btn-secondary text-[11px] py-1 px-2 rounded-lg flex items-center gap-1 text-purple-400 border border-purple-500/30 hover:bg-purple-500/10 cursor-pointer"
+              title="إعادة خلط وترتيب الخيارات"
+            >
+              <i data-lucide="shuffle" class="w-3.5 h-3.5"></i>
+              <span>خلط 🔀</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Options -->
+        <div class="space-y-2 mb-3">
+          ${q.options.map((opt, i) => `
+            <div onclick="checkQuizOpt(${i})" id="qopt_${i}" class="quiz-opt text-xs text-gray-300">
+              ${opt}
+            </div>
+          `).join('')}
+        </div>
+
+        <!-- Explanation Feedback -->
+        <div id="quizExp" class="hidden p-3 rounded-xl text-xs"></div>
+
+        <!-- Bottom Navigation (السؤال التالي / السابق) -->
+        <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-800/80 flex-wrap gap-2">
+          <div>
+            ${quizIdx > 0 ? `
+              <button type="button" onclick="prevQuizQuestion()" class="btn-prev-q text-xs py-1.5 px-3 rounded-xl flex items-center gap-1 text-gray-300 border border-slate-700 hover:bg-slate-800 transition-all font-medium cursor-pointer">
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                <span>السابق</span>
+              </button>
+            ` : ''}
+          </div>
+          <!-- زر الانتقال للسؤال التالي -->
+          <button type="button" onclick="nextQuizQuestion()" class="btn-next-q text-xs py-1.5 px-4 rounded-xl flex items-center gap-1.5 text-white bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 transition-all font-bold shadow-md shadow-purple-500/20 cursor-pointer">
+            <span>السؤال التالي</span>
+            <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      `;
+      if (window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
+    }
+
+    function checkQuizOpt(selected) {
+      const q = ch4Questions[quizIdx];
+      const isCorrect = selected === q.correct;
+      playBeep(isCorrect ? 800 : 250, 'sine', 0.15);
+
+      document.getElementById(`qopt_${selected}`).className = isCorrect ? 'quiz-opt correct text-xs' : 'quiz-opt wrong text-xs';
+      if (!isCorrect) {
+        document.getElementById(`qopt_${q.correct}`).className = 'quiz-opt correct text-xs';
+      }
+      const exp = document.getElementById('quizExp');
+      exp.classList.remove('hidden');
+      exp.className = isCorrect ? 'p-3 rounded-xl text-xs bg-emerald-950/40 border border-emerald-500/50 text-emerald-300' : 'p-3 rounded-xl text-xs bg-red-950/40 border border-red-500/50 text-red-300';
+      exp.innerHTML = `${isCorrect ? '✅ إجابة صحيحة!' : '❌ إجابة غير دقيقة.'} ${q.exp}`;
+
+      if (isCorrect) addXp(25);
+
+      if (quizTimeout) clearTimeout(quizTimeout);
+      quizTimeout = setTimeout(() => {
+        quizIdx++;
+        renderQuiz();
+      }, 2400);
+    }
+
+    // INITIALIZATION
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      const disp = document.getElementById('userXpDisplay');
+      if (disp) disp.textContent = getUserXp();
+      updateAbDisplay();
+      renderQuiz();
+    });
+  </script>
+</body>
+</html>
